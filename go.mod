@@ -12,6 +12,9 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.1
+	github.com/yuin/goldmark v1.2.1 // indirect
+	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691 // indirect
+	github.com/yuin/goldmark-meta v0.0.0-20191126180153-f0638e958b60 // indirect
 	golang.org/x/sys v0.0.0-20200803210538-64077c9b5642 // indirect
 	golang.org/x/text v0.3.3 // indirect
 	gopkg.in/ini.v1 v1.57.0 // indirect
