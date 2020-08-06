@@ -1,21 +1,32 @@
 package generator
 
 import (
-	"github.com/verless/verless/builder"
-	"github.com/verless/verless/parser"
+	"github.com/verless/verless/model"
 	"github.com/verless/verless/plugin"
-	"github.com/verless/verless/writer"
 )
 
 const (
 	parallelism = 4
 )
 
+type Parser interface {
+	ParsePage(src []byte) (model.Page, error)
+}
+
+type Builder interface {
+	RegisterPage(route string, page model.Page) error
+	Dispatch() (model.Site, error)
+}
+
+type Writer interface {
+	Write(site model.Site) error
+}
+
 type Context struct {
 	files   <-chan string
-	parser  parser.Parser
-	builder builder.Builder
-	writer  writer.Writer
+	parser  Parser
+	builder Builder
+	writer  Writer
 }
 
 type Generator interface {

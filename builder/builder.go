@@ -9,12 +9,7 @@ import (
 
 type walkFn func(route *model.Route) error
 
-type Builder interface {
-	RegisterPage(route string, page model.Page) error
-	Dispatch() (model.Site, error)
-}
-
-func New() Builder {
+func New() *builder {
 	b := builder{
 		site:  model.Site{},
 		mutex: &sync.Mutex{},

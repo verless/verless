@@ -9,7 +9,7 @@ import (
 	"github.com/yuin/goldmark/parser"
 )
 
-func NewMarkdown() Parser {
+func NewMarkdown() *markdown {
 	m := markdown{
 		gm: goldmark.New(
 			goldmark.WithExtensions(meta.Meta, highlighting.Highlighting),
