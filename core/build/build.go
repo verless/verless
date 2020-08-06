@@ -1,8 +1,7 @@
-package generator
+package build
 
 import (
 	"github.com/verless/verless/model"
-	"github.com/verless/verless/plugin"
 )
 
 const (
@@ -18,6 +17,11 @@ type Builder interface {
 	Dispatch() (model.Site, error)
 }
 
+type Plugin interface {
+	ProcessPage(page *model.Page) error
+	Finalize() error
+}
+
 type Writer interface {
 	Write(site model.Site) error
 }
@@ -26,30 +30,11 @@ type Context struct {
 	files   <-chan string
 	parser  Parser
 	builder Builder
+	plugins []Plugin
 	writer  Writer
 }
 
-type Generator interface {
-	AddPlugin(plugin plugin.Plugin)
-	Run(ctx Context) error
-}
-
-func New() Generator {
-	p := generator{
-		plugins: make([]plugin.Plugin, 0),
-	}
-	return &p
-}
-
-type generator struct {
-	plugins []plugin.Plugin
-}
-
-func (p *generator) AddPlugin(plugin plugin.Plugin) {
-	p.plugins = append(p.plugins, plugin)
-}
-
-func (p *generator) Run(ctx Context) error {
+func Run(ctx Context) error {
 	err := runParallel(func(file string) error {
 		return nil
 	}, ctx.files, parallelism)
@@ -63,8 +48,8 @@ func (p *generator) Run(ctx Context) error {
 		return err
 	}
 
-	for _, _plugin := range p.plugins {
-		if err := _plugin.Finalize(); err != nil {
+	for _, plugin := range ctx.plugins {
+		if err := plugin.Finalize(); err != nil {
 			return err
 		}
 	}

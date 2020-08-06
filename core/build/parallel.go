@@ -1,4 +1,4 @@
-package generator
+package build
 
 func runParallel(fn func(file string) error, files <-chan string, n int) error {
 	errors := make(chan error)
