@@ -1,4 +1,4 @@
-package pipeline
+package generator
 
 func runParallel(fn func(file string) error, files <-chan string, n int) error {
 	errors := make(chan error)
