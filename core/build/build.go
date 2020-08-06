@@ -1,6 +1,7 @@
 package build
 
 import (
+	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 )
 
@@ -27,34 +28,43 @@ type Writer interface {
 }
 
 type Context struct {
-	files   <-chan string
-	parser  Parser
-	builder Builder
-	plugins []Plugin
-	writer  Writer
+	Path    string
+	Parser  Parser
+	Builder Builder
+	Plugins []Plugin
+	Writer  Writer
 }
 
 func Run(ctx Context) error {
+	var (
+		files  = make(chan string)
+		errors = make(chan error)
+	)
+
+	go func() {
+		errors <- fs.StreamFiles(ctx.Path, files, fs.MarkdownOnly, fs.NoUnderscores)
+	}()
+
 	err := runParallel(func(file string) error {
 		return nil
-	}, ctx.files, parallelism)
+	}, files, parallelism)
 
 	if err != nil {
 		return err
 	}
 
-	site, err := ctx.builder.Dispatch()
+	site, err := ctx.Builder.Dispatch()
 	if err != nil {
 		return err
 	}
 
-	for _, plugin := range ctx.plugins {
+	for _, plugin := range ctx.Plugins {
 		if err := plugin.Finalize(); err != nil {
 			return err
 		}
 	}
 
-	if err := ctx.writer.Write(site); err != nil {
+	if err := ctx.Writer.Write(site); err != nil {
 		return err
 	}
 
