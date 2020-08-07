@@ -1,11 +1,13 @@
 package writer
 
 import (
-	"github.com/verless/verless/config"
-	"github.com/verless/verless/model"
 	"os"
 	"path/filepath"
 	"text/template"
+
+	"github.com/otiai10/copy"
+	"github.com/verless/verless/config"
+	"github.com/verless/verless/model"
 )
 
 func New(path, outputDir string) (*writer, error) {
@@ -43,7 +45,15 @@ func (w *writer) Write(site model.Site) error {
 		return w.writeIndexPage(path, &route.IndexPage)
 	}, -1)
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	if err := w.copyAssetDir(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (w *writer) initTemplates() error {
@@ -92,4 +102,13 @@ func (w *writer) writeIndexPage(route string, indexPage *model.IndexPage) error 
 	}
 
 	return w.indexPageTpl.Execute(file, &indexPage)
+}
+
+func (w *writer) copyAssetDir() error {
+	var (
+		src  = filepath.Join(w.path, config.AssetDir)
+		dest = filepath.Join(w.outputPath, config.AssetDir)
+	)
+
+	return copy.Copy(src, dest)
 }
