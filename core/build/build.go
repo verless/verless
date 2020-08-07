@@ -58,14 +58,14 @@ func Run(ctx Context) error {
 		return err
 	}
 
+	if err := ctx.Writer.Write(site); err != nil {
+		return err
+	}
+
 	for _, plugin := range ctx.Plugins {
 		if err := plugin.Finalize(); err != nil {
 			return err
 		}
-	}
-
-	if err := ctx.Writer.Write(site); err != nil {
-		return err
 	}
 
 	return nil
