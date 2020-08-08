@@ -18,8 +18,12 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 		_parser  = parser.NewMarkdown()
 		_builder = builder.New()
 		plugins  = make([]build.Plugin, 0)
-		_writer  = writer.New(path, options.OutputDir)
 	)
+
+	_writer, err := writer.New(path, options.OutputDir)
+	if err != nil {
+		return err
+	}
 
 	ctx := build.Context{
 		Path:    path,

@@ -1,8 +1,10 @@
 package build
 
 import (
+	"fmt"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
+	"os"
 )
 
 const (
@@ -45,9 +47,7 @@ func Run(ctx Context) error {
 		errors <- fs.StreamFiles(ctx.Path, files, fs.MarkdownOnly, fs.NoUnderscores)
 	}()
 
-	err := runParallel(func(file string) error {
-		return nil
-	}, files, parallelism)
+	err := runParallel(getFileProcessingPipeline(ctx), files, parallelism)
 
 	if err != nil {
 		return err
@@ -69,4 +69,32 @@ func Run(ctx Context) error {
 	}
 
 	return nil
+}
+
+func getFileProcessingPipeline(ctx Context) func(file string) error {
+	return func(file string) error {
+		// read page
+		f, err := os.Open(file)
+		if err != nil {
+			return err
+		}
+
+		info, err := f.Stat()
+		if err != nil {
+			return err
+		}
+
+		fileData := make([]byte, info.Size())
+		f.Read(fileData)
+
+		// parse page
+		mdParsed, err := ctx.Parser.ParsePage(fileData)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(mdParsed)
+
+		return nil
+	}
 }

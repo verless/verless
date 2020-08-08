@@ -1,0 +1,28 @@
+{
+  "Site": {
+    "Meta": {
+      "Title": "titel",
+      "Subtitle": "subtitle",
+      "Author": "author",
+      "Base": "base"
+    },
+    "Nav": {
+      "Items": [
+        {
+          "Label": "label",
+          "Target": "target"
+        }
+      ],
+      "Override": false
+    },
+    "Footer": {
+      "Items": [
+        {
+          "Label": "label",
+          "Target": "target"
+        }
+      ]
+    },
+    "Override": false
+  }
+}

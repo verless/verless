@@ -17,3 +17,8 @@ example/target/
 
 # Test binaries built with `go test -c`.
 *.test
+
+# folders and files for the test main
+in
+out
+config.json

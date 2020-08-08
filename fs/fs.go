@@ -30,5 +30,6 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 		return nil
 	})
 
+	close(files)
 	return err
 }
