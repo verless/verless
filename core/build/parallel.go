@@ -3,8 +3,8 @@ package build
 import "sync"
 
 func runParallel(fn func(file string) error, files <-chan string, n int) error {
-	errors := make(chan error)
-	stopSignal := make(chan bool)
+	errors := make(chan error, n)
+	stopSignals := make(chan bool, n)
 
 	wg := sync.WaitGroup{}
 	for i := 0; i < n; i++ {
@@ -12,14 +12,17 @@ func runParallel(fn func(file string) error, files <-chan string, n int) error {
 		go func() {
 			for file := range files {
 				select {
-				case stop, ok := <-stopSignal:
+				case stop, ok := <-stopSignals:
 					if !ok || stop {
 						// stopping is signalled
-						return
+						break
 					}
 				default:
 				}
 
+				// TODO: Also handle several errors in different files.
+				// 		 Currently this leads to writing to a closed channel.
+				//       Maybe pass an errors chanel from the outside?
 				errors <- fn(file)
 			}
 			wg.Done()
@@ -34,7 +37,10 @@ func runParallel(fn func(file string) error, files <-chan string, n int) error {
 	for err := range errors {
 		if err != nil {
 			// signal all still running go routines to stop also
-			stopSignal <- true
+			for i := 0; i < n; i++ {
+				stopSignals <- true
+			}
+
 			close(errors)
 			return err
 		}

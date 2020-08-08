@@ -73,6 +73,7 @@ func Run(ctx Context) error {
 
 func getFileProcessingPipeline(ctx Context) func(file string) error {
 	return func(file string) error {
+		fmt.Println("read file", file)
 		// read page
 		f, err := os.Open(file)
 		if err != nil {
@@ -93,7 +94,7 @@ func getFileProcessingPipeline(ctx Context) func(file string) error {
 			return err
 		}
 
-		fmt.Println(mdParsed)
+		fmt.Println("pared markdown:", file, mdParsed.Content)
 
 		return nil
 	}
