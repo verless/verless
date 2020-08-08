@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bytes"
+
 	"github.com/verless/verless/model"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting"

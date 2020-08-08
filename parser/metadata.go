@@ -1,8 +1,9 @@
 package parser
 
 import (
-	"github.com/verless/verless/model"
 	"time"
+
+	"github.com/verless/verless/model"
 )
 
 const (

@@ -1,8 +1,9 @@
 package builder
 
 import (
-	"github.com/verless/verless/model"
 	"sync"
+
+	"github.com/verless/verless/model"
 )
 
 func New() *builder {
