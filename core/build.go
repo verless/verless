@@ -15,18 +15,26 @@ type BuildOptions struct {
 
 func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 	var (
-		_parser  = parser.NewMarkdown()
-		_builder = builder.New()
-		plugins  = make([]build.Plugin, 0)
-		_writer  = writer.New(path, options.OutputDir)
+		p       = parser.NewMarkdown()
+		b       = builder.New()
+		w, err  = writer.New(path, options.OutputDir)
+		plugins = make([]build.Plugin, 0)
 	)
+
+	if err != nil {
+		return err
+	}
+
+	if options.RenderRSS {
+		plugins = append(plugins, nil)
+	}
 
 	ctx := build.Context{
 		Path:    path,
-		Parser:  _parser,
-		Builder: _builder,
+		Parser:  p,
+		Builder: b,
+		Writer:  w,
 		Plugins: plugins,
-		Writer:  _writer,
 	}
 
 	return build.Run(ctx)

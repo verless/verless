@@ -9,30 +9,29 @@ const (
 	parallelism = 4
 )
 
-type Parser interface {
-	ParsePage(src []byte) (model.Page, error)
-}
-
-type Builder interface {
-	RegisterPage(route string, page model.Page) error
-	Dispatch() (model.Site, error)
-}
-
-type Plugin interface {
-	ProcessPage(page *model.Page) error
-	Finalize() error
-}
-
-type Writer interface {
-	Write(site model.Site) error
-}
+type (
+	Parser interface {
+		ParsePage(src []byte) (model.Page, error)
+	}
+	Builder interface {
+		RegisterPage(route string, page model.Page) error
+		Dispatch() (model.Site, error)
+	}
+	Writer interface {
+		Write(site model.Site) error
+	}
+	Plugin interface {
+		ProcessPage(page *model.Page) error
+		Finalize() error
+	}
+)
 
 type Context struct {
 	Path    string
 	Parser  Parser
 	Builder Builder
-	Plugins []Plugin
 	Writer  Writer
+	Plugins []Plugin
 }
 
 func Run(ctx Context) error {
