@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
-	"os"
+	"io/ioutil"
 )
 
 const (
@@ -74,18 +74,7 @@ func getFileProcessingPipeline(ctx Context) func(file string) error {
 	return func(file string) error {
 		fmt.Println("read file", file)
 		// read page
-		f, err := os.Open(file)
-		if err != nil {
-			return err
-		}
-
-		info, err := f.Stat()
-		if err != nil {
-			return err
-		}
-
-		fileData := make([]byte, info.Size())
-		f.Read(fileData)
+		fileData, err := ioutil.ReadFile(file)
 
 		// parse page
 		mdParsed, err := ctx.Parser.ParsePage(fileData)
