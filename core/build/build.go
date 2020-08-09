@@ -23,7 +23,7 @@ type (
 		Write(site model.Site) error
 	}
 	Plugin interface {
-		ProcessPage(page *model.Page) error
+		ProcessPage(route string, page *model.Page) error
 		Finalize() error
 	}
 )
@@ -64,7 +64,7 @@ func Run(ctx Context) error {
 		}
 
 		for _, plugin := range ctx.Plugins {
-			if err := plugin.ProcessPage(&page); err != nil {
+			if err := plugin.ProcessPage(path, &page); err != nil {
 				return err
 			}
 		}
