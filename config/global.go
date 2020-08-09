@@ -1,6 +1,8 @@
 package config
 
 const (
+	Version      string = "UNDEFINED"
+	ConfigFile   string = "verless.yml"
 	ContentDir   string = "content"
 	TemplateDir  string = "templates"
 	AssetDir     string = "assets"
