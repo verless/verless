@@ -1,16 +1,14 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+	"github.com/verless/verless/model"
+)
 
 type Config struct {
 	Site struct {
-		Meta struct {
-			Title    string
-			Subtitle string
-			Author   string
-			Base     string
-		}
-		Nav struct {
+		Meta model.Meta
+		Nav  struct {
 			Items []struct {
 				Label  string
 				Target string
