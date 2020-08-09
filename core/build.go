@@ -5,6 +5,7 @@ import (
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/build"
 	"github.com/verless/verless/parser"
+	"github.com/verless/verless/plugin/atom"
 	"github.com/verless/verless/writer"
 )
 
@@ -26,7 +27,8 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 	}
 
 	if options.RenderRSS {
-		plugins = append(plugins, nil)
+		atomPlugin := atom.New(&cfg.Site.Meta, options.OutputDir)
+		plugins = append(plugins, atomPlugin)
 	}
 
 	ctx := build.Context{
