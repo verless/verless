@@ -20,7 +20,7 @@ func New(meta *model.Meta, outputDir string) *atom {
 		feed: &feeds.Feed{
 			Title:       meta.Title,
 			Link:        &feeds.Link{Href: meta.Base},
-			Description: "", // ToDo: Add `Description` to model.Meta
+			Description: meta.Description,
 			Author:      &feeds.Author{Name: meta.Author},
 			Updated:     time.Time{},
 			Created:     time.Now(),
