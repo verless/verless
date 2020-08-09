@@ -3,6 +3,8 @@ package build
 import (
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
+	"io/ioutil"
+	"path/filepath"
 )
 
 const (
@@ -45,6 +47,28 @@ func Run(ctx Context) error {
 	}()
 
 	err := runParallel(func(file string) error {
+		src, err := ioutil.ReadFile(file)
+		if err != nil {
+			return err
+		}
+
+		page, err := ctx.Parser.ParsePage(src)
+		if err != nil {
+			return err
+		}
+
+		path := filepath.Dir(file)
+
+		if err := ctx.Builder.RegisterPage(path, page); err != nil {
+			return err
+		}
+
+		for _, plugin := range ctx.Plugins {
+			if err := plugin.ProcessPage(&page); err != nil {
+				return err
+			}
+		}
+
 		return nil
 	}, files, parallelism)
 
