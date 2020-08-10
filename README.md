@@ -1,6 +1,6 @@
 <p align="center">
 <br>
-<img src="https://verless.dominikbraun.io/assets/img/logo.png">
+<img src="https://verless.dominikbraun.io/assets/img/logo-readme.png">
 </p>
 
 <h3 align="center">A simple and lightweight Static Site Generator.</h3>
