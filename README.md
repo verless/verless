@@ -25,3 +25,16 @@
 
 **verless** (pronounced like _serverless_) is a Static Site Generator designed for Markdown-based content with focus on
 simplicity and performance. It reads your Markdown files, applies your HTML templates and renders them as a website.
+
+## <img src="https://verless.dominikbraun.io/assets/img/list-item.png"> Features
+
+* Flexibility: Provide and use your default template for all pages, or use a different template for a specific page
+* Simplicity: Build your entire website within a single CLI command
+* Performance: Generating your website only takes a few seconds, even for thousands of pages
+* Rapid Development: Get started quickly with verless' small and reduced feature set
+* Configurability: Prodive additional information or override verless' defaults in `verless.yml` 
+
+## <img src="https://verless.dominikbraun.io/assets/img/list-item.png"> Examples
+
+* Example project structure: [example/](https://github.com/verless/verless/tree/master/example)
+* Real-world example website: [dominikbraun.io](https://dominikbraun.io)
