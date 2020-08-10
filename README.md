@@ -21,5 +21,5 @@
 
 ---
 
-**verless** is a Static Site Generator that reads your Markdown files, applies HTML templates on them and generates a
-static website.
+**verless** (pronounced like _serverless_ without _sir_) is a Static Site Generator designed for Markdown-based content.
+It reads your Markdown files, applies your HTML templates and renders them as a static website.
