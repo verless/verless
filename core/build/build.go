@@ -1,10 +1,11 @@
 package build
 
 import (
-	"github.com/verless/verless/fs"
-	"github.com/verless/verless/model"
 	"io/ioutil"
 	"path/filepath"
+
+	"github.com/verless/verless/fs"
+	"github.com/verless/verless/model"
 )
 
 const (
