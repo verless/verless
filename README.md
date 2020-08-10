@@ -19,4 +19,4 @@
 
 ---
 
-...
+verless reads your Markdown files, applies your HTML templates on them and generates a website.
