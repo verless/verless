@@ -1,13 +1,13 @@
 <p align="center">
 <br>
-<br>
 <img src="https://verless.dominikbraun.io/assets/img/logo.png">
-<br>
 </p>
 
 <h3 align="center">A simple and lightweight Static Site Generator.</h3>
 
 <p align="center">
+<br>
+<br>
 <a href="https://circleci.com/gh/dominikbraun/cleanup"><img src="https://circleci.com/gh/dominikbraun/cleanup.svg?style=shield"></a>
 <a href="https://goreportcard.com/report/github.com/dominikbraun/cleanup"><img src="https://goreportcard.com/badge/github.com/dominikbraun/cleanup"></a>
 <a href="https://www.codefactor.io/repository/github/dominikbraun/cleanup"><img src="https://www.codefactor.io/repository/github/dominikbraun/cleanup/badge" /></a>
