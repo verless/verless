@@ -32,10 +32,38 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 * Simplicity: Build your entire website within a single CLI command
 * Performance: Generating your website only takes a few seconds, even for thousands of pages
 * Rapid Development: Get started quickly with verless' small and reduced feature set
-* Configurability: Prodive additional information or override defaults in `verless.yml`
+* Configurability: Provide additional information or override defaults in `verless.yml`
 * Portability: verless is packaged as a single binary without any dependencies for multiple platforms
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
 
-* Example project structure: [verless/example](https://github.com/verless/verless/tree/master/example)
+* Example project structure: [verless/example](https://github.com/verless/example)
 * Real-world example website: [dominikbraun.io](https://dominikbraun.io)
+
+## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Installation
+
+### Linux and macOS
+
+Download the [latest release](https://github.com/verless/verless/releases) for your platform. Extract the
+downloaded binary into a directory like `/usr/local/bin`. Make sure the directory is in `PATH`.
+
+### Windows
+
+Download the [latest release](https://github.com/verless/verless/releases), create a directory like
+`C:\Program Files\verless` and extract the executable into that directory.
+[Add the directory to `Path`](https://www.computerhope.com/issues/ch000549.htm).
+
+### Docker
+
+Assuming your project directory is `my-blog`, the following command builds your website:
+
+```shell script
+$ docker container run -v $(pwd)/my-blog:/project verless/verless
+```
+
+The container will build the project mounted at `/project` and you'll find the website in `my-blog/target`. To run
+another command, just append it to the image name:
+
+```shell script
+$ docker container run verless/verless version
+```
