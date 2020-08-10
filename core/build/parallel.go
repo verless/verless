@@ -1,6 +1,11 @@
 package build
 
-func runParallel(fn func(file string) error, files <-chan string, n int) error {
+// processFiles takes a function for processing a file path. This
+// function is called concurrently for each file in the channel.
+//
+// If one of the functions returns a non-nil error, the error is
+// returned by processFiles.
+func processFiles(fn func(file string) error, files <-chan string, n int) error {
 	errors := make(chan error)
 
 	for i := 0; i < n; i++ {
