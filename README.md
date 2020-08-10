@@ -6,7 +6,7 @@
 <br>
 </p>
 
-<h3 align="center">A simple and lightweight Static Site Generator.</h3>
+<h4 align="center">A simple and lightweight Static Site Generator.</h4>
 
 <p align="center">
 <a href="https://circleci.com/gh/dominikbraun/cleanup"><img src="https://circleci.com/gh/dominikbraun/cleanup.svg?style=shield"></a>
