@@ -33,6 +33,7 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 * Performance: Generating your website only takes a few seconds, even for thousands of pages
 * Rapid Development: Get started quickly with verless' small and reduced feature set
 * Configurability: Prodive additional information or override defaults in `verless.yml`
+* Portability: verless is packaged as a single binary without any dependencies for multiple platforms
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
 
