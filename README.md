@@ -19,11 +19,9 @@
 <br>
 <br>
 <br>
-<br>
 </p>
 
 ---
 
 **verless** (pronounced like _serverless_) is a Static Site Generator designed for Markdown-based content with focus on
-simplicity and performance. It reads your Markdown files, applies your HTML templates and renders them as a static
-website.
+simplicity and performance. It reads your Markdown files, applies your HTML templates and renders them as a website.
