@@ -30,7 +30,7 @@ func TestSite_CreateRoute(t *testing.T) {
 		route := s.Root.Children[segment]
 
 		if len(route.Pages) < 1 {
-			t.Errorf("no pages has been added to route %s", segment)
+			t.Errorf("no pages have been added to route %s", segment)
 		}
 	}
 }
