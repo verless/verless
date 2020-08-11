@@ -40,8 +40,12 @@ func (s *Site) walkRoute(path string, route *Route, walkFn walkFn, maxDepth, cur
 func (s *Site) CreateRoute(route string) *Route {
 	var (
 		node     = &s.Root
-		segments = strings.Split(route, "/")
+		segments = strings.Split(route[1:], "/")
 	)
+
+	if node == &s.Root && s.Root.Children == nil {
+		s.Root.Children = make(map[string]*Route)
+	}
 
 	for i, s := range segments {
 		if _, exists := node.Children[s]; !exists {
@@ -51,10 +55,10 @@ func (s *Site) CreateRoute(route string) *Route {
 				IndexPage: IndexPage{},
 			}
 		}
+		node = node.Children[s]
 		if i == len(segments)-1 {
 			return node
 		}
-		node = node.Children[s]
 	}
 
 	return nil
@@ -63,17 +67,21 @@ func (s *Site) CreateRoute(route string) *Route {
 func (s *Site) ResolveRoute(route string) (*Route, error) {
 	var (
 		node     = &s.Root
-		segments = strings.Split(route, "/")
+		segments = strings.Split(route[1:], "/")
 	)
 
+	if node == &s.Root && s.Root.Children == nil {
+		s.Root.Children = make(map[string]*Route)
+	}
+
 	for i, s := range segments {
-		if i == len(segments)-1 {
-			return node, nil
-		}
 		if _, exists := node.Children[s]; !exists {
 			return node, fmt.Errorf("child route %s does not exist", s)
 		}
 		node = node.Children[s]
+		if i == len(segments)-1 {
+			return node, nil
+		}
 	}
 
 	return node, fmt.Errorf("route %s does not exist", route)
