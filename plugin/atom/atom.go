@@ -43,7 +43,7 @@ func (a *atom) ProcessPage(route string, page *model.Page) error {
 		return nil
 	}
 
-	canonical := fmt.Sprintf("%s%s%s", a.meta.Base, route, page.ID)
+	canonical := fmt.Sprintf("%s%s/%s", a.meta.Base, route, page.ID)
 
 	item := &feeds.Item{
 		Title:       page.Title,
