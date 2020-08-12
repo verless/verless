@@ -67,3 +67,12 @@ another command, just append it to the image name:
 ```shell script
 $ docker container run verless/verless version
 ```
+
+## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
+
+For a detailed reference, check out the [documentation](https://github.com/verless/verless/tree/master/docs).
+
+## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Contributing
+
+Anyone is welcome to contribute to verless. Please refer to our
+[Contribution guidelines](https://github.com/verless/verless/blob/master/.github/CONTRIBUTING.md).
