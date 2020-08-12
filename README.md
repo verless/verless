@@ -75,6 +75,7 @@ example. Create a project directory on your local machine, e.g. `coffee-blog`, a
 it:
 
 ```yaml
+# File: coffee-blog/verless.yml
 site:
   meta:
     title: Coffee Blog
@@ -84,6 +85,7 @@ site:
 After that, create a directory `templates/` inside your project and add a template file called `index-page.html`:
 
 ```html
+<!-- File: coffee-blog/templates/index-page.html -->
 <!DOCTYPE html>
 <html>
     <head>
