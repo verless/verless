@@ -85,7 +85,7 @@ func Run(ctx Context) []error {
 		streamError       = make(chan error, 1)           // as fs.StreamFiles only returns one error set the size to one to avoid blocking
 		processingErrors  = make(chan error, parallelism) // add as much possible errors as parallelism to avoid blocking
 		stopSignal        = make(chan bool)
-		contentDir = filepath.Join(ctx.Path, config.ContentDir)
+		contentDir        = filepath.Join(ctx.Path, config.ContentDir)
 	)
 
 	go func() {
