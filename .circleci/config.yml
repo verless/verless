@@ -44,5 +44,5 @@ workflows:
     jobs:
       - go-check
       - go-test:
-        requires:
-          - go-check
+          requires:
+            - go-check
