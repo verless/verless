@@ -68,6 +68,43 @@ another command, just append it to the image name:
 $ docker container run verless/verless version
 ```
 
+## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Getting started
+
+If you are ready to get your hands dirty and test if everything works as expected, you may want to start with a quick
+example. Create a project directory on your local machine, e.g. `coffee-blog`, and a file called `verless.yml` inside of
+it:
+
+```yaml
+site:
+  meta:
+    title: Coffee Blog
+    subtitle: About Espresso & Cappuccino
+```
+
+After that, create a directory `templates/` inside your project and add a template file called `index-page.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{.Meta.Title}}</title>
+    </head>
+    <body>
+        <h1>{{.Meta.Title}}</h1>
+        <h3>{{.Meta.Subtitle}}</h3>
+    </body>
+</html>
+```
+
+Now run the following command in your project directory:
+
+```shell script
+$ verless build
+```
+
+The generated website is inside the created `target` directory. You're now good to
+[create your first content](https://github.com/verless/verless/tree/master/docs).
+
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
 
 For a detailed reference, check out the [documentation](https://github.com/verless/verless/tree/master/docs).
