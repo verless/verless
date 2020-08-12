@@ -27,7 +27,8 @@ type Config struct {
 
 func FromFile(path, filename string) (Config, error) {
 	viper.AddConfigPath(path)
-	viper.SetConfigFile(filename)
+	// set the filename (without extension) this allows free usage of all formats viper accepts.
+	viper.SetConfigName(filename)
 
 	var config Config
 

@@ -71,19 +71,30 @@ type Context struct {
 //	4. Get the finished site model with all pages from the builder.
 //	5. Render that site model as HTML.
 //	6. Let each plugin finish its work, e.g. by writing a file.
-//
 // For further info on one of these steps, see its implementation.
-func Run(ctx Context) error {
+//
+// If any error occurs it is returned as a slice of errors as there can be
+// several errors from the concurrent goroutines at the same time.
+// If any error occurs all goroutines are stopped as soon as possible.
+func Run(ctx Context) []error {
 	var (
-		files  = make(chan string)
-		errors = make(chan error)
+		concurrencyErrors []error
+		files             = make(chan string)
+		streamError       = make(chan error, 1)           // as fs.StreamFiles only returns one error set the size to one to avoid blocking
+		processingErrors  = make(chan error, parallelism) // add as much possible errors as parallelism to avoid blocking
+		stopSignal        = make(chan bool)
 	)
 
 	go func() {
-		errors <- fs.StreamFiles(ctx.Path, files, fs.MarkdownOnly, fs.NoUnderscores)
+		err := fs.StreamFiles(ctx.Path, files, stopSignal, fs.MarkdownOnly, fs.NoUnderscores)
+		if err != nil {
+			streamError <- err
+		}
+
+		close(streamError)
 	}()
 
-	err := processFiles(func(file string) error {
+	processFiles(func(file string) error {
 		src, err := ioutil.ReadFile(file)
 		if err != nil {
 			return err
@@ -109,26 +120,36 @@ func Run(ctx Context) error {
 		}
 
 		return nil
-	}, files, parallelism)
+	}, files, processingErrors, parallelism)
 
-	if err != nil {
-		return err
+	close(processingErrors)
+	close(stopSignal)
+
+	// collect all errors
+	for err := range streamError {
+		concurrencyErrors = append(concurrencyErrors, err)
+	}
+	for err := range processingErrors {
+		concurrencyErrors = append(concurrencyErrors, err)
+	}
+	if len(concurrencyErrors) > 0 {
+		return concurrencyErrors
 	}
 
 	site, err := ctx.Builder.Dispatch()
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	if err := ctx.Writer.Write(site); err != nil {
-		return err
+		return []error{err}
 	}
 
 	for _, plugin := range ctx.Plugins {
 		// Finalize has to be called after writing the page to make
 		// sure that no files will be overwritten by the Writer.
 		if err := plugin.Finalize(); err != nil {
-			return err
+			return []error{err}
 		}
 	}
 
