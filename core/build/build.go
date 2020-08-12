@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 )
@@ -71,6 +72,7 @@ type Context struct {
 //	4. Get the finished site model with all pages from the builder.
 //	5. Render that site model as HTML.
 //	6. Let each plugin finish its work, e.g. by writing a file.
+//
 // For further info on one of these steps, see its implementation.
 //
 // If any error occurs it is returned as a slice of errors as there can be
@@ -83,10 +85,11 @@ func Run(ctx Context) []error {
 		streamError       = make(chan error, 1)           // as fs.StreamFiles only returns one error set the size to one to avoid blocking
 		processingErrors  = make(chan error, parallelism) // add as much possible errors as parallelism to avoid blocking
 		stopSignal        = make(chan bool)
+		contentDir = filepath.Join(ctx.Path, config.ContentDir)
 	)
 
 	go func() {
-		err := fs.StreamFiles(ctx.Path, files, stopSignal, fs.MarkdownOnly, fs.NoUnderscores)
+		err := fs.StreamFiles(contentDir, files, stopSignal, fs.MarkdownOnly, fs.NoUnderscores)
 		if err != nil {
 			streamError <- err
 		}
