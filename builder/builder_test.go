@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
 )
 
@@ -80,7 +81,7 @@ func TestBuilder_Dispatch(t *testing.T) {
 
 func setupBuilder() {
 	if b == nil {
-		b = New(nil)
+		b = New(&config.Config{})
 	}
 }
 
