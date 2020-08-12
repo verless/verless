@@ -3,7 +3,7 @@ version: 2.1
 executors:
   go-container:
     docker:
-      - image: cimg/go:1.14
+      - image: circleci/golang:1.14
     environment:
       GO111MODULE: "on"
       GOPROXY: "https://proxy.golang.org"
@@ -32,7 +32,7 @@ jobs:
           command: go mod download
       - save_cache:
           key: gomodules-v1-{{ checksum "go.mod" }}
-          paths: $GOPATH/pkg/mod
+          paths: /go/pkg
       - run:
           name: Run all tests
           command: go test -v ./...
