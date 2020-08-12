@@ -101,13 +101,13 @@ After that, create a directory `templates/` inside your project and add a templa
 </html>
 ```
 
-Now run the following command in your project directory:
+Now run the following command inside your project directory:
 
 ```shell script
 $ verless build
 ```
 
-The generated website is inside the created `target` directory. You're now good to
+The generated website is in the created `target` directory. You're now good to
 [create your first content](https://github.com/verless/verless/tree/master/docs)!
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
