@@ -105,7 +105,7 @@ $ verless build
 ```
 
 The generated website is inside the created `target` directory. You're now good to
-[create your first content](https://github.com/verless/verless/tree/master/docs).
+[create your first content](https://github.com/verless/verless/tree/master/docs)!
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
 
