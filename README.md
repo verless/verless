@@ -2,7 +2,6 @@
 <br>
 <br>
 <br>
-<br>
 <img src="https://verless.dominikbraun.io/assets/img/logo-github.png">
 <br>
 <br>
