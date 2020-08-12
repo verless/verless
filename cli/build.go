@@ -26,7 +26,7 @@ func newBuildCmd() *cobra.Command {
 			if len(errs) == 1 {
 				return errs[0]
 			} else if len(errs) > 1 {
-				return errors.Errorf("several errors occurred while building", errs)
+				return errors.Errorf("several errors occurred while building: %v", errs)
 			}
 
 			return nil
