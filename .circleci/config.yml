@@ -42,7 +42,7 @@ workflows:
   # The basic CI workflow for single commits and opened PRs.
   verless-ci:
     jobs:
-      - go-check:
+      - go-check
       - go-test:
         requires:
           - go-check
