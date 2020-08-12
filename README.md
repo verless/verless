@@ -7,7 +7,6 @@
 <br>
 <br>
 <br>
-<br>
 </p>
 
 <h3 align="center">A simple and lightweight Static Site Generator.</h3>
