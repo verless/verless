@@ -121,5 +121,5 @@ Anyone is welcome to contribute to verless. Please refer to our
 
 <p align="center">
 <br>
-<img src="https://verless.dominikbraun.io/assets/img/icon-light.png">
+<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
 </p>
