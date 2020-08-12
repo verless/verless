@@ -37,12 +37,22 @@ func (w *writer) Write(site model.Site) error {
 	w.site = site
 
 	err := w.site.WalkRoutes(func(path string, route *model.Route) error {
-		for _, page := range route.Pages {
-			if err := w.writePage(path, &page); err != nil {
+		for _, p := range route.Pages {
+			if err := w.writePage(path, page{
+				Meta:   &w.site.Meta,
+				Nav:    &w.site.Nav,
+				Page:   &p,
+				Footer: &w.site.Footer,
+			}); err != nil {
 				return err
 			}
 		}
-		return w.writeIndexPage(path, &route.IndexPage)
+		return w.writeIndexPage(path, indexPage{
+			Meta:   &w.site.Meta,
+			Nav:    &w.site.Nav,
+			Page:   &route.IndexPage,
+			Footer: &w.site.Footer,
+		})
 	}, -1)
 
 	if err != nil {
@@ -74,8 +84,8 @@ func (w *writer) initTemplates() error {
 	return nil
 }
 
-func (w *writer) writePage(route string, page *model.Page) error {
-	path := filepath.Join(w.outputPath, route, page.ID)
+func (w *writer) writePage(route string, page page) error {
+	path := filepath.Join(w.outputPath, route, page.Page.ID)
 
 	if err := os.MkdirAll(path, 0700); err != nil {
 		return err
@@ -89,7 +99,7 @@ func (w *writer) writePage(route string, page *model.Page) error {
 	return w.pageTpl.Execute(file, &page)
 }
 
-func (w *writer) writeIndexPage(route string, indexPage *model.IndexPage) error {
+func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 	path := filepath.Join(w.outputPath, route)
 
 	if err := os.MkdirAll(path, 0700); err != nil {
@@ -109,6 +119,10 @@ func (w *writer) copyAssetDir() error {
 		src  = filepath.Join(w.path, config.AssetDir)
 		dest = filepath.Join(w.outputPath, config.AssetDir)
 	)
+
+	if _, err := os.Stat(src); os.IsNotExist(err) {
+		return nil
+	}
 
 	return copy.Copy(src, dest)
 }
