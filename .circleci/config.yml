@@ -32,7 +32,7 @@ jobs:
           command: go mod download
       - save_cache:
           key: gomodules-v1-{{ checksum "go.mod" }}
-          paths: /go/pkg
+          paths: $GOPATH/pkg/mod
       - run:
           name: Run all tests
           command: go test -v ./...
