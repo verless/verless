@@ -19,6 +19,10 @@ var (
 
 func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filters ...func(file string) bool) error {
 	err := filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
 		if info.IsDir() {
 			return nil
 		}
