@@ -82,6 +82,9 @@ site:
     subtitle: About Espresso & Cappuccino
 ```
 
+This file stores global metadata for your website and offers the possibility to modify your website manually, for
+example you could override the generated navigation items here.
+
 After that, create a directory `templates/` inside your project and add a template file called `index-page.html`:
 
 ```html
