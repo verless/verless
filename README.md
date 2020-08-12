@@ -118,3 +118,7 @@ For a detailed reference, check out the [documentation](https://github.com/verle
 
 Anyone is welcome to contribute to verless. Please refer to our
 [Contribution guidelines](https://github.com/verless/verless/blob/master/.github/CONTRIBUTING.md).
+
+<p align="center">
+<img src="https://verless.dominikbraun.io/assets/img/icon-light.png">
+</p>
