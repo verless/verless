@@ -5,6 +5,9 @@
 # Build artifacts.
 target/
 
+# Python virtual environment.
+venv/
+
 # The built example project.
 example/target/
 
