@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 )
@@ -75,12 +76,13 @@ type Context struct {
 // For further info on one of these steps, see its implementation.
 func Run(ctx Context) error {
 	var (
-		files  = make(chan string)
-		errors = make(chan error)
+		files      = make(chan string)
+		errors     = make(chan error)
+		contentDir = filepath.Join(ctx.Path, config.ContentDir)
 	)
 
 	go func() {
-		errors <- fs.StreamFiles(ctx.Path, files, fs.MarkdownOnly, fs.NoUnderscores)
+		errors <- fs.StreamFiles(contentDir, files, fs.MarkdownOnly, fs.NoUnderscores)
 	}()
 
 	err := processFiles(func(file string) error {
