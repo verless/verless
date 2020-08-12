@@ -20,3 +20,6 @@ example/
 
 # Test binaries built with `go test -c`.
 *.test
+
+out
+in

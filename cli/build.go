@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
@@ -15,11 +16,20 @@ func newBuildCmd() *cobra.Command {
 	buildCmd := cobra.Command{
 		Use: "build",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfg, err := config.FromFile(path, config.ConfigName)
+			cfg, err := config.FromFile(path, config.FileName)
 			if err != nil {
 				return err
 			}
-			return core.RunBuild(path, options, cfg)
+
+			errs := core.RunBuild(path, options, cfg)
+
+			if len(errs) == 1 {
+				return errs[0]
+			} else if len(errs) > 1 {
+				return errors.Errorf("several errors occurred while building", errs)
+			}
+
+			return nil
 		},
 	}
 

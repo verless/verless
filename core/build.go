@@ -26,7 +26,9 @@ type BuildOptions struct {
 // core build function. Also, all build plugins are initialized.
 //
 // See doc.go for more information on the core architecture.
-func RunBuild(path string, options BuildOptions, cfg config.Config) error {
+//
+// As some parts are running concurrently several errors can occur at the same time.
+func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	var (
 		p       = parser.NewMarkdown()
 		b       = builder.New()
@@ -35,7 +37,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 	)
 
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	if options.RenderRSS {

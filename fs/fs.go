@@ -1,6 +1,7 @@
 package fs
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -16,8 +17,12 @@ var (
 	}
 )
 
-func StreamFiles(path string, files chan<- string, filters ...func(file string) bool) error {
+func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filters ...func(file string) bool) error {
 	err := filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
 		if info.IsDir() {
 			return nil
 		}
@@ -26,9 +31,26 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 				return nil
 			}
 		}
-		files <- file
+
+		for {
+			if len(files) == cap(files) {
+				files <- file
+				break
+			}
+
+			select {
+			case _, ok := <-stopSignal: // check for stop signal (channel closing)
+				if !ok {
+					return errors.New("forcefully stopped filepath walk")
+				}
+			default:
+				// do nothing, just re-run the for again until any of the cases passes or the file can be sent.
+			}
+		}
+
 		return nil
 	})
 
+	close(files)
 	return err
 }
