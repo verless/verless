@@ -1,0 +1,46 @@
+version: 2.1
+
+executors:
+  go-container:
+    docker:
+      - image: circleci/golang:1.14
+    environment:
+      GO111MODULE: "on"
+      GOPROXY: "https://proxy.golang.org"
+
+jobs:
+  # Run static Go-related checks, e.g. code formatting.
+  go-check:
+    executor: go-container
+    steps:
+      - checkout
+      - run:
+          name: Check Go format
+          command: "! go fmt ./... | read"
+
+  # Run all tests.
+  go-test:
+    executor: go-container
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gomodules-v1-{{ checksum "go.mod" }}
+            - gomodules-v1-
+      - run:
+          name: Download dependencies
+          command: go mod download
+      - save_cache:
+          key: gomodules-v1-{{ checksum "go.mod" }}
+          paths: /go/pkg
+      - run:
+          name: Run all tests
+          command: go test -v ./...
+
+workflows:
+  version: 2
+  verless-ci:
+    - go-check
+    - go-test:
+        requires:
+          - go-check
