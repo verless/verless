@@ -31,7 +31,7 @@ type BuildOptions struct {
 func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	var (
 		p       = parser.NewMarkdown()
-		b       = builder.New()
+		b       = builder.New(&cfg)
 		w, err  = writer.New(path, options.OutputDir)
 		plugins = make([]build.Plugin, 0)
 	)

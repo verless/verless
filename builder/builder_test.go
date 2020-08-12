@@ -80,7 +80,7 @@ func TestBuilder_Dispatch(t *testing.T) {
 
 func setupBuilder() {
 	if b == nil {
-		b = New()
+		b = New(nil)
 	}
 }
 

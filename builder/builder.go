@@ -3,12 +3,15 @@ package builder
 import (
 	"sync"
 
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
 )
 
-func New() *builder {
+func New(cfg *config.Config) *builder {
 	b := builder{
-		site:  model.Site{},
+		site: model.Site{
+			Meta: cfg.Site.Meta,
+		},
 		mutex: &sync.Mutex{},
 	}
 	return &b
