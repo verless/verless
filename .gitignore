@@ -8,8 +8,8 @@ target/
 # Python virtual environment.
 venv/
 
-# The built example project.
-example/target/
+# The example project.
+example/
 
 # Binaries for programs and plugins.
 *.exe
