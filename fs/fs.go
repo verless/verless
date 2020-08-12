@@ -18,6 +18,12 @@ var (
 )
 
 func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filters ...func(file string) bool) error {
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		close(files)
+		return nil
+	}
+
 	err := filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
