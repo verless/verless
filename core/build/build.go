@@ -108,9 +108,9 @@ func Run(ctx Context) []error {
 			return err
 		}
 
-		// Given a file path like `/blog/coffee/making-espresso.md`,
-		// the resulting path for the page will be `/blog/coffee`.
-		path := filepath.Dir(file)
+		// Given a file path like `example/content/blog/coffee/making-espresso.md`,
+		// the resulting path for the `making-espresso` page will be `/blog/coffee`.
+		path := filepath.Dir(file)[len(contentDir):]
 
 		if err := ctx.Builder.RegisterPage(path, page); err != nil {
 			return err
