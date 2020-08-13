@@ -1,3 +1,6 @@
+// Package fs provides convenience functions for filesystem
+// operations. For trivial operations like creating a new file,
+// prefer built-in functions instead of creating new functions.
 package fs
 
 import (
@@ -8,15 +11,22 @@ import (
 )
 
 var (
+	// MarkdownOnly is a filter that only lets pass Markdown files.
 	MarkdownOnly = func(file string) bool {
 		return filepath.Ext(file) == ".md"
 	}
+
+	// NoUnderscores is a predefined filter that doesn't let pass
+	// files starting with an underscore.
 	NoUnderscores = func(file string) bool {
 		filename := filepath.Base(file)
 		return !strings.HasPrefix(filename, "_")
 	}
 )
 
+// StreamFiles sends files in a given path that match the given
+// filters through the files channel. If a value from stopSignal
+// is received, StreamFiles exits.
 func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filters ...func(file string) bool) error {
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
