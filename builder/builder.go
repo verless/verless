@@ -32,7 +32,14 @@ func (b *builder) RegisterPage(route string, page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	r := b.site.CreateRoute(route)
+	var r *model.Route
+
+	if route != "" {
+		r = b.site.CreateRoute(route)
+	} else {
+		r = &b.site.Root
+	}
+
 	r.Pages = append(r.Pages, page)
 	// ToDo: Append page to route's IndexPage
 
