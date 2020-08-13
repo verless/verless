@@ -5,6 +5,7 @@ import (
 	"github.com/verless/verless/config"
 )
 
+// NewRootCmd creates the `verless` command and its sub-commands.
 func NewRootCmd() *cobra.Command {
 	rootCmd := cobra.Command{
 		Use:     "verless",

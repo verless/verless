@@ -5,6 +5,7 @@ import (
 	"github.com/verless/verless/core"
 )
 
+// newVersionCmd creates the `verless version` command.
 func newVersionCmd() *cobra.Command {
 	var options core.VersionOptions
 

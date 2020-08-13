@@ -7,6 +7,7 @@ import (
 	"github.com/verless/verless/core"
 )
 
+// newBuildCmd creates the `verless build` command.
 func newBuildCmd() *cobra.Command {
 	var (
 		options core.BuildOptions
