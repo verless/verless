@@ -38,8 +38,6 @@ func newBuildCmd() *cobra.Command {
 		"", `Specify an output directory.`)
 	buildCmd.Flags().StringVarP(&path, "path", "p",
 		".", `Specify a build path other than the current directory.`)
-	buildCmd.Flags().BoolVar(&options.RenderRSS, "render-rss",
-		true, `Render an Atom RSS feed as atom.xml.`)
 
 	return &buildCmd
 }

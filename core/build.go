@@ -29,7 +29,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, out)
+		w, err  = writer.New(path, options.OutputDir)
 		plugins = make([]build.Plugin, 0)
 	)
 
@@ -37,7 +37,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		return []error{err}
 	}
 
-	if options.RenderRSS {
+	if cfg.HasPlugin(atom.Key) {
 		atomPlugin := atom.New(&cfg.Site.Meta, out)
 		plugins = append(plugins, atomPlugin)
 	}
