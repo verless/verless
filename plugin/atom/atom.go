@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	Key      string = "atom"
 	filename string = "atom.xml"
 )
 

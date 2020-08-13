@@ -14,8 +14,6 @@ type BuildOptions struct {
 	// OutputDir sets the output directory. If this field is empty,
 	// it defaults to config.OutputDir.
 	OutputDir string
-	// RenderRSS renders an Atom RSS feed.
-	RenderRSS bool
 }
 
 // RunBuild triggers a build using the provided options and user
@@ -34,7 +32,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		return []error{err}
 	}
 
-	if options.RenderRSS {
+	if cfg.HasPlugin(atom.Key) {
 		atomPlugin := atom.New(&cfg.Site.Meta, options.OutputDir)
 		plugins = append(plugins, atomPlugin)
 	}
