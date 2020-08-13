@@ -1,6 +1,4 @@
-// Package build provides verless' core build functionality and
-// an entry point for it. All public functions may only be called
-// by the outer core package functions.
+// Package build provides verless' core build functionality.
 package build
 
 import (
@@ -83,8 +81,8 @@ func Run(ctx Context) []error {
 	var (
 		concurrencyErrors []error
 		files             = make(chan string)
-		streamError       = make(chan error, 1)           // as fs.StreamFiles only returns one error set the size to one to avoid blocking
-		processingErrors  = make(chan error, parallelism) // add as much possible errors as parallelism to avoid blocking
+		streamError       = make(chan error, 1)           // Buffer the channel to avoid blocking.
+		processingErrors  = make(chan error, parallelism) // Add as much possible errors as parallelism to avoid blocking.
 		stopSignal        = make(chan bool)
 		contentDir        = filepath.Join(ctx.Path, config.ContentDir)
 	)
@@ -133,7 +131,6 @@ func Run(ctx Context) []error {
 	close(processingErrors)
 	close(stopSignal)
 
-	// collect all errors
 	for err := range streamError {
 		concurrencyErrors = append(concurrencyErrors, err)
 	}

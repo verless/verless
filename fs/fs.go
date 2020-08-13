@@ -1,6 +1,4 @@
-// Package fs provides convenience functions for filesystem
-// operations. For trivial operations like creating a new file,
-// prefer built-in functions instead of creating new functions.
+// Package fs provides functions for filesystem operations.
 package fs
 
 import (

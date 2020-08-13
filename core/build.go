@@ -21,13 +21,7 @@ type BuildOptions struct {
 // RunBuild triggers a build using the provided options and user
 // configuration.
 //
-// It is responsible for initializing all build dependencies like
-// the parser, builder and writer, which are then passed to the
-// core build function. Also, all build plugins are initialized.
-//
 // See doc.go for more information on the core architecture.
-//
-// As some parts are running concurrently several errors can occur at the same time.
 func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	var (
 		p       = parser.NewMarkdown()

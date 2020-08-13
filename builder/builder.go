@@ -8,9 +8,7 @@ import (
 	"github.com/verless/verless/model"
 )
 
-// New creates a new builder instance that takes the provided user
-// configuration into account. The configuration is required when
-// it comes to generating metadata and navigation items for example.
+// New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
 		site: model.Site{

@@ -1,6 +1,4 @@
 // Package config provides configuration-related types and functions.
-// Its main purpose is to parse and provide the user-defined verless
-// configuration.
 package config
 
 import (

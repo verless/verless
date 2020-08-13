@@ -1,8 +1,7 @@
 package config
 
 var (
-	// Version specifies the verless version and is injected when
-	// building a new release.
+	// Version is injected when building a new release.
 	Version string = "UNDEFINED"
 )
 
