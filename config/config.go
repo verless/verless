@@ -28,6 +28,7 @@ type Config struct {
 	Plugins []string
 }
 
+// HasPlugin checks if the configuration has enabled a given plugin.
 func (c Config) HasPlugin(key string) bool {
 	for _, plugin := range c.Plugins {
 		if key == plugin {
