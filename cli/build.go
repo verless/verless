@@ -35,7 +35,7 @@ func newBuildCmd() *cobra.Command {
 	}
 
 	buildCmd.Flags().StringVarP(&options.OutputDir, "output", "o",
-		config.OutputDir, `Specify an output directory.`)
+		"", `Specify an output directory.`)
 	buildCmd.Flags().StringVarP(&path, "path", "p",
 		".", `Specify a build path other than the current directory.`)
 	buildCmd.Flags().BoolVar(&options.RenderRSS, "render-rss",

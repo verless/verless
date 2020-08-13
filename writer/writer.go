@@ -12,8 +12,8 @@ import (
 
 func New(path, outputDir string) (*writer, error) {
 	w := writer{
-		path:       path,
-		outputPath: outputDir,
+		path:      path,
+		outputDir: outputDir,
 	}
 
 	if err := w.initTemplates(); err != nil {
@@ -25,7 +25,7 @@ func New(path, outputDir string) (*writer, error) {
 
 type writer struct {
 	path         string
-	outputPath   string
+	outputDir    string
 	site         model.Site
 	pageTpl      *template.Template
 	indexPageTpl *template.Template
@@ -83,7 +83,7 @@ func (w *writer) initTemplates() error {
 }
 
 func (w *writer) writePage(route string, page page) error {
-	path := filepath.Join(w.outputPath, route, page.Page.ID)
+	path := filepath.Join(w.outputDir, route, page.Page.ID)
 
 	if err := os.MkdirAll(path, 0700); err != nil {
 		return err
@@ -98,7 +98,7 @@ func (w *writer) writePage(route string, page page) error {
 }
 
 func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
-	path := filepath.Join(w.outputPath, route)
+	path := filepath.Join(w.outputDir, route)
 
 	if err := os.MkdirAll(path, 0700); err != nil {
 		return err
@@ -115,7 +115,7 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 func (w *writer) copyAssetDir() error {
 	var (
 		src  = filepath.Join(w.path, config.AssetDir)
-		dest = filepath.Join(w.outputPath, config.AssetDir)
+		dest = filepath.Join(w.outputDir, config.AssetDir)
 	)
 
 	if _, err := os.Stat(src); os.IsNotExist(err) {

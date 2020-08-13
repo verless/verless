@@ -1,6 +1,8 @@
 package core
 
 import (
+	"path/filepath"
+
 	"github.com/verless/verless/builder"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/build"
@@ -12,7 +14,7 @@ import (
 // BuildOptions represents options for running a verless build.
 type BuildOptions struct {
 	// OutputDir sets the output directory. If this field is empty,
-	// it defaults to config.OutputDir.
+	// config.OutputDir will be used.
 	OutputDir string
 	// RenderRSS renders an Atom RSS feed.
 	RenderRSS bool
@@ -24,9 +26,10 @@ type BuildOptions struct {
 // See doc.go for more information on the core architecture.
 func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	var (
+		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, options.OutputDir)
+		w, err  = writer.New(path, out)
 		plugins = make([]build.Plugin, 0)
 	)
 
@@ -35,7 +38,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	}
 
 	if options.RenderRSS {
-		atomPlugin := atom.New(&cfg.Site.Meta, options.OutputDir)
+		atomPlugin := atom.New(&cfg.Site.Meta, out)
 		plugins = append(plugins, atomPlugin)
 	}
 
@@ -48,4 +51,18 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	}
 
 	return build.Run(ctx)
+}
+
+// finalOutputDir determines the final output path the website
+// will be written into.
+func finalOutputDir(path string, options *BuildOptions) string {
+	var outputPath string
+
+	if options.OutputDir != "" {
+		outputPath = options.OutputDir
+	} else {
+		outputPath = filepath.Join(path, config.OutputDir)
+	}
+
+	return outputPath
 }
