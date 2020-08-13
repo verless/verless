@@ -11,11 +11,9 @@ import (
 )
 
 func New(path, outputDir string) (*writer, error) {
-	outputPath := filepath.Join(path, outputDir)
-
 	w := writer{
 		path:       path,
-		outputPath: outputPath,
+		outputPath: outputDir,
 	}
 
 	if err := w.initTemplates(); err != nil {
