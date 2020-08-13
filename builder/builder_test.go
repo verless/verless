@@ -10,7 +10,9 @@ import (
 )
 
 var (
-	b     *builder     = nil
+	// b is the builder instance used for testing.
+	b *builder = nil
+	// pages is a set of pages used for testing.
 	pages []model.Page = []model.Page{
 		{ID: "page-0"},
 		{ID: "page-1"},
@@ -19,6 +21,8 @@ var (
 	}
 )
 
+// TestBuilder_RegisterPage checks if the pages can be resolved
+// from the site model exactly like they've been registered.
 func TestBuilder_RegisterPage(t *testing.T) {
 	setupBuilder()
 
@@ -43,6 +47,8 @@ func TestBuilder_RegisterPage(t *testing.T) {
 	}
 }
 
+// TestBuilder_Dispatch checks if the dispatched site model is
+// valid and contains all registered pages.
 func TestBuilder_Dispatch(t *testing.T) {
 	setupBuilder()
 
@@ -79,12 +85,14 @@ func TestBuilder_Dispatch(t *testing.T) {
 	}
 }
 
+// setupBuilder initializes the builder if required.
 func setupBuilder() {
 	if b == nil {
 		b = New(&config.Config{})
 	}
 }
 
+// getRoute returns a generated route identified by a number n.
 func getRoute(n int) string {
 	return fmt.Sprintf("/route-%v", n)
 }
