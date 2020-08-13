@@ -6,6 +6,7 @@ package build
 import (
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
@@ -108,9 +109,13 @@ func Run(ctx Context) []error {
 			return err
 		}
 
-		// Given a file path like `example/content/blog/coffee/making-espresso.md`,
-		// the resulting path for the `making-espresso` page will be `/blog/coffee`.
+		// For a file path like example/content/blog/coffee/making-espresso.md,
+		// the resulting path will be /blog/coffee.
 		path := filepath.Dir(file)[len(contentDir):]
+
+		// For a file name like making-espresso.md, the resulting page
+		// ID will be making-espresso.
+		page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
 
 		if err := ctx.Builder.RegisterPage(path, page); err != nil {
 			return err
