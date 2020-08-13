@@ -35,8 +35,8 @@ to meet in order to get merged.
 * Commit messages have to start capitalized and should be written in the imperative, e.g.
 `Read markdown files concurrently`.
 * Create a WIP pull request so that reviewers can track your work continuously and jump in early if there are problems.
-* Branches shall not be merged locally, _all_ merges require a pull request. This is also true for internal branches
-from contributors with direct push access to the verless repository.
+* Branches shall not be merged locally. _All_ merges require a pull request. This is also true for internal branches
+from contributors with direct push access.
 
 ### Coding conventions
 
@@ -45,7 +45,8 @@ Most importantly, there are some hard rules for code:
 * All code has to be testable, maintainable and extendable.
 * All code has to follow the [Effective Go](https://golang.org/doc/effective_go.html) guidelines.
 * All code has to be formatted with `gofmt -s`.
-* All type declarations and methods have to be documented, even if they're private.
+* All type declarations and methods have to be documented briefly, even if they're private.
+* All code has to pass the CI jobs successfully.
 
 There also are some 'soft' recommendations that apply to most cases:
 
