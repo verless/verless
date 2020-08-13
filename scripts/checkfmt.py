@@ -9,8 +9,8 @@ def check_fmt():
     If all files are formatted appropriately, exit with status 0,
     otherwise exit with status 1 by printing all invalid files.
     """
-    process = subprocess.run(["gofmt", "-l", ".."], capture_output=True)
-    output = process.stdout.decode("utf-8")
+    output = subprocess.check_output(["gofmt", "-l", ".."])
+    output = output.decode("utf-8")
 
     if output != "":
         msg = """gofmt found non-formatted code in the following files:
