@@ -17,7 +17,7 @@ func newBuildCmd() *cobra.Command {
 	buildCmd := cobra.Command{
 		Use: "build",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfg, err := config.FromFile(path, config.FileName)
+			cfg, err := config.FromFile(path, config.Filename)
 			if err != nil {
 				return err
 			}

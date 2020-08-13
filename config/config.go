@@ -1,3 +1,6 @@
+// Package config provides configuration-related types and functions.
+// Its main purpose is to parse and provide the user-defined verless
+// configuration.
 package config
 
 import (
@@ -5,6 +8,7 @@ import (
 	"github.com/verless/verless/model"
 )
 
+// Config represents the user configuration stored in verless.yml.
 type Config struct {
 	Site struct {
 		Meta model.Meta
@@ -25,9 +29,11 @@ type Config struct {
 	}
 }
 
+// FromFile looks for a YAML, TOML oder JSON file with the given
+// name in the provided path and converts it to a Config instance.
 func FromFile(path, filename string) (Config, error) {
 	viper.AddConfigPath(path)
-	// set the filename (without extension) this allows free usage of all formats viper accepts.
+	// Set the filename without extension to allow all supported formats.
 	viper.SetConfigName(filename)
 
 	var config Config
