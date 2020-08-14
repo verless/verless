@@ -46,10 +46,10 @@ func (w *writer) Write(site model.Site) error {
 			}
 		}
 		return w.writeIndexPage(path, indexPage{
-			Meta:   &w.site.Meta,
-			Nav:    &w.site.Nav,
-			Page:   &route.IndexPage,
-			Footer: &w.site.Footer,
+			Meta:      &w.site.Meta,
+			Nav:       &w.site.Nav,
+			IndexPage: &route.IndexPage,
+			Footer:    &w.site.Footer,
 		})
 	}, -1)
 

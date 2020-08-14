@@ -8,7 +8,7 @@
     </head>
     <body>
         <main>
-            {{range $page := .Page.Pages}}
+            {{range $page := .Pages}}
                 <div>
                     <h3>{{$page.Title}}</h3>
                     <p><small>Posted on {{$page.Date.Format "Jan 2 2006"}}</small></p>
