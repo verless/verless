@@ -85,7 +85,7 @@ func TestWriter_removeOutDirIfPermitted(t *testing.T) {
 		if testCase.expectedError == "" {
 			test.Ok(t, err)
 		} else {
-			test.Equals(t, testCase.expectedError, err.Error())
+			test.Assert(t, err != nil && testCase.expectedError == err.Error(), "should error")
 		}
 
 		testCase.cleanupTest()
