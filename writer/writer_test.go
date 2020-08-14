@@ -35,8 +35,9 @@ func TestWriter_removeOutDirIfPermitted(t *testing.T) {
 			beforeTest: func() {
 				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
 
-				_, err := os.Create(path.Join(testOutPath, "anyFile.txt"))
+				file, err := os.Create(path.Join(testOutPath, "anyFile.txt"))
 				test.Ok(t, err)
+				_ = file.Close()
 			},
 			cleanupTest: func() {
 				err := os.RemoveAll(testOutPath)
@@ -58,8 +59,9 @@ func TestWriter_removeOutDirIfPermitted(t *testing.T) {
 			overwrite: true,
 			beforeTest: func() {
 				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
-				_, err := os.Create(path.Join(testOutPath, "anyFile.txt"))
+				file, err := os.Create(path.Join(testOutPath, "anyFile.txt"))
 				test.Ok(t, err)
+				_ = file.Close()
 			},
 			cleanupTest: func() {
 				err := os.RemoveAll(testOutPath)
