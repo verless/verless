@@ -16,8 +16,6 @@ type BuildOptions struct {
 	// OutputDir sets the output directory. If this field is empty,
 	// config.OutputDir will be used.
 	OutputDir string
-	// RenderRSS renders an Atom RSS feed.
-	RenderRSS bool
 }
 
 // RunBuild triggers a build using the provided options and user
@@ -53,8 +51,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	return build.Run(ctx)
 }
 
-// finalOutputDir determines the final output path the website
-// will be written into.
+// finalOutputDir determines the final output path.
 func finalOutputDir(path string, options *BuildOptions) string {
 	var outputPath string
 

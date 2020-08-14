@@ -58,7 +58,8 @@ func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filte
 					return errors.New("forcefully stopped filepath walk")
 				}
 			default:
-				// do nothing, just re-run the for again until any of the cases passes or the file can be sent.
+				// do nothing, just re-run the for again until an
+				// of the cases passes or the file can be sent.
 			}
 		}
 
