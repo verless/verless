@@ -29,7 +29,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, options.OutputDir)
+		w, err  = writer.New(path, out)
 		plugins = make([]build.Plugin, 0)
 	)
 
