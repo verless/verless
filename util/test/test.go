@@ -1,14 +1,14 @@
 // Package test contains some simple utils for more readable tests.
 // It is based on https://github.com/benbjohnson/testing
-
 package test
 
 import (
 	"fmt"
-	"github.com/google/go-cmp/cmp"
 	"path/filepath"
 	"runtime"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 // Assert fails the test if the condition is false.
