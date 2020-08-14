@@ -40,7 +40,7 @@ func (b *builder) RegisterPage(route string, page model.Page) error {
 	}
 
 	r.Pages = append(r.Pages, page)
-	// ToDo: Append page to route's IndexPage
+	r.IndexPage.Pages = append(r.IndexPage.Pages, &page)
 
 	return nil
 }
