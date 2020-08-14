@@ -6,7 +6,7 @@ import (
 	"path"
 	"testing"
 
-	"github.com/verless/verless/util/test"
+	"github.com/verless/verless/test"
 )
 
 const (
