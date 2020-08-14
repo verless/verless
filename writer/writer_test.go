@@ -2,10 +2,11 @@
 package writer
 
 import (
-	"github.com/verless/verless/util/test"
 	"os"
 	"path"
 	"testing"
+
+	"github.com/verless/verless/util/test"
 )
 
 const (
