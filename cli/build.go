@@ -39,5 +39,8 @@ func newBuildCmd() *cobra.Command {
 	buildCmd.Flags().StringVarP(&path, "path", "p",
 		".", `Specify a build path other than the current directory.`)
 
+	// Overwrite should not have a shorthand to avoid accidental usage.
+	buildCmd.Flags().BoolVar(&options.Overwrite, "overwrite", false, `Allows overwriting an existing output directory.`)
+
 	return &buildCmd
 }
