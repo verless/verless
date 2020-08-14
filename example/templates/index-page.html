@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{.Meta.Title}}</title>
+        <meta name="author" content="{{.Meta.Author}}" />
+        <meta name="description" content="{{.Meta.Description}}" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    </head>
+    <body>
+        <main>
+            {{range $page := .Page.Pages}}
+                <div>
+                    <h3>{{$page.Title}}</h3>
+                    <p><small>Posted on {{$page.Date.Format "Jan 2 2006"}}</small></p>
+                    <p>{{$page.Description}}</p>
+                    <p><a href="{{$page.ID}}">read post</a></p>
+                </div>
+            {{end}}
+        </main>
+    </body>
+</html>

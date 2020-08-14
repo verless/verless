@@ -32,6 +32,14 @@ func readMetadata(metadata metadata, page *model.Page) {
 		page.Tags = append(page.Tags, val.(string))
 	})
 
+	readPrimitive(metadata["Img"], func(val interface{}) {
+		page.Img = val.(string)
+	})
+
+	readPrimitive(metadata["Credit"], func(val interface{}) {
+		page.Credit = val.(string)
+	})
+
 	readPrimitive(metadata["Description"], func(val interface{}) {
 		page.Description = val.(string)
 	})
