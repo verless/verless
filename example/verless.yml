@@ -1,0 +1,17 @@
+# Settings that apply to the contents of your website.
+site:
+  # General information about your project.
+  meta:
+    title: My Coffee Blog
+    subtitle: About Espresso & Cappuccino
+    author: Clara Crema
+    description: I'm Clara and write alot about coffee. Welcome to my blog!
+  # Add items to your website's navigation.
+  nav:
+    items:
+      - label: Instagram
+        target: https://instagram.com
+
+# Enable plugins for your project.
+plugins:
+  - atom
