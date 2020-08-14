@@ -16,6 +16,8 @@ type BuildOptions struct {
 	// OutputDir sets the output directory. If this field is empty,
 	// config.OutputDir will be used.
 	OutputDir string
+	// Overwrite specifies that the output folder can be overwritten.
+	Overwrite bool
 }
 
 // RunBuild triggers a build using the provided options and user
@@ -27,7 +29,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, out)
+		w, err  = writer.New(path, out, options.Overwrite)
 		plugins = make([]build.Plugin, 0)
 	)
 
