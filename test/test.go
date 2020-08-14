@@ -1,5 +1,5 @@
 // Package test contains some simple utils for more readable tests.
-// It is based on https://github.com/benbjohnson/testing
+// It is based on https://github.com/benbjohnson/testing.
 package test
 
 import (
@@ -11,11 +11,18 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+// Formatting strings for printing test results.
+const (
+	assertFormat string = "\\033[31m%s:%d: \"+msg+\"\\033[39m\\n\\n"
+	okFormat     string = "\u001B[31m%s:%d: unexpected error: %s\u001B[39m\n\n"
+	equalsFormat string = "\u001B[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
+)
+
 // Assert fails the test if the condition is false.
 func Assert(tb testing.TB, condition bool, msg string, v ...interface{}) {
 	if !condition {
 		_, file, line, _ := runtime.Caller(1)
-		fmt.Printf("\033[31m%s:%d: "+msg+"\033[39m\n\n", append([]interface{}{filepath.Base(file), line}, v...)...)
+		fmt.Printf(assertFormat, append([]interface{}{filepath.Base(file), line}, v...)...)
 		tb.FailNow()
 	}
 }
@@ -24,7 +31,7 @@ func Assert(tb testing.TB, condition bool, msg string, v ...interface{}) {
 func Ok(tb testing.TB, err error) {
 	if err != nil {
 		_, file, line, _ := runtime.Caller(1)
-		fmt.Printf("\033[31m%s:%d: unexpected error: %s\033[39m\n\n", filepath.Base(file), line, err.Error())
+		fmt.Printf(okFormat, filepath.Base(file), line, err.Error())
 		tb.Error(err)
 	}
 }
@@ -33,7 +40,7 @@ func Ok(tb testing.TB, err error) {
 func Equals(tb testing.TB, exp, act interface{}, options ...cmp.Option) {
 	if !cmp.Equal(exp, act, options...) {
 		_, file, line, _ := runtime.Caller(1)
-		fmt.Printf("\033[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\033[39m\n\n", filepath.Base(file), line, exp, act)
+		fmt.Printf(equalsFormat, filepath.Base(file), line, exp, act)
 		tb.FailNow()
 	}
 }
