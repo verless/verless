@@ -45,7 +45,7 @@ func readMetadata(metadata metadata, page *model.Page) {
 	})
 
 	readList(metadata["Related"], func(val interface{}) {
-		page.RelatedFQNs = append(page.RelatedFQNs, val.(model.FQN))
+		page.RelatedFQNs = append(page.RelatedFQNs, val.(string))
 	})
 
 	readPrimitive(metadata["Template"], func(val interface{}) {
