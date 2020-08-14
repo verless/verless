@@ -19,14 +19,13 @@ func New(cfg *config.Config) *builder {
 	return &b
 }
 
-// builder represents a model builder maintaining a site model
-// where all pages get registered.
+// builder represents a model builder maintaining a site model.
 type builder struct {
 	site  model.Site
 	mutex *sync.Mutex
 }
 
-// RegisterPage registers the given page under the given route. It
+// RegisterPage registers a given page under a given route. It
 // is safe for concurrent usage.
 func (b *builder) RegisterPage(route string, page model.Page) error {
 	b.mutex.Lock()

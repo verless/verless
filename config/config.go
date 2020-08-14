@@ -38,8 +38,7 @@ func (c Config) HasPlugin(key string) bool {
 	return false
 }
 
-// FromFile looks for a YAML, TOML oder JSON file with the given
-// name in the provided path and converts it to a Config instance.
+// FromFile looks for a configuration file and converts it to a Config.
 func FromFile(path, filename string) (Config, error) {
 	viper.AddConfigPath(path)
 	// Set the filename without extension to allow all supported formats.

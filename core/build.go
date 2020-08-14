@@ -53,8 +53,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	return build.Run(ctx)
 }
 
-// finalOutputDir determines the final output path the website
-// will be written into.
+// finalOutputDir determines the final output path.
 func finalOutputDir(path string, options *BuildOptions) string {
 	var outputPath string
 

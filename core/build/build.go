@@ -43,7 +43,7 @@ type (
 		// ProcessPage will be invoked after parsing the page.
 		// Must be safe for concurrent usage.
 		ProcessPage(route string, page *model.Page) error
-		// Finalize will be invoked after rendering the site.
+		// Finalize will be invoked after processing all pages.
 		Finalize() error
 	}
 )
