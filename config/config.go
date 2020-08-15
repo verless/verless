@@ -26,6 +26,9 @@ type Config struct {
 		}
 	}
 	Plugins []string
+	Build   struct {
+		Overwrite bool
+	}
 }
 
 // HasPlugin checks if the configuration has enabled a given plugin.
