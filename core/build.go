@@ -13,6 +13,13 @@ import (
 	"github.com/verless/verless/writer"
 )
 
+var (
+	// ErrCannotOverwrite states that verless isn't allowed to
+	// delete or overwrite the output directory.
+	ErrCannotOverwrite = errors.New(`Cannot overwrite the output directory.
+Consider using the --overwrite flag or enabled build.overwrite in the configuration file.`)
+)
+
 // BuildOptions represents options for running a verless build.
 type BuildOptions struct {
 	// OutputDir sets the output directory. If this field is empty,
@@ -40,9 +47,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	}
 
 	if !canOverwrite(out, &options, &cfg) {
-		return []error{
-			errors.New("cannot overwrite the output directory. consider using --overwrite"),
-		}
+		return []error{ErrCannotOverwrite}
 	}
 
 	if cfg.HasPlugin(atom.Key) {
