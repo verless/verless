@@ -1,8 +1,8 @@
-# verless Documentation
+# Documentation
 
 ## Contents
 
-* [Configuration reference]()
+* [Configuration reference](#configuration-reference)
 * [Template reference]()
 * [Command reference]()
 
@@ -51,7 +51,27 @@ build:
 
 ### Configuration key reference
 
-...
+* **`site`** _(Map)_:
+    * **`meta`** _(Map)_:
+        * **`title`** _(String)_: The global website title that applies to all pages.
+        * **`subtitle`** _(String)_: The global website subtitle that applies to all pages.
+        * **`description`** _(String)_: The global website description that applies to all pages.
+        * **`author`** _(String)_: The website author or publisher.
+        * **`base`** _(String)_: The website's base URL in the form `https://example.com`. Needs to be enclosed in quotes.
+    * **`nav`** _(Map)_:
+        * **`items`** _(Array)_:
+            - **`label`** _(String)_: The navigation item's label, e.g. `Home`.
+              **`target`** _(String)_: The navigation item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
+        * **`overwrite`** _(Bool)_: Overwrite the generated navigation items with `items`. If this is `false` or not set, `items` are appended to the generated items.
+    * **`footer`** _(Map)_:
+        * **`items`** _(Array)_:
+            - **`label`** _(String)_: The footer item's label, e.g. `Home`.
+              **`target`** _(String)_: The footer item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
+        * **`overwrite`** _(Bool)_: Overwrite the generated footer items with `items`. If this is `false` or not set, `items` are appended to the generated items.
+* **`plugins`** _(Array)_:
+    - **`<plugin key>`** _(String)_: The key of the plugin to be used.
+* **`build`** _(Map)_:
+    * **`overwrite`** _(Bool)_: Allow verless to overwrite the output directory completely. This removes the need for the `--overwrite` flag for builds.
 
 <p align="center">
 <br>
