@@ -1,6 +1,8 @@
 package core
 
 import (
+	"errors"
+	"os"
 	"path/filepath"
 
 	"github.com/verless/verless/builder"
@@ -29,12 +31,18 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, out, options.Overwrite)
+		w, err  = writer.New(path, out)
 		plugins = make([]build.Plugin, 0)
 	)
 
 	if err != nil {
 		return []error{err}
+	}
+
+	if !canOverwrite(out, &options, &cfg) {
+		return []error{
+			errors.New("cannot overwrite the output directory. consider using --overwrite"),
+		}
 	}
 
 	if cfg.HasPlugin(atom.Key) {
@@ -64,4 +72,19 @@ func finalOutputDir(path string, options *BuildOptions) string {
 	}
 
 	return outputPath
+}
+
+// canOverwrite determines of the output directory can be removed
+// or overwritten safely. This is true if
+//	- the user specified the --overwrite flag,
+//	- the user opted in to overwriting in verless.yml,
+//	- or the output directory doesn't exist yet.
+func canOverwrite(outputDir string, options *BuildOptions, cfg *config.Config) bool {
+	if options.Overwrite || cfg.Build.Overwrite {
+		return true
+	}
+	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+		return true
+	}
+	return false
 }

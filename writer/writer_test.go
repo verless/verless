@@ -14,24 +14,22 @@ const (
 	testOutPath = "../test-out-path"
 )
 
-func TestWriter_removeOutDirIfPermitted(t *testing.T) {
+func TestWriter_removeOutDirIfExists(t *testing.T) {
 
 	tests := map[string]struct {
-		overwrite bool
-		// beforeTest is a callback which creates the folders / files to test a specific testcase.
+		// beforeTest is a callback which creates the folders/files
+		// to test a specific testcase.
 		beforeTest func()
-		// cleanupTest is a callback which the folders / files created by beforeTest and the test itself.
-		cleanupTest func()
-
+		// cleanupTest is a callback which the folders/files created
+		// by beforeTest and the test itself.
+		cleanupTest   func()
 		expectedError string
 	}{
 		"normal": {
-			overwrite:   false,
 			beforeTest:  func() {},
 			cleanupTest: func() {},
 		},
 		"already exists": {
-			overwrite: false,
 			beforeTest: func() {
 				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
 
@@ -43,10 +41,8 @@ func TestWriter_removeOutDirIfPermitted(t *testing.T) {
 				err := os.RemoveAll(testOutPath)
 				test.Ok(t, err)
 			},
-			expectedError: "the output folder already exists and is not empty\ncondisder using the --overwrite flag",
 		},
 		"already exists but without file": {
-			overwrite: false,
 			beforeTest: func() {
 				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
 			},
@@ -54,35 +50,17 @@ func TestWriter_removeOutDirIfPermitted(t *testing.T) {
 				err := os.RemoveAll(testOutPath)
 				test.Ok(t, err)
 			},
-		},
-		"already exists with overwrite": {
-			overwrite: true,
-			beforeTest: func() {
-				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
-				file, err := os.Create(path.Join(testOutPath, "anyFile.txt"))
-				test.Ok(t, err)
-				_ = file.Close()
-			},
-			cleanupTest: func() {
-				err := os.RemoveAll(testOutPath)
-				test.Ok(t, err)
-			},
-		},
-		"not exists with overwrite": {
-			overwrite:   true,
-			beforeTest:  func() {},
-			cleanupTest: func() {},
 		},
 	}
 
 	for caseName, testCase := range tests {
 		t.Logf("Testing '%s'", caseName)
 
-		w := setupNewWriter(t, testCase.overwrite)
+		w := setupNewWriter(t)
 
 		testCase.beforeTest()
 
-		err := w.removeOutDirIfPermitted()
+		err := w.removeOutDirIfExists()
 
 		if testCase.expectedError == "" {
 			test.Ok(t, err)
@@ -94,8 +72,8 @@ func TestWriter_removeOutDirIfPermitted(t *testing.T) {
 	}
 }
 
-func setupNewWriter(t testing.TB, overwrite bool) *writer {
-	w, err := New(testPath, testOutPath, overwrite)
+func setupNewWriter(t testing.TB) *writer {
+	w, err := New(testPath, testOutPath)
 	if err != nil {
 		t.Errorf("New should not throw an error: %v", err)
 	}
