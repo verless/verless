@@ -26,7 +26,7 @@ func newCreateProjectCmd() *cobra.Command {
 	)
 
 	createProjectCmd := cobra.Command{
-		Use:  "project <path>",
+		Use:  "project PATH",
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
