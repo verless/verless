@@ -35,6 +35,7 @@ to meet in order to get merged.
 * Commit messages have to start capitalized and should be written in the imperative, e.g.
 `Read markdown files concurrently`.
 * Create a WIP pull request so that reviewers can track your work continuously and jump in early if there are problems.
+* If your pull request fixes an existing issue, refer to it with the issue number: `Fixes #19.`
 * Branches shall not be merged locally. _All_ merges require a pull request. This is also true for internal branches
 from contributors with direct push access.
 
