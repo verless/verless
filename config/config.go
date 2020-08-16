@@ -15,14 +15,14 @@ type Config struct {
 				Label  string
 				Target string
 			}
-			Override bool
+			Overwrite bool
 		}
 		Footer struct {
 			Items []struct {
 				Label  string
 				Target string
 			}
-			Override bool
+			Overwrite bool
 		}
 	}
 	Plugins []string
