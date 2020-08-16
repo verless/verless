@@ -11,18 +11,17 @@ import (
 func newBuildCmd() *cobra.Command {
 	var (
 		options core.BuildOptions
-		path    string
 	)
 
 	buildCmd := cobra.Command{
-		Use: "build",
+		Use: "build PROJECT",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfg, err := config.FromFile(path, config.Filename)
+			cfg, err := config.FromFile(args[0], config.Filename)
 			if err != nil {
 				return err
 			}
 
-			errs := core.RunBuild(path, options, cfg)
+			errs := core.RunBuild(args[0], options, cfg)
 
 			if len(errs) == 1 {
 				return errs[0]
@@ -32,12 +31,11 @@ func newBuildCmd() *cobra.Command {
 
 			return nil
 		},
+		Args: cobra.ExactArgs(1),
 	}
 
 	buildCmd.Flags().StringVarP(&options.OutputDir, "output", "o",
 		"", `Specify an output directory.`)
-	buildCmd.Flags().StringVarP(&path, "path", "p",
-		".", `Specify a build path other than the current directory.`)
 
 	// Overwrite should not have a shorthand to avoid accidental usage.
 	buildCmd.Flags().BoolVar(&options.Overwrite, "overwrite", false, `Allows overwriting an existing output directory.`)
