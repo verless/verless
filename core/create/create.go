@@ -55,7 +55,7 @@ func Project(path string) error {
 // createDirectories creates all given directories inside path.
 func createDirectories(path string, directories ...string) error {
 	for _, directory := range directories {
-		if err := os.MkdirAll(filepath.Join(path, directory), 0644); err != nil {
+		if err := os.MkdirAll(filepath.Join(path, directory), 0755); err != nil {
 			return err
 		}
 	}
