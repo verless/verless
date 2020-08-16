@@ -48,11 +48,6 @@ Note that all configuration keys are optional.
 * **`build`** _(Map)_:
     * **`overwrite`** _(Bool)_: Allow verless to overwrite the output directory completely. This removes the need for the `--overwrite` flag for builds.
 
-<p align="center">
-<br>
-<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
-</p>
-
 ## Template reference
 
 ...
@@ -64,3 +59,8 @@ Note that all configuration keys are optional.
 ## Command reference
 
 ...
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+</p>
