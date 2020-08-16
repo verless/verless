@@ -37,7 +37,7 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
 
-* Example project structure: [verless/](https://github.com/verless/verless/tree/master/example)
+* Example project structure: [example/](https://github.com/verless/verless/tree/master/example)
 * Real-world example website: [dominikbraun.io](https://dominikbraun.io)
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Installation
