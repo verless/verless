@@ -21,6 +21,9 @@ func RunCreateProject(path string, options CreateProjectOptions) error {
 		if !options.Force {
 			return fmt.Errorf("%s already exists. use --force to overwrite it", path)
 		}
+		if err := os.RemoveAll(path); err != nil {
+			return err
+		}
 	}
 
 	return create.Project(path)
