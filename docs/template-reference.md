@@ -83,7 +83,28 @@ Available in:
 | `{{.Meta.Author}}`      | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
 | `{{.Meta.Base}}`        | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
 
+### Nav
+
+Available in:
+* `page.html`
+* `index-page.html`
+
+| Field            | Source                 | Description                                                                                   |
+|------------------|------------------------|-----------------------------------------------------------------------------------------------|
+| `{{.Nav.Items}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+
+### NavItem
+
+Available in:
+* `{{.Nav.Items}}`
+
+| Field         | Source                 | Description                                                                                   |
+|---------------|------------------------|-----------------------------------------------------------------------------------------------|
+| `{{.Label}}`  | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| `{{.Target}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+
 ...
+
 
 <p align="center">
 <br>
