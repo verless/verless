@@ -2,9 +2,11 @@
 package build
 
 import (
+	"errors"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
@@ -79,66 +81,54 @@ type Context struct {
 // If any error occurs all goroutines are stopped as soon as possible.
 func Run(ctx Context) []error {
 	var (
-		concurrencyErrors []error
-		files             = make(chan string)
-		streamError       = make(chan error, 1)           // Buffer the channel to avoid blocking.
-		processingErrors  = make(chan error, parallelism) // Add as much possible errors as parallelism to avoid blocking.
-		stopSignal        = make(chan bool)
-		contentDir        = filepath.Join(ctx.Path, config.ContentDir)
+		files      = make(chan string)
+		errorChan  = make(chan error)
+		retErrors  = make([]error, 0)
+		contentDir = filepath.Join(ctx.Path, config.ContentDir)
 	)
 
 	go func() {
-		err := fs.StreamFiles(contentDir, files, stopSignal, fs.MarkdownOnly, fs.NoUnderscores)
-		if err != nil {
-			streamError <- err
+		if err := fs.StreamFiles(contentDir, files, fs.MarkdownOnly, fs.NoUnderscores); err != nil {
+			errorChan <- err
 		}
-
-		close(streamError)
 	}()
 
-	processFiles(func(file string) error {
-		src, err := ioutil.ReadFile(file)
-		if err != nil {
-			return err
-		}
+	wg := sync.WaitGroup{}
+	wg.Add(parallelism)
 
-		page, err := ctx.Parser.ParsePage(src)
-		if err != nil {
-			return err
-		}
-
-		// For a file path like example/content/blog/coffee/making-espresso.md,
-		// the resulting path will be /blog/coffee.
-		path := filepath.Dir(file)[len(contentDir):]
-
-		// For a file name like making-espresso.md, the resulting page
-		// ID will be making-espresso.
-		page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
-
-		if err := ctx.Builder.RegisterPage(path, page); err != nil {
-			return err
-		}
-
-		for _, plugin := range ctx.Plugins {
-			if err := plugin.ProcessPage(path, &page); err != nil {
-				return err
+	for i := 0; i < parallelism; i++ {
+		go func() {
+			// Process the files received via the files channel.
+			for file := range files {
+				if err := processFile(&ctx, contentDir, file); err != nil {
+					errorChan <- err
+				}
 			}
+			wg.Done()
+		}()
+	}
+
+	// Observe the WaitGroup and close the error channel when
+	// all workers have finished.
+	go func() {
+		for {
+			wg.Wait()
+			close(errorChan)
+			break
 		}
+	}()
 
-		return nil
-	}, files, processingErrors, parallelism)
-
-	close(processingErrors)
-	close(stopSignal)
-
-	for err := range streamError {
-		concurrencyErrors = append(concurrencyErrors, err)
+	// Collect all errors. This automatically stops when the
+	// workers have finished, as the channel gets closed.
+	for err := range errorChan {
+		if errors.Is(err, fs.ErrStreaming) {
+			return []error{err}
+		}
+		retErrors = append(retErrors, err)
 	}
-	for err := range processingErrors {
-		concurrencyErrors = append(concurrencyErrors, err)
-	}
-	if len(concurrencyErrors) > 0 {
-		return concurrencyErrors
+
+	if len(retErrors) > 0 {
+		return retErrors
 	}
 
 	site, err := ctx.Builder.Dispatch()
@@ -155,6 +145,38 @@ func Run(ctx Context) []error {
 		// sure that no files will be overwritten by the Writer.
 		if err := plugin.Finalize(); err != nil {
 			return []error{err}
+		}
+	}
+
+	return nil
+}
+
+func processFile(ctx *Context, contentDir, file string) error {
+	src, err := ioutil.ReadFile(file)
+	if err != nil {
+		return err
+	}
+
+	page, err := ctx.Parser.ParsePage(src)
+	if err != nil {
+		return err
+	}
+
+	// For a file path like example/content/blog/coffee/making-espresso.md,
+	// the resulting path will be /blog/coffee.
+	path := filepath.Dir(file)[len(contentDir):]
+
+	// For a file name like making-espresso.md, the resulting page
+	// ID will be making-espresso.
+	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
+
+	if err := ctx.Builder.RegisterPage(path, page); err != nil {
+		return err
+	}
+
+	for _, plugin := range ctx.Plugins {
+		if err := plugin.ProcessPage(path, &page); err != nil {
+			return err
 		}
 	}
 
