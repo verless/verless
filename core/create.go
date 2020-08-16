@@ -7,10 +7,15 @@ import (
 	"github.com/verless/verless/core/create"
 )
 
+// CreateProjectOptions represents options for creating
+// a new verless project.
 type CreateProjectOptions struct {
 	Force bool
 }
 
+// RunCreateProject creates a new verless project. If the
+// specified project path already exists, RunCreateProject
+// returns an error unless --force has been used.
 func RunCreateProject(path string, options CreateProjectOptions) error {
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
 		if !options.Force {
