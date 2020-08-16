@@ -67,12 +67,12 @@ Available in:
 * `page.html`
 * `index-page.html`
 
-| Field                   | Source      | Note |
-|-------------------------|-------------|------|
-| `{{.Meta.Title}}`       | verless.yml |      |
-| `{{.Meta.Subtitle}}`    | verless.yml |      |
-| `{{.Meta.Description}}` | verless.yml |      |
-| `{{.Meta.Author}}`      | verless.yml |      |
-| `{{.Meta.Base}}`        | verless.yml |      |
+| Field                   | Source      | Description                                                                                   |
+|-------------------------|-------------|-----------------------------------------------------------------------------------------------|
+| `{{.Meta.Title}}`       | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| `{{.Meta.Subtitle}}`    | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| `{{.Meta.Description}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| `{{.Meta.Author}}`      | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| `{{.Meta.Base}}`        | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
 
 ...
