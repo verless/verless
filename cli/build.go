@@ -14,7 +14,7 @@ func newBuildCmd() *cobra.Command {
 	)
 
 	buildCmd := cobra.Command{
-		Use: "build {project-path}",
+		Use: "build PROJECT",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := config.FromFile(args[0], config.Filename)
 			if err != nil {
@@ -31,12 +31,7 @@ func newBuildCmd() *cobra.Command {
 
 			return nil
 		},
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) != 1 {
-				return errors.New("requires a build path argument where the project to build is located")
-			}
-			return nil
-		},
+		Args: cobra.ExactArgs(1),
 	}
 
 	buildCmd.Flags().StringVarP(&options.OutputDir, "output", "o",
