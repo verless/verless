@@ -65,7 +65,7 @@ You can loop over an array like an index page's `Pages` and access its items as 
 </li>
 ```
 
-Make sure to check out the [example templates](https://github.com/verless/verless/tree/docs/example/templates).
+Make sure to check out the [example templates](https://github.com/verless/verless/tree/master/example/templates).
 
 ## Field reference
 
@@ -122,6 +122,13 @@ Available in:
 | `{{.Page.Content}}`     | Markdown |                                                                                                  |
 | `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.     |
 | `{{.Page.Template}}`    | Markdown | A custom template to use. This has to be a file in `templates`.                                  |
+
+### Pages
+
+Available in:
+* `index-page.html`
+
+...
 
 <p align="center">
 <br>
