@@ -5,6 +5,7 @@ import (
 	"github.com/verless/verless/core"
 )
 
+// newCreateCmd creates the `verless create` command.
 func newCreateCmd() *cobra.Command {
 	createCmd := cobra.Command{
 		Use: "create",
@@ -18,6 +19,7 @@ func newCreateCmd() *cobra.Command {
 	return &createCmd
 }
 
+// newCreateProjectCmd creates the `verless create project` command.
 func newCreateProjectCmd() *cobra.Command {
 	var (
 		options core.CreateProjectOptions
