@@ -2,7 +2,6 @@
 package fs
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,23 +19,24 @@ var (
 		filename := filepath.Base(file)
 		return !strings.HasPrefix(filename, "_")
 	}
+
+	// ErrStreaming is returned from StreamFiles.
+	ErrStreaming error = nil
 )
 
 // StreamFiles sends files in a given path that match the given
-// filters through the files channel. If a value from stopSignal
-// is received, StreamFiles exits.
-func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filters ...func(file string) bool) error {
+// filters through the files channel.
+func StreamFiles(path string, files chan<- string, filters ...func(file string) bool) error {
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		close(files)
 		return nil
 	}
 
-	err := filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
+	ErrStreaming = filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-
 		if info.IsDir() {
 			return nil
 		}
@@ -46,26 +46,11 @@ func StreamFiles(path string, files chan<- string, stopSignal <-chan bool, filte
 			}
 		}
 
-		for {
-			if len(files) == cap(files) {
-				files <- file
-				break
-			}
-
-			select {
-			case _, ok := <-stopSignal: // check for stop signal (channel closing)
-				if !ok {
-					return errors.New("forcefully stopped filepath walk")
-				}
-			default:
-				// do nothing, just re-run the for again until an
-				// of the cases passes or the file can be sent.
-			}
-		}
+		files <- file
 
 		return nil
 	})
 
 	close(files)
-	return err
+	return ErrStreaming
 }
