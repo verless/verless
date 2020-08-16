@@ -87,14 +87,14 @@ func Run(ctx Context) []error {
 		contentDir = filepath.Join(ctx.Path, config.ContentDir)
 	)
 
-	wg := sync.WaitGroup{}
-	wg.Add(parallelism)
-
 	go func() {
 		if err := fs.StreamFiles(contentDir, files, fs.MarkdownOnly, fs.NoUnderscores); err != nil {
 			errorChan <- err
 		}
 	}()
+
+	wg := sync.WaitGroup{}
+	wg.Add(parallelism)
 
 	for i := 0; i < parallelism; i++ {
 		go func() {
