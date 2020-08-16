@@ -34,13 +34,13 @@ Note that all configuration keys are optional.
         * **`base`** _(String)_: The website's base URL in the form `https://example.com`. Needs to be enclosed in quotes.
     * **`nav`** _(Map)_:
         * **`items`** _(Array)_:
-            - **`label`** _(String)_: The navigation item's label, e.g. `Home`.
-              **`target`** _(String)_: The navigation item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
+            * **`- label`** _(String)_: The navigation item's label, e.g. `Home`.
+            * **`  target`** _(String)_: The navigation item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
         * **`overwrite`** _(Bool)_: Overwrite the generated navigation items with `items`. If this is `false` or not set, `items` are appended to the generated items.
     * **`footer`** _(Map)_:
         * **`items`** _(Array)_:
-            - **`label`** _(String)_: The footer item's label, e.g. `Home`.
-              **`target`** _(String)_: The footer item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
+            * **`- label`** _(String)_: The footer item's label, e.g. `Home`.
+            * **`  target`** _(String)_: The footer item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
         * **`overwrite`** _(Bool)_: Overwrite the generated footer items with `items`. If this is `false` or not set, `items` are appended to the generated items.
 * **`plugins`** _(Array)_:
     - **`<plugin key>`** _(String)_: The key of the plugin to be used.
