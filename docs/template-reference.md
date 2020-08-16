@@ -75,13 +75,13 @@ Available in:
 * `page.html`
 * `index-page.html`
 
-| Field                   | Source      | Description                                                                                   |
-|-------------------------|-------------|-----------------------------------------------------------------------------------------------|
-| `{{.Meta.Title}}`       | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
-| `{{.Meta.Subtitle}}`    | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
-| `{{.Meta.Description}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
-| `{{.Meta.Author}}`      | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
-| `{{.Meta.Base}}`        | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| Field                   | Source      | Description                                                                                    |
+|-------------------------|-------------|------------------------------------------------------------------------------------------------|
+| `{{.Meta.Title}}`       | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| `{{.Meta.Subtitle}}`    | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| `{{.Meta.Description}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| `{{.Meta.Author}}`      | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| `{{.Meta.Base}}`        | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
 
 ### Nav
 
@@ -89,22 +89,39 @@ Available in:
 * `page.html`
 * `index-page.html`
 
-| Field            | Source                 | Description                                                                                   |
-|------------------|------------------------|-----------------------------------------------------------------------------------------------|
-| `{{.Nav.Items}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| Field            | Source                 | Description                                                                                    |
+|------------------|------------------------|------------------------------------------------------------------------------------------------|
+| `{{.Nav.Items}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
 
 ### NavItem
 
 Available in:
 * `{{.Nav.Items}}`
 
-| Field         | Source                 | Description                                                                                   |
-|---------------|------------------------|-----------------------------------------------------------------------------------------------|
-| `{{.Label}}`  | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
-| `{{.Target}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml) |
+| Field         | Source                 | Description                                                                                    |
+|---------------|------------------------|------------------------------------------------------------------------------------------------|
+| `{{.Label}}`  | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| `{{.Target}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
 
-...
+### Page
 
+Available in:
+* `page.html`
+* `index-page.html`
+
+| Field                   | Source      | Description                                                                                   |
+|-------------------------|-------------|-----------------------------------------------------------------------------------------------|
+| `{{.Page.ID}}`          | Markdown | Useful for creating links to other pages.                                                        |
+| `{{.Page.Title}}`       | Markdown |                                                                                                  |
+| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                             |
+| `{{.Page.Date}}`        | Markdown |                                                                                                  |
+| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.       |
+| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                                  |
+| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                               |
+| `{{.Page.Description}}` | Markdown |                                                                                                  |
+| `{{.Page.Content}}`     | Markdown |                                                                                                  |
+| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.     |
+| `{{.Page.Template}}`    | Markdown | A custom template to use. This has to be a file in `templates`.                                  |
 
 <p align="center">
 <br>
