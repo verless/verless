@@ -8,7 +8,8 @@ import (
 
 // Config represents the user configuration stored in verless.yml.
 type Config struct {
-	Site struct {
+	Version string
+	Site    struct {
 		Meta model.Meta
 		Nav  struct {
 			Items []struct {
