@@ -3,13 +3,14 @@ package build
 
 import (
 	"errors"
-	"github.com/verless/verless/config"
-	"github.com/verless/verless/fs"
-	"github.com/verless/verless/model"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
 	"sync"
+
+	"github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
+	"github.com/verless/verless/model"
 )
 
 const (
