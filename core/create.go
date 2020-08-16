@@ -10,7 +10,7 @@ import (
 // CreateProjectOptions represents options for creating
 // a new verless project.
 type CreateProjectOptions struct {
-	Force bool
+	Overwrite bool
 }
 
 // RunCreateProject creates a new verless project. If the
@@ -18,7 +18,7 @@ type CreateProjectOptions struct {
 // returns an error unless --force has been used.
 func RunCreateProject(path string, options CreateProjectOptions) error {
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
-		if !options.Force {
+		if !options.Overwrite {
 			return fmt.Errorf("%s already exists. use --force to overwrite it", path)
 		}
 		if err := os.RemoveAll(path); err != nil {

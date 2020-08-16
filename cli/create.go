@@ -34,7 +34,7 @@ func newCreateProjectCmd() *cobra.Command {
 		},
 	}
 
-	createProjectCmd.Flags().BoolVarP(&options.Force, "force", "f",
+	createProjectCmd.Flags().BoolVar(&options.Overwrite, "overwrite",
 		false, `overwrite the directory if it already exists`)
 
 	return &createProjectCmd
