@@ -3,6 +3,14 @@
 verless renders Markdown content as static HTML sites using templates. This reference explains how to create and use
 these templates.
 
+## Contents
+
+* [Template path](#template-path)
+* [Required template](#required-templates)
+* [Optional templates](#optional-templates)
+* [Template syntax](#template-syntax)
+* [Field reference](#field-reference)
+
 ## Template path
 
 All templates have to live in your project's `templates` directory. You can use the `verless create project` command
