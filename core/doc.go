@@ -3,8 +3,12 @@ Package core provides the verless business logic.
 
 Each verless sub-command maintains its own file in the core package,
 like build.go for `verless build`. This file provides a function in
-the form Run<Command>, e.g. RunBuild, serving as an entry point for
-other packages.
+the form Run<Sub-Command>, e.g. RunBuild, serving as an entry point
+for other packages.
+
+Sub-commands of sub-commands like `verless create project` don't
+require an own file, they can just be grouped together in a common
+file like create.go.
 
 An entry point function either implements the business logic itself
 like RunVersion does, or prepares components and passes them to an
@@ -14,7 +18,10 @@ Typically, a verless command has multiple options. These options are
 types in the core package, declared in the command's file. They have
 to be initialized by the caller - for example the cli package - and
 then passed to the entry point function. The name of an option type
-must be in the form <Command>Options.
+must be in the form <Sub-Command>Options like BuildOptions. Options
+for sub-commands of sub-commands like `verless create project` must
+have a name in the form <Sub-Command><Sub-Command>Options, like
+CreateProjectOptions.
 
 As a result, most entry point functions accept a dedicated options
 instance. Some of them also require an initialized config instance
