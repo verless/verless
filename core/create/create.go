@@ -27,8 +27,8 @@ plugins:
   - atom
 build:
   # Allow verless to overwrite the output directory of your website
-  # when re-building it.
-  overwrite: true`
+  # when re-building it. False by default.
+  overwrite: false`
 )
 
 // Project creates a new verless project along with its mandatory
