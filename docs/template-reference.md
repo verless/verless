@@ -128,7 +128,29 @@ Available in:
 Available in:
 * `index-page.html`
 
-...
+| Field        | Source      | Description                                                                                  |
+|--------------|-------------|----------------------------------------------------------------------------------------------|
+| `{{.Pages}}` | Markdown    | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`. |
+
+### Footer
+
+Available in:
+* `page.html`
+* `index-page.html`
+
+| Field               | Source                 | Description                                                                                    |
+|---------------------|------------------------|------------------------------------------------------------------------------------------------|
+| `{{.Footer.Items}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+
+### Footer
+
+Available in:
+* `{{.Footer.Items}}`
+
+| Field         | Source                 | Description                                                                                    |
+|---------------|------------------------|------------------------------------------------------------------------------------------------|
+| `{{.Label}}`  | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| `{{.Target}}` | verless.yml, generated | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
 
 <p align="center">
 <br>
