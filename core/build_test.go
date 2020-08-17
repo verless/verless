@@ -1,15 +1,16 @@
 package core_test
 
 import (
+	"os"
+	"testing"
+
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
 	"github.com/verless/verless/test"
-	"os"
-	"testing"
 )
 
 const (
-	// Yes, it is intention to use ' ' just to test this also.
+	// Yes, it is intention to use spaces just to test this also.
 	outTestPath       = "out test path"
 	projectFolderPath = "../example"
 )
@@ -28,5 +29,5 @@ func TestRunFullBuild(t *testing.T) {
 		test.Ok(t, err)
 	}
 
-	os.RemoveAll(outTestPath)
+	_ := os.RemoveAll(outTestPath)
 }
