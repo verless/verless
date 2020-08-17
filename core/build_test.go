@@ -29,5 +29,5 @@ func TestRunFullBuild(t *testing.T) {
 		test.Ok(t, err)
 	}
 
-	_ := os.RemoveAll(outTestPath)
+	_ = os.RemoveAll(outTestPath)
 }
