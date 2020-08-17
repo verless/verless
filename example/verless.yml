@@ -16,3 +16,4 @@ site:
 # Enable plugins for your project.
 plugins:
   - atom
+  - tags
