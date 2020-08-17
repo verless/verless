@@ -2,6 +2,9 @@
 Title: Making Barista-Quality Espresso
 Date: 2020-08-14
 Description: This is a guide for making italian Espresso.
+Tags:
+    - Espresso
+    - Coffee
 Img: espresso.jpg
 Credit: Burst on Pexels
 ---

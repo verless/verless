@@ -2,6 +2,9 @@
 Title: Steaming Milk for Cappuccino
 Date: 2020-08-15
 Description: This is a guide for steaming milk.
+Tags:
+    - Cappuccino
+    - Coffee
 Img: /assets/img/blog/cappuccino.jpg
 Credit: Chevanon Photography on Pexels
 ---
