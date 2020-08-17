@@ -1,3 +1,4 @@
+version: 1
 # Settings that apply to the contents of your website.
 site:
   # General information about your project.

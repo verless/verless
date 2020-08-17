@@ -46,6 +46,12 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		return []error{err}
 	}
 
+	if cfg.Version == "" {
+		return []error{
+			errors.New("the configuration has to include a version"),
+		}
+	}
+
 	if !canOverwrite(out, &options, &cfg) {
 		return []error{ErrCannotOverwrite}
 	}
