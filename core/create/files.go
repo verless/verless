@@ -6,7 +6,7 @@ package create
 var (
 	files = map[string]string{
 
-		"example/assets/css/style.css": `* {
+		"assets/css/style.css": `* {
     font-family: Arial, Tahoma, sans-serif;
 }
 
@@ -19,7 +19,7 @@ main {
     margin-left: auto;
 }`,
 
-		"example/content/about.md": `---
+		"content/about.md": `---
 Title: About me
 ---
 
@@ -29,7 +29,7 @@ for making Espresso-based coffees.
 
 Feel free to contact me if you have an idea for a new blog post. Have fun!`,
 
-		"example/content/blog/making-barista-quality-espresso.md": `---
+		"content/blog/making-barista-quality-espresso.md": `---
 Title: Making Barista-Quality Espresso
 Date: 2020-08-14
 Description: This is a guide for making italian Espresso.
@@ -43,7 +43,7 @@ and practice, you'll be able to make delicious coffee at home.
 
 ...`,
 
-		"example/content/blog/steaming-milk-for-cappuccino.md": `---
+		"content/blog/steaming-milk-for-cappuccino.md": `---
 Title: Steaming Milk for Cappuccino
 Date: 2020-08-15
 Description: This is a guide for steaming milk.
@@ -57,7 +57,7 @@ matter of feeling and experience.
 
 ...`,
 
-		"example/target/about/index.html": `<!DOCTYPE html>
+		"target/about/index.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>About me</title>
@@ -85,7 +85,7 @@ for making Espresso-based coffees.</p>
     </body>
 </html>`,
 
-		"example/target/assets/css/style.css": `* {
+		"target/assets/css/style.css": `* {
     font-family: Arial, Tahoma, sans-serif;
 }
 
@@ -98,7 +98,7 @@ main {
     margin-left: auto;
 }`,
 
-		"example/target/atom.xml": `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+		"target/atom.xml": `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>My Coffee Blog</title>
   <id></id>
   <updated>2020-08-16T12:53:25+02:00</updated>
@@ -130,7 +130,7 @@ main {
   </entry>
 </feed>`,
 
-		"example/target/blog/index.html": `<!DOCTYPE html>
+		"target/blog/index.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>My Coffee Blog</title>
@@ -159,7 +159,7 @@ main {
     </body>
 </html>`,
 
-		"example/target/blog/making-barista-quality-espresso/index.html": `<!DOCTYPE html>
+		"target/blog/making-barista-quality-espresso/index.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Making Barista-Quality Espresso</title>
@@ -190,7 +190,7 @@ and practice, you'll be able to make delicious coffee at home.</p>
     </body>
 </html>`,
 
-		"example/target/blog/steaming-milk-for-cappuccino/index.html": `<!DOCTYPE html>
+		"target/blog/steaming-milk-for-cappuccino/index.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Steaming Milk for Cappuccino</title>
@@ -221,7 +221,7 @@ matter of feeling and experience.</p>
     </body>
 </html>`,
 
-		"example/target/index.html": `<!DOCTYPE html>
+		"target/index.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>My Coffee Blog</title>
@@ -243,7 +243,7 @@ matter of feeling and experience.</p>
     </body>
 </html>`,
 
-		"example/templates/index-page.html": `<!DOCTYPE html>
+		"templates/index-page.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>{{.Meta.Title}}</title>
@@ -265,7 +265,7 @@ matter of feeling and experience.</p>
     </body>
 </html>`,
 
-		"example/templates/page.html": `<!DOCTYPE html>
+		"templates/page.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>{{.Page.Title}}</title>
@@ -292,7 +292,7 @@ matter of feeling and experience.</p>
     </body>
 </html>`,
 
-		"example/verless.yml": `# Settings that apply to the contents of your website.
+		"verless.yml": `# Settings that apply to the contents of your website.
 site:
   # General information about your project.
   meta:

@@ -1,11 +1,9 @@
 package create
 
 import (
-	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
-
-	"github.com/verless/verless/config"
 )
 
 const (
@@ -31,33 +29,20 @@ build:
   overwrite: false`
 )
 
-// Project creates a new verless project along with its mandatory
-// directories and files.
+// Project creates a new verless project which is an exact copy
+// of the example project.
 func Project(path string) error {
-	if err := createDirectories(path, config.ContentDir, config.TemplateDir, config.AssetDir); err != nil {
-		return err
-	}
+	for file, content := range files {
+		dir := filepath.Join(path, filepath.Dir(file))
 
-	configFile := fmt.Sprintf("%s.yml", config.Filename)
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			return err
+		}
 
-	file, err := os.Create(filepath.Join(path, configFile))
-	if err != nil {
-		return err
-	}
-
-	if _, err := file.Write([]byte(defaultConfig)); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// createDirectories creates all given directories inside path.
-func createDirectories(path string, directories ...string) error {
-	for _, directory := range directories {
-		if err := os.MkdirAll(filepath.Join(path, directory), 0755); err != nil {
+		if err := ioutil.WriteFile(filepath.Join(path, file), []byte(content), 0755); err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
