@@ -46,7 +46,7 @@ type (
 		// Must be safe for concurrent usage.
 		ProcessPage(route string, page *model.Page) error
 		// Finalize will be invoked after processing all pages.
-		Finalize() error
+		Finalize(site *model.Site) error
 	}
 )
 
@@ -143,7 +143,7 @@ func Run(ctx Context) []error {
 	for _, plugin := range ctx.Plugins {
 		// Finalize has to be called after writing the page to make
 		// sure that no files will be overwritten by the Writer.
-		if err := plugin.Finalize(); err != nil {
+		if err := plugin.Finalize(&site); err != nil {
 			return []error{err}
 		}
 	}
