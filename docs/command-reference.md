@@ -29,7 +29,7 @@ The `build` command will generate all pages and collect all errors that occurred
 returned as a list of things that have to be fixed - the build itself will _not_ finish.
 
 For security reasons, verless doesn't overwrite an existing output directory if it already exists. If you've run a
-build before, creating a `target` directory, this cannot be just overwritten by the next build. You explicitly have to
+build before, the created `target` directory cannot be just overwritten by the next build. You explicitly have to
 allow verless to overwrite it using `--overwrite`. If you're getting tired of this and know what you're doing, you may
 allow this in the project configuration:
 
