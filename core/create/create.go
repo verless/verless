@@ -7,7 +7,7 @@ import (
 )
 
 // Project creates a new verless project which is an exact copy
-// of the example project.
+// of the project at the given path.
 func Project(path string) error {
 	for file, content := range files {
 		dir := filepath.Join(path, filepath.Dir(file))
