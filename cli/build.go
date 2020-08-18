@@ -15,7 +15,7 @@ func newBuildCmd() *cobra.Command {
 	)
 
 	buildCmd := cobra.Command{
-		Use: "build PATH",
+		Use: "build PROJECT",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := config.FromFile(path, config.Filename)
 			if err != nil {
