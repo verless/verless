@@ -1,6 +1,8 @@
 package core
 
 import (
+	"errors"
+	"os"
 	"path/filepath"
 
 	"github.com/verless/verless/builder"
@@ -9,6 +11,13 @@ import (
 	"github.com/verless/verless/parser"
 	"github.com/verless/verless/plugin/atom"
 	"github.com/verless/verless/writer"
+)
+
+var (
+	// ErrCannotOverwrite states that verless isn't allowed to
+	// delete or overwrite the output directory.
+	ErrCannotOverwrite = errors.New(`Cannot overwrite the output directory.
+Consider using the --overwrite flag or enabled build.overwrite in the configuration file.`)
 )
 
 // BuildOptions represents options for running a verless build.
@@ -29,12 +38,22 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, out, options.Overwrite)
+		w, err  = writer.New(path, out)
 		plugins = make([]build.Plugin, 0)
 	)
 
 	if err != nil {
 		return []error{err}
+	}
+
+	if cfg.Version == "" {
+		return []error{
+			errors.New("the configuration has to include a version"),
+		}
+	}
+
+	if !canOverwrite(out, &options, &cfg) {
+		return []error{ErrCannotOverwrite}
 	}
 
 	if cfg.HasPlugin(atom.Key) {
@@ -64,4 +83,19 @@ func finalOutputDir(path string, options *BuildOptions) string {
 	}
 
 	return outputPath
+}
+
+// canOverwrite determines of the output directory can be removed
+// or overwritten safely. This is true if
+//	- the user specified the --overwrite flag,
+//	- the user opted in to overwriting in verless.yml,
+//	- or the output directory doesn't exist yet.
+func canOverwrite(outputDir string, options *BuildOptions, cfg *config.Config) bool {
+	if options.Overwrite || cfg.Build.Overwrite {
+		return true
+	}
+	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+		return true
+	}
+	return false
 }

@@ -8,24 +8,28 @@ import (
 
 // Config represents the user configuration stored in verless.yml.
 type Config struct {
-	Site struct {
+	Version string
+	Site    struct {
 		Meta model.Meta
 		Nav  struct {
 			Items []struct {
 				Label  string
 				Target string
 			}
-			Override bool
+			Overwrite bool
 		}
 		Footer struct {
 			Items []struct {
 				Label  string
 				Target string
 			}
-			Override bool
+			Overwrite bool
 		}
 	}
 	Plugins []string
+	Build   struct {
+		Overwrite bool
+	}
 }
 
 // HasPlugin checks if the configuration has enabled a given plugin.
