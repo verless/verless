@@ -29,7 +29,6 @@ To enable overview pages for the `Coffee` and `Coffee Machine` tags, you have to
 configuration:
 
 ```yaml
-# ...
 plugins:
 - tags
 ```
