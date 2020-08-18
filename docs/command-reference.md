@@ -68,3 +68,8 @@ directory with the new project.
 | Option    | Short | Type   | Example   | Description                          |
 |-----------|-------|--------|-----------|--------------------------------------|
 | `--quiet` | `-q`  | Bool   | `--quiet` | Only print the plain version number. |
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+</p>

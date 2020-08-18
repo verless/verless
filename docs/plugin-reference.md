@@ -56,3 +56,8 @@ template. This is where all pages are available as
 [`Pages`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages). From there, you can link to
 the each page's actual location. As a result, the overview for all articles with the `coffee` tag are available under
 `/tags/coffee`.
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+</p>
