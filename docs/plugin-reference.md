@@ -49,8 +49,8 @@ RSS feed will be available in your project root.
 ### tags
 
 * **Plugin key:** `tags`
-* **What it does:** Generates index pages for each tag in your Markdown files. It will create a top-level `tags`
-directory containing a directory for each tag, and those directories contain an `index.html` file. This is where all
-pages are available as [`Pages`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages). From
-there, you can link to the each page's actual location. As a result, the overview for all articles with the `coffee` tag
-are available under `/tags/coffee`.
+* **What it does:** Creates a top-level `tags` directory containing a directory for each tag, and those directories
+contain an `index.html` file. This is where all pages are available as
+[`Pages`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages). From there, you can link to
+the each page's actual location. As a result, the overview for all articles with the `coffee` tag are available under
+`/tags/coffee`.
