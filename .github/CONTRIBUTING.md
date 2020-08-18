@@ -4,6 +4,7 @@
 
 * [Reporting issues](#reporting-issues)
 * [Proposing features](#proposing-features)
+* [Improving documentation](#improving-documentation)
 * [Contributing code](#contributing-code)
 
 ## Reporting issues
@@ -24,10 +25,16 @@ Good feature proposals ...
 * explain why it would be a desirable feature for the majority of users.
 * bear in mind that verless should stay simple and lightweight.
 
+## Improving documentation
+
+If you've noticed something in the documentation that could be improved, please give us feedback. The easiest way to
+request changes is to [file an issue](https://github.com/verless/verless/issues/new) or to fork the repository, make the
+changes yourself and open a pull request. When you do so, please take note of our [Git conventions](#git-conventions).
+
 ## Contributing code
 
-I highly appreciate the time and effort that go into code contributions. There are just some requirements the code needs
-to meet in order to get merged.
+We highly appreciate the time and effort that go into code contributions. There are just some requirements the code
+needs to meet in order to get merged.
 
 ### Git conventions
 
