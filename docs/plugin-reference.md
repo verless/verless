@@ -6,6 +6,11 @@ configuration.
 
 Those advanced features are provided by _plugins_.
 
+## Contents
+
+* [Enabling plugins](#enabling-plugins)
+* [Available plugins](#available-plugins)
+
 ## Enabling plugins
 
 To enable a certain plugin, you have to add them to the top-level `plugins` key in your project configuration. Say you
