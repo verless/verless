@@ -101,7 +101,7 @@ main {
 		"target/atom.xml": `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>My Coffee Blog</title>
   <id></id>
-  <updated>2020-08-16T12:53:25+02:00</updated>
+  <updated>2020-08-17T18:02:38+02:00</updated>
   <subtitle>I&#39;m Clara and write alot about coffee. Welcome to my blog!</subtitle>
   <link href=""></link>
   <author>
@@ -115,18 +115,18 @@ main {
     <summary type="html"></summary>
   </entry>
   <entry>
-    <title>Making Barista-Quality Espresso</title>
-    <updated>2020-08-14T00:00:00Z</updated>
-    <id>\blog/making-barista-quality-espresso</id>
-    <link href="\blog/making-barista-quality-espresso" rel="alternate"></link>
-    <summary type="html">This is a guide for making italian Espresso.</summary>
-  </entry>
-  <entry>
     <title>Steaming Milk for Cappuccino</title>
     <updated>2020-08-15T00:00:00Z</updated>
     <id>\blog/steaming-milk-for-cappuccino</id>
     <link href="\blog/steaming-milk-for-cappuccino" rel="alternate"></link>
     <summary type="html">This is a guide for steaming milk.</summary>
+  </entry>
+  <entry>
+    <title>Making Barista-Quality Espresso</title>
+    <updated>2020-08-14T00:00:00Z</updated>
+    <id>\blog/making-barista-quality-espresso</id>
+    <link href="\blog/making-barista-quality-espresso" rel="alternate"></link>
+    <summary type="html">This is a guide for making italian Espresso.</summary>
   </entry>
 </feed>`,
 
@@ -142,17 +142,17 @@ main {
         <main>
             
                 <div>
-                    <h3>Making Barista-Quality Espresso</h3>
-                    <p><small>Posted on Aug 14 2020</small></p>
-                    <p>This is a guide for making italian Espresso.</p>
-                    <p><a href="making-barista-quality-espresso">read post</a></p>
-                </div>
-            
-                <div>
                     <h3>Steaming Milk for Cappuccino</h3>
                     <p><small>Posted on Aug 15 2020</small></p>
                     <p>This is a guide for steaming milk.</p>
                     <p><a href="steaming-milk-for-cappuccino">read post</a></p>
+                </div>
+            
+                <div>
+                    <h3>Making Barista-Quality Espresso</h3>
+                    <p><small>Posted on Aug 14 2020</small></p>
+                    <p>This is a guide for making italian Espresso.</p>
+                    <p><a href="making-barista-quality-espresso">read post</a></p>
                 </div>
             
         </main>
@@ -243,6 +243,79 @@ matter of feeling and experience.</p>
     </body>
 </html>`,
 
+		"target/tags/cappuccino/index.html": `<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Coffee Blog</title>
+        <meta name="author" content="Clara Crema" />
+        <meta name="description" content="I&#39;m Clara and write alot about coffee. Welcome to my blog!" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    </head>
+    <body>
+        <main>
+            
+                <div>
+                    <h3>Steaming Milk for Cappuccino</h3>
+                    <p><small>Posted on Aug 15 2020</small></p>
+                    <p>This is a guide for steaming milk.</p>
+                    <p><a href="steaming-milk-for-cappuccino">read post</a></p>
+                </div>
+            
+        </main>
+    </body>
+</html>`,
+
+		"target/tags/coffee/index.html": `<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Coffee Blog</title>
+        <meta name="author" content="Clara Crema" />
+        <meta name="description" content="I&#39;m Clara and write alot about coffee. Welcome to my blog!" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    </head>
+    <body>
+        <main>
+            
+                <div>
+                    <h3>Steaming Milk for Cappuccino</h3>
+                    <p><small>Posted on Aug 15 2020</small></p>
+                    <p>This is a guide for steaming milk.</p>
+                    <p><a href="steaming-milk-for-cappuccino">read post</a></p>
+                </div>
+            
+                <div>
+                    <h3>Making Barista-Quality Espresso</h3>
+                    <p><small>Posted on Aug 14 2020</small></p>
+                    <p>This is a guide for making italian Espresso.</p>
+                    <p><a href="making-barista-quality-espresso">read post</a></p>
+                </div>
+            
+        </main>
+    </body>
+</html>`,
+
+		"target/tags/espresso/index.html": `<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Coffee Blog</title>
+        <meta name="author" content="Clara Crema" />
+        <meta name="description" content="I&#39;m Clara and write alot about coffee. Welcome to my blog!" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    </head>
+    <body>
+        <main>
+            
+                <div>
+                    <h3>Making Barista-Quality Espresso</h3>
+                    <p><small>Posted on Aug 14 2020</small></p>
+                    <p>This is a guide for making italian Espresso.</p>
+                    <p><a href="making-barista-quality-espresso">read post</a></p>
+                </div>
+            
+        </main>
+    </body>
+</html>`,
+
 		"templates/index-page.html": `<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -292,23 +365,37 @@ matter of feeling and experience.</p>
     </body>
 </html>`,
 
-		"verless.yml": `# Settings that apply to the contents of your website.
+		"verless.yml": `# verless.yml is your project configuration. This example
+# file contains all configuration keys available.
+version: 1
 site:
   # General information about your project.
   meta:
     title: My Coffee Blog
     subtitle: About Espresso & Cappuccino
-    author: Clara Crema
     description: I'm Clara and write alot about coffee. Welcome to my blog!
-  # Add items to your website's navigation.
+    author: Clara Crema
+    base: http://localhost
+  # Settings for your website's navigation.
   nav:
     items:
       - label: Instagram
         target: https://instagram.com
-
+    overwrite: false
+  # Settings for your website's footer.
+  footer:
+    items:
+      - label: Home
+        target: http://localhost
+    overwrite: false
 # Enable plugins for your project.
 plugins:
   - atom
+build:
+  # Uncomment the following line to automatically overwrite
+  # the output directory without having to use --overwrite.
+  # Use with caution!
+  # overwrite: true
 `,
 	}
 )
