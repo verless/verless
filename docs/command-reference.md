@@ -4,12 +4,12 @@ This is an overview for the verless CLI and its commands.
 
 ## Contents
 
-*[Installation](#installation)
-*[`verless`](#verless)
-*[`verless build`](#verless-build)
-*[`verless create`](#verless-create)
-*[`verless create project`](#verless-create-project)
-*[`verless version`](#verless-version)
+* [Installation](#installation)
+* [`verless`](#verless)
+* [`verless build`](#verless-build)
+* [`verless create`](#verless-create)
+* [`verless create project`](#verless-create-project)
+* [`verless version`](#verless-version)
 
 ## Installation
 
