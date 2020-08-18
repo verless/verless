@@ -3,6 +3,12 @@
 All project-related settings are stored in the verless configuration file. Even though the file is optional from a
 technical perspective, it makes sense to maintain a project configuration for the majority of cases.
 
+## Contents
+
+* [Configuration file](#configuration-file)
+* [Full configuration example](#full-configuration-example)
+* [Configuration key reference](#configuration-key-reference)
+
 ## Configuration file
 
 verless expects the project configuration file to be stored in the project root. The file name has to be `verless`, and
