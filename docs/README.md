@@ -13,7 +13,7 @@ look at the [example project](https://github.com/verless/verless/tree/master/exa
 
 ## Improvements
 
-Have an idea for improving the documentation? Check our
+You have an idea for improving the documentation? Check our
 [contribution guidelines](https://github.com/verless/verless/blob/master/.github/CONTRIBUTING.md#improving-documentation).
 
 <p align="center">
