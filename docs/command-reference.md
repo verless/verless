@@ -11,7 +11,7 @@ To install the verless CLI tool, check out the
 
 ### verless
 
-The top-level verless command doesn't provide any functionality.
+The top-level verless command does not provide any functionality.
 
 ### verless build
 
@@ -32,5 +32,24 @@ build:
 ```
 
 **Caution:** This will also overwrite any other output directory specified with `--output`.
+
+| Option        | Short | Type   | Example                    | Description                                                      |
+|---------------|-------|--------|----------------------------|------------------------------------------------------------------|
+| `--output`    | `-o`  | String | `--output="/var/www/html"` | An alternative output directory where the website is written to. |
+| `--overwrite` | -     | Bool   | `--overwrite`              | Allow verless to overwrite the output directory.                 |
+
+### verless create
+
+The `verless create` command does not provide any functionality.
+
+### verless create project
+
+`verless create project NAME` initializes a new verless standard project with all directories and files required for
+running a build. If the `NAME` directory already exists, the command will fail. Use `--overwrite` to overwrite the
+directory with the new project.
+
+| Option        | Short | Type   | Example                    | Description                                                      |
+|---------------|-------|--------|----------------------------|------------------------------------------------------------------|
+| `--overwrite` | -     | Bool   | `--overwrite`              | Overwrite the specified directory if it already exists.          |
 
 ...
