@@ -2,18 +2,25 @@
 
 This is an overview for the verless CLI and its commands.
 
+## Contents
+
+*[Installation](#installation)
+*[`verless`](#verless)
+*[`verless build`](#verless-build)
+*[`verless create`](#verless-create)
+*[`verless create project`](#verless-create-project)
+*[`verless version`](#verless-version)
+
 ## Installation
 
 To install the verless CLI tool, check out the
 [installation instructions](https://github.com/verless/verless/tree/docs#-installation).
 
-## Commands
-
-### verless
+## verless
 
 The top-level verless command does not provide any functionality.
 
-### verless build
+## verless build
 
 `verless build PATH` runs a build for the specified `PATH`. If your current directory is the project directory, you
 can build your project using `verless build .`.
@@ -38,18 +45,24 @@ build:
 | `--output`    | `-o`  | String | `--output="/var/www/html"` | An alternative output directory where the website is written to. |
 | `--overwrite` | -     | Bool   | `--overwrite`              | Allow verless to overwrite the output directory.                 |
 
-### verless create
+## verless create
 
 The `verless create` command does not provide any functionality.
 
-### verless create project
+## verless create project
 
 `verless create project NAME` initializes a new verless standard project with all directories and files required for
 running a build. If the `NAME` directory already exists, the command will fail. Use `--overwrite` to overwrite the
 directory with the new project.
 
-| Option        | Short | Type   | Example                    | Description                                                      |
-|---------------|-------|--------|----------------------------|------------------------------------------------------------------|
-| `--overwrite` | -     | Bool   | `--overwrite`              | Overwrite the specified directory if it already exists.          |
+| Option        | Short | Type   | Example       | Description                                             |
+|---------------|-------|--------|---------------|---------------------------------------------------------|
+| `--overwrite` | -     | Bool   | `--overwrite` | Overwrite the specified directory if it already exists. |
 
-...
+## verless version
+
+`verless version` prints the installed verless version.
+
+| Option    | Short | Type   | Example   | Description                          |
+|-----------|-------|--------|-----------|--------------------------------------|
+| `--quiet` | `-q`  | Bool   | `--quiet` | Only print the plain version number. |
