@@ -15,7 +15,7 @@ type CreateProjectOptions struct {
 
 // RunCreateProject creates a new verless project. If the
 // specified project path already exists, RunCreateProject
-// returns an error unless --force has been used.
+// returns an error unless --overwrite has been used.
 func RunCreateProject(path string, options CreateProjectOptions) error {
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
 		if !options.Overwrite {
