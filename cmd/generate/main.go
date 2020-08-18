@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/verless/verless/config"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
@@ -50,7 +52,10 @@ func generateExampleFileMap() error {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() || filepath.Ext(path) == ".jpg" {
+		if info.IsDir() || strings.Contains(path, config.OutputDir) {
+			return nil
+		}
+		if filepath.Ext(path) == ".jpg" {
 			return nil
 		}
 
