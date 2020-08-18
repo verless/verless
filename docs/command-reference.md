@@ -18,7 +18,7 @@ To install the verless CLI tool, check out the
 
 ## verless
 
-The top-level verless command does not provide any functionality.
+The top-level verless command does not provide any functionality and only prints usage information instead.
 
 ## verless build
 
@@ -47,13 +47,15 @@ build:
 
 ## verless create
 
-The `verless create` command does not provide any functionality.
+The `verless create` command does not provide any functionality and only prints usage information instead.
 
 ## verless create project
 
 `verless create project NAME` initializes a new verless standard project with all directories and files required for
 running a build. If the `NAME` directory already exists, the command will fail. Use `--overwrite` to overwrite the
 directory with the new project.
+
+**Caution:** The entire directory will be deleted when doing so.
 
 | Option        | Short | Type   | Example       | Description                                             |
 |---------------|-------|--------|---------------|---------------------------------------------------------|

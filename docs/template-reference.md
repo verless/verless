@@ -21,7 +21,7 @@ to initialize a new verless project, which will create the directory automatical
 There are two types of templates, and each is represented with its own file:
 
 * `page.html`: This template is used to render your Markdown content.
-* `index-page.html`: This template is used to render generated index pages. verless creates an index page for each
+* `index-page.html`: This template is used to render generated index pages. Verless creates an index page for each
 directory in your content path, and all pages inside that directory are available to the index page.
 
 Both templates are required to build a static website.

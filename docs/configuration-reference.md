@@ -19,11 +19,12 @@ the file extension is `.yml`, `.toml` or `.json`, depending on the configuration
 There is a full YAML configuration available in the example project:
 [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml)
 
-Note that all configuration keys are optional.
+Note that all configuration keys except `version` are optional.
 
 ## Configuration key reference
 
 * **`site`** _(Map)_:
+    * **`version`** _(String)_: The configuration version (currently `1`).
     * **`meta`** _(Map)_:
         * **`title`** _(String)_: The global website title that applies to all pages.
         * **`subtitle`** _(String)_: The global website subtitle that applies to all pages.

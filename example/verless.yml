@@ -1,5 +1,6 @@
 # verless.yml is your project configuration. This example
 # file contains all configuration keys available.
+version: 1
 site:
   # General information about your project.
   meta:
@@ -24,4 +25,7 @@ site:
 plugins:
   - atom
 build:
-  overwrite: true
+  # Uncomment the following line to automatically overwrite
+  # the output directory without having to use --overwrite.
+  # Use with caution!
+  # overwrite: true
