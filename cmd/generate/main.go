@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/verless/verless/config"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/verless/verless/config"
 )
 
 // Constants related to generating the Go code containing
