@@ -1,6 +1,4 @@
 // Package config provides configuration-related types and functions.
-// Its main purpose is to parse and provide the user-defined verless
-// configuration.
 package config
 
 import (
@@ -10,27 +8,41 @@ import (
 
 // Config represents the user configuration stored in verless.yml.
 type Config struct {
-	Site struct {
+	Version string
+	Site    struct {
 		Meta model.Meta
 		Nav  struct {
 			Items []struct {
 				Label  string
 				Target string
 			}
-			Override bool
+			Overwrite bool
 		}
 		Footer struct {
 			Items []struct {
 				Label  string
 				Target string
 			}
-			Override bool
+			Overwrite bool
 		}
+	}
+	Plugins []string
+	Build   struct {
+		Overwrite bool
 	}
 }
 
-// FromFile looks for a YAML, TOML oder JSON file with the given
-// name in the provided path and converts it to a Config instance.
+// HasPlugin checks if the configuration has enabled a given plugin.
+func (c Config) HasPlugin(key string) bool {
+	for _, plugin := range c.Plugins {
+		if key == plugin {
+			return true
+		}
+	}
+	return false
+}
+
+// FromFile looks for a configuration file and converts it to a Config.
 func FromFile(path, filename string) (Config, error) {
 	viper.AddConfigPath(path)
 	// Set the filename without extension to allow all supported formats.

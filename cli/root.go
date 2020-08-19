@@ -17,6 +17,7 @@ func NewRootCmd() *cobra.Command {
 	}
 
 	rootCmd.AddCommand(newBuildCmd())
+	rootCmd.AddCommand(newCreateCmd())
 	rootCmd.AddCommand(newVersionCmd())
 
 	return &rootCmd

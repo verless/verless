@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -11,11 +12,9 @@ import (
 )
 
 func New(path, outputDir string) (*writer, error) {
-	outputPath := filepath.Join(path, outputDir)
-
 	w := writer{
-		path:       path,
-		outputPath: outputPath,
+		path:      path,
+		outputDir: outputDir,
 	}
 
 	if err := w.initTemplates(); err != nil {
@@ -27,13 +26,17 @@ func New(path, outputDir string) (*writer, error) {
 
 type writer struct {
 	path         string
-	outputPath   string
+	outputDir    string
 	site         model.Site
 	pageTpl      *template.Template
 	indexPageTpl *template.Template
 }
 
 func (w *writer) Write(site model.Site) error {
+	if err := w.removeOutDirIfExists(); err != nil {
+		return err
+	}
+
 	w.site = site
 
 	err := w.site.WalkRoutes(func(path string, route *model.Route) error {
@@ -48,10 +51,10 @@ func (w *writer) Write(site model.Site) error {
 			}
 		}
 		return w.writeIndexPage(path, indexPage{
-			Meta:   &w.site.Meta,
-			Nav:    &w.site.Nav,
-			Page:   &route.IndexPage,
-			Footer: &w.site.Footer,
+			Meta:      &w.site.Meta,
+			Nav:       &w.site.Nav,
+			IndexPage: &route.IndexPage,
+			Footer:    &w.site.Footer,
 		})
 	}, -1)
 
@@ -85,7 +88,7 @@ func (w *writer) initTemplates() error {
 }
 
 func (w *writer) writePage(route string, page page) error {
-	path := filepath.Join(w.outputPath, route, page.Page.ID)
+	path := filepath.Join(w.outputDir, route, page.Page.ID)
 
 	if err := os.MkdirAll(path, 0700); err != nil {
 		return err
@@ -100,7 +103,7 @@ func (w *writer) writePage(route string, page page) error {
 }
 
 func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
-	path := filepath.Join(w.outputPath, route)
+	path := filepath.Join(w.outputDir, route)
 
 	if err := os.MkdirAll(path, 0700); err != nil {
 		return err
@@ -117,7 +120,7 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 func (w *writer) copyAssetDir() error {
 	var (
 		src  = filepath.Join(w.path, config.AssetDir)
-		dest = filepath.Join(w.outputPath, config.AssetDir)
+		dest = filepath.Join(w.outputDir, config.AssetDir)
 	)
 
 	if _, err := os.Stat(src); os.IsNotExist(err) {
@@ -125,4 +128,21 @@ func (w *writer) copyAssetDir() error {
 	}
 
 	return copy.Copy(src, dest)
+}
+
+// removeOutDirIfExists checks if the output folder exists and tries
+// to remove it if it does.
+func (w *writer) removeOutDirIfExists() error {
+	info, err := ioutil.ReadDir(w.outputDir)
+	if os.IsNotExist(err) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if len(info) > 0 {
+		return os.RemoveAll(w.outputDir)
+	}
+
+	return nil
 }

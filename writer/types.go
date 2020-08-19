@@ -10,8 +10,8 @@ type page struct {
 }
 
 type indexPage struct {
-	Meta   *model.Meta
-	Nav    *model.Nav
-	Page   *model.IndexPage
+	Meta *model.Meta
+	Nav  *model.Nav
+	*model.IndexPage
 	Footer *model.Footer
 }

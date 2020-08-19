@@ -37,7 +37,7 @@ def build(os, arch):
     binary = "verless.exe" if os == "windows" else "verless"
     target = "../target/{0}-{1}/{2}".format(os, arch, binary)
 
-    subprocess.run([go_os, go_arch, "go", "build", "-v", "-o", target, "../cmd/main.go"])
+    subprocess.run([go_os, go_arch, "go", "build", "-v", "-o", target, "../cmd/verless/main.go"])
 
 
 matrix()

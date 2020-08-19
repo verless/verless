@@ -8,9 +8,7 @@ import (
 	"github.com/verless/verless/model"
 )
 
-// New creates a new builder instance that takes the provided user
-// configuration into account. The configuration is required when
-// it comes to generating metadata and navigation items for example.
+// New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
 		site: model.Site{
@@ -21,22 +19,28 @@ func New(cfg *config.Config) *builder {
 	return &b
 }
 
-// builder represents a model builder maintaining a site model
-// where all pages get registered.
+// builder represents a model builder maintaining a site model.
 type builder struct {
 	site  model.Site
 	mutex *sync.Mutex
 }
 
-// RegisterPage registers the given page under the given route. It
+// RegisterPage registers a given page under a given route. It
 // is safe for concurrent usage.
 func (b *builder) RegisterPage(route string, page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	r := b.site.CreateRoute(route)
+	var r *model.Route
+
+	if route != "" {
+		r = b.site.CreateRoute(route)
+	} else {
+		r = &b.site.Root
+	}
+
 	r.Pages = append(r.Pages, page)
-	// ToDo: Append page to route's IndexPage
+	r.IndexPage.Pages = append(r.IndexPage.Pages, &page)
 
 	return nil
 }

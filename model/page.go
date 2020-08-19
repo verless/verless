@@ -13,7 +13,7 @@ type Page struct {
 	Description string
 	Content     string
 	Related     []*Page
-	RelatedFQNs []FQN
+	RelatedFQNs []string
 	Template    string
 	Hide        bool
 }
@@ -22,5 +22,3 @@ type IndexPage struct {
 	Page
 	Pages []*Page
 }
-
-type FQN string
