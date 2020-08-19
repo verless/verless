@@ -1,24 +1,39 @@
 package tpl
 
-import "text/template"
+import (
+	"fmt"
+	"text/template"
+)
 
 var (
 	templates map[string]*template.Template
 )
 
-func Load(path string) (*template.Template, error) {
+func Load(key string, path string) (*template.Template, error) {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
 	}
 
-	if _, exists := templates[path]; !exists {
+	if _, exists := templates[key]; !exists {
 		tpl, err := template.ParseFiles(path)
 		if err != nil {
 			return nil, err
 		}
 
-		templates[path] = tpl
+		templates[key] = tpl
 	}
 
-	return templates[path], nil
+	return templates[key], nil
+}
+
+func Get(key string) (*template.Template, error) {
+	if templates == nil {
+		templates = make(map[string]*template.Template)
+	}
+
+	if _, exists := templates[key]; !exists {
+		return nil, fmt.Errorf("template %s has not been loaded", key)
+	}
+
+	return templates[key], nil
 }
