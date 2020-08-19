@@ -14,14 +14,16 @@ func Register(key string, path string) (*template.Template, error) {
 		templates = make(map[string]*template.Template)
 	}
 
-	if _, exists := templates[key]; !exists {
-		tpl, err := template.ParseFiles(path)
-		if err != nil {
-			return nil, err
-		}
-
-		templates[key] = tpl
+	if _, exists := templates[key]; exists {
+		return nil, fmt.Errorf("key %s has already been registered", key)
 	}
+
+	tpl, err := template.ParseFiles(path)
+	if err != nil {
+		return nil, err
+	}
+
+	templates[key] = tpl
 
 	return templates[key], nil
 }
