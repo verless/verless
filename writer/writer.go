@@ -1,13 +1,14 @@
 package writer
 
 import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
+
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tpl"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 )
 
 func New(path, outputDir string) (*writer, error) {
