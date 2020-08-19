@@ -9,7 +9,7 @@ var (
 	templates map[string]*template.Template
 )
 
-func Load(key string, path string) (*template.Template, error) {
+func Register(key string, path string) (*template.Template, error) {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
 	}
@@ -32,7 +32,7 @@ func Get(key string) (*template.Template, error) {
 	}
 
 	if _, exists := templates[key]; !exists {
-		return nil, fmt.Errorf("template %s has not been loaded", key)
+		return nil, fmt.Errorf("template %s has not been registered", key)
 	}
 
 	return templates[key], nil

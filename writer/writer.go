@@ -72,11 +72,11 @@ func (w *writer) initTemplates() error {
 		indexPageTplPath = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
 	)
 
-	if _, err := tpl.Load(config.PageTpl, pageTplPath); err != nil {
+	if _, err := tpl.Register(config.PageTpl, pageTplPath); err != nil {
 		return err
 	}
 
-	if _, err := tpl.Load(config.IndexPageTpl, indexPageTplPath); err != nil {
+	if _, err := tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
 		return err
 	}
 
