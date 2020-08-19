@@ -3,6 +3,7 @@ package core
 import (
 	"errors"
 	"os"
+	"path/filepath"
 
 	"github.com/verless/verless/builder"
 	"github.com/verless/verless/config"
@@ -10,7 +11,6 @@ import (
 	"github.com/verless/verless/parser"
 	"github.com/verless/verless/plugin/atom"
 	"github.com/verless/verless/writer"
-	"path/filepath"
 )
 
 var (
