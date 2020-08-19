@@ -1,4 +1,4 @@
-package template
+package tpl
 
 import "text/template"
 

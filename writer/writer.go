@@ -9,6 +9,7 @@ import (
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/tpl"
 )
 
 func New(path, outputDir string) (*writer, error) {
@@ -76,11 +77,11 @@ func (w *writer) initTemplates() error {
 		indexPageTpl = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
 	)
 
-	if w.pageTpl, err = template.ParseFiles(pageTpl); err != nil {
+	if w.pageTpl, err = tpl.Load(pageTpl); err != nil {
 		return err
 	}
 
-	if w.indexPageTpl, err = template.ParseFiles(indexPageTpl); err != nil {
+	if w.indexPageTpl, err = tpl.Load(indexPageTpl); err != nil {
 		return err
 	}
 
