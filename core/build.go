@@ -5,12 +5,12 @@ import (
 	"os"
 
 	"github.com/verless/verless/builder"
-	"path/filepath"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/build"
 	"github.com/verless/verless/parser"
 	"github.com/verless/verless/plugin/atom"
 	"github.com/verless/verless/writer"
+	"path/filepath"
 )
 
 var (
