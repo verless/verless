@@ -13,7 +13,7 @@ import (
 
 // Formatting strings for printing test results.
 const (
-	assertFormat string = "\\033[31m%s:%d: \"+msg+\"\\033[39m\\n\\n"
+	assertFormat string = "\\033[31m%s:%d: %v\\033[39m\\n\\n"
 	okFormat     string = "\u001B[31m%s:%d: unexpected error: %s\u001B[39m\n\n"
 	equalsFormat string = "\u001B[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
 )
