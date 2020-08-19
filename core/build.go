@@ -3,9 +3,9 @@ package core
 import (
 	"errors"
 	"os"
-	"path/filepath"
 
 	"github.com/verless/verless/builder"
+	"path/filepath"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/build"
 	"github.com/verless/verless/parser"
