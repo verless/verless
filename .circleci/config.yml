@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name: Check Go format
-          command: python ./scripts/checkfmt.py
+          command: python ./scripts/check_fmt.py
 
   # Run all tests.
   go-test:
