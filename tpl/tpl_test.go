@@ -1,14 +1,17 @@
 package tpl
 
 import (
-	"github.com/verless/verless/config"
-	"github.com/verless/verless/test"
 	"path/filepath"
 	"testing"
+	"text/template"
+
+	"github.com/verless/verless/config"
+	"github.com/verless/verless/test"
 )
 
 const (
 	projectFolderPath = "../example"
+	testKey           = "test key"
 	invalidKey        = "invalid key"
 )
 
@@ -23,14 +26,17 @@ func TestRegister(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	indexPageTplPath := filepath.Join(projectFolderPath, config.TemplateDir, config.IndexPageTpl)
+	if templates == nil {
+		templates = make(map[string]*template.Template)
+	}
 
-	_, err := Register(config.IndexPageTpl, indexPageTplPath)
+	templates[testKey] = &template.Template{}
+
+	tpl, err := Get(testKey)
 	test.Ok(t, err)
 
-	_, err = Get(config.IndexPageTpl)
-	test.Ok(t, err)
+	test.Assert(t, tpl == templates[testKey], "template has to be in map")
 
 	_, err = Get(invalidKey)
-	test.Assert(t, err != nil, "key is invalid")
+	test.Assert(t, err != nil, "template key is invalid")
 }
