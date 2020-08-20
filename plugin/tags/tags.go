@@ -2,13 +2,14 @@
 package tags
 
 import (
-	"html/template"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/tpl"
 )
 
 const (
@@ -53,13 +54,26 @@ func (t *tags) ProcessPage(_ string, page *model.Page) error {
 
 // Finalize invokes writeIndexPage for each tag map entry.
 func (t *tags) Finalize(site *model.Site) error {
-	tpl, err := template.ParseFiles(filepath.Join(t.path, config.TemplateDir, config.IndexPageTpl))
-	if err != nil {
-		return err
+	var (
+		indexPageTpl *template.Template
+		err          error
+	)
+
+	// If the template for the IndexPage hasn't already been parsed
+	// and registered, register it. Otherwise, load it.
+	if !tpl.IsRegistered(config.IndexPageTpl) {
+		indexPageTplPath := filepath.Join(t.path, config.TemplateDir, config.IndexPageTpl)
+		if indexPageTpl, err = tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
+			return err
+		}
+	} else {
+		if indexPageTpl, err = tpl.Get(config.IndexPageTpl); err != nil {
+			return err
+		}
 	}
 
 	for tag, ip := range t.m {
-		if err := t.writeIndexPage(tag, ip, tpl, site); err != nil {
+		if err := t.writeIndexPage(tag, ip, indexPageTpl, site); err != nil {
 			return err
 		}
 	}

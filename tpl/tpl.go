@@ -41,3 +41,8 @@ func Get(key string) (*template.Template, error) {
 
 	return templates[key], nil
 }
+
+func IsRegistered(key string) bool {
+	_, exists := templates[key]
+	return exists
+}
