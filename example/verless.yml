@@ -1,19 +1,31 @@
+# verless.yml is your project configuration. This example
+# file contains all configuration keys available.
 version: 1
-# Settings that apply to the contents of your website.
 site:
   # General information about your project.
   meta:
     title: My Coffee Blog
     subtitle: About Espresso & Cappuccino
-    author: Clara Crema
     description: I'm Clara and write alot about coffee. Welcome to my blog!
-  # Add items to your website's navigation.
+    author: Clara Crema
+    base: http://localhost
+  # Settings for your website's navigation.
   nav:
     items:
       - label: Instagram
         target: https://instagram.com
-
+    overwrite: false
+  # Settings for your website's footer.
+  footer:
+    items:
+      - label: Home
+        target: http://localhost
+    overwrite: false
 # Enable plugins for your project.
 plugins:
   - atom
-  - tags
+build:
+  # Uncomment the following line to automatically overwrite
+  # the output directory without having to use --overwrite.
+  # Use with caution!
+  # overwrite: true
