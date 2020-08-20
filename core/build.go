@@ -10,6 +10,7 @@ import (
 	"github.com/verless/verless/core/build"
 	"github.com/verless/verless/parser"
 	"github.com/verless/verless/plugin/atom"
+	"github.com/verless/verless/plugin/tags"
 	"github.com/verless/verless/writer"
 )
 
@@ -59,6 +60,11 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	if cfg.HasPlugin(atom.Key) {
 		atomPlugin := atom.New(&cfg.Site.Meta, out)
 		plugins = append(plugins, atomPlugin)
+	}
+
+	if cfg.HasPlugin(tags.Key) {
+		tagsPlugin := tags.New(path, out)
+		plugins = append(plugins, tagsPlugin)
 	}
 
 	ctx := build.Context{
