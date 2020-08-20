@@ -1,12 +1,14 @@
 package tpl
 
 import (
+	"errors"
 	"fmt"
 	"text/template"
 )
 
 var (
-	templates map[string]*template.Template
+	templates            map[string]*template.Template
+	ErrAlreadyRegistered = errors.New("template has already been registered")
 )
 
 func Register(key string, path string) (*template.Template, error) {
@@ -15,7 +17,7 @@ func Register(key string, path string) (*template.Template, error) {
 	}
 
 	if _, exists := templates[key]; exists {
-		return nil, fmt.Errorf("key %s has already been registered", key)
+		return nil, ErrAlreadyRegistered
 	}
 
 	tpl, err := template.ParseFiles(path)

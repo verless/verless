@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -74,11 +75,15 @@ func (w *writer) initTemplates() error {
 	)
 
 	if _, err := tpl.Register(config.PageTpl, pageTplPath); err != nil {
-		return err
+		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
+			return err
+		}
 	}
 
 	if _, err := tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
-		return err
+		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
+			return err
+		}
 	}
 
 	return nil
