@@ -13,7 +13,7 @@ import (
 
 // Formatting strings for printing test results.
 const (
-	assertFormat string = "\\033[31m%s:%d: \"+msg+\"\\033[39m\\n\\n"
+	assertFormat string = "\\033[31m%s:%d: %v\\033[39m\\n\\n"
 	okFormat     string = "\u001B[31m%s:%d: unexpected error: %s\u001B[39m\n\n"
 	equalsFormat string = "\u001B[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
 )
@@ -22,7 +22,7 @@ const (
 func Assert(tb testing.TB, condition bool, msg string, v ...interface{}) {
 	if !condition {
 		_, file, line, _ := runtime.Caller(1)
-		fmt.Printf(assertFormat, append([]interface{}{filepath.Base(file), line}, v...)...)
+		fmt.Printf(assertFormat, append([]interface{}{filepath.Base(file), line, msg}, v...)...)
 		tb.FailNow()
 	}
 }

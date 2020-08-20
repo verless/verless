@@ -1,14 +1,15 @@
 package writer
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"text/template"
 
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/tpl"
 )
 
 func New(path, outputDir string) (*writer, error) {
@@ -25,11 +26,9 @@ func New(path, outputDir string) (*writer, error) {
 }
 
 type writer struct {
-	path         string
-	outputDir    string
-	site         model.Site
-	pageTpl      *template.Template
-	indexPageTpl *template.Template
+	path      string
+	outputDir string
+	site      model.Site
 }
 
 func (w *writer) Write(site model.Site) error {
@@ -71,17 +70,20 @@ func (w *writer) Write(site model.Site) error {
 
 func (w *writer) initTemplates() error {
 	var (
-		err          error
-		pageTpl      = filepath.Join(w.path, config.TemplateDir, config.PageTpl)
-		indexPageTpl = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
+		pageTplPath      = filepath.Join(w.path, config.TemplateDir, config.PageTpl)
+		indexPageTplPath = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
 	)
 
-	if w.pageTpl, err = template.ParseFiles(pageTpl); err != nil {
-		return err
+	if _, err := tpl.Register(config.PageTpl, pageTplPath); err != nil {
+		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
+			return err
+		}
 	}
 
-	if w.indexPageTpl, err = template.ParseFiles(indexPageTpl); err != nil {
-		return err
+	if _, err := tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
+		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
+			return err
+		}
 	}
 
 	return nil
@@ -99,7 +101,9 @@ func (w *writer) writePage(route string, page page) error {
 		return err
 	}
 
-	return w.pageTpl.Execute(file, &page)
+	pageTpl, _ := tpl.Get(config.PageTpl)
+
+	return pageTpl.Execute(file, &page)
 }
 
 func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
@@ -114,7 +118,9 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 		return err
 	}
 
-	return w.indexPageTpl.Execute(file, &indexPage)
+	indexPageTpl, _ := tpl.Get(config.IndexPageTpl)
+
+	return indexPageTpl.Execute(file, &indexPage)
 }
 
 func (w *writer) copyAssetDir() error {

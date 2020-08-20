@@ -1,9 +1,7 @@
 <p align="center">
 <br>
 <br>
-<br>
-<img src="https://verless.dominikbraun.io/assets/img/logo-github.png">
-<br>
+<img src="https://verless.dominikbraun.io/assets/img/logo-header-0.1.0.png">
 <br>
 <br>
 </p>
@@ -70,44 +68,20 @@ $ docker container run verless/verless version
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Getting started
 
-If you are ready to get your hands dirty and test if everything works as expected, you may want to start with a quick
-example. Create a project directory on your local machine, e.g. `coffee-blog`, and a file called `verless.yml` inside of
-it:
-
-```yaml
-# File: coffee-blog/verless.yml
-site:
-  meta:
-    title: Coffee Blog
-    subtitle: About Espresso & Cappuccino
-```
-
-This file stores global metadata for your website and offers the possibility to modify your website manually, for
-example you could override the generated navigation items here.
-
-After that, create a directory `templates/` inside your project and add a template file called `index-page.html`:
-
-```html
-<!-- File: coffee-blog/templates/index-page.html -->
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{{.Meta.Title}}</title>
-    </head>
-    <body>
-        <h1>{{.Meta.Title}}</h1>
-        <h3>{{.Meta.Subtitle}}</h3>
-    </body>
-</html>
-```
-
-Now run the following command inside your project directory:
+The easiest way to create a new project is to use the verless CLI:
 
 ```shell script
-$ verless build
+$ verless create project my-blog
 ```
 
-The generated website is in the created `target` directory. You're now good to
+This initializes a project called `my-blog` inside a new directory, containing all required files. Building the
+corresponding works similarly:
+
+```shell script
+$ verless build my-blog
+```
+
+By default, the website is generated in `my-blog/target`. You're now good to
 [create your first content](https://github.com/verless/verless/tree/master/docs)!
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
