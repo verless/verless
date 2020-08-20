@@ -1,7 +1,7 @@
 <p align="center">
 <br>
 <br>
-<img src="https://verless.dominikbraun.io/assets/img/logo-banner-0.1.0.png">
+<img src="https://verless.dominikbraun.io/assets/img/logo-header-0.1.0.png">
 <br>
 <br>
 </p>
