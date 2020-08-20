@@ -22,7 +22,7 @@ const (
 func Assert(tb testing.TB, condition bool, msg string, v ...interface{}) {
 	if !condition {
 		_, file, line, _ := runtime.Caller(1)
-		fmt.Printf(assertFormat, append([]interface{}{filepath.Base(file), line}, v...)...)
+		fmt.Printf(assertFormat, append([]interface{}{filepath.Base(file), line, msg}, v...)...)
 		tb.FailNow()
 	}
 }
