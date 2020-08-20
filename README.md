@@ -1,8 +1,6 @@
 <p align="center">
 <br>
-<br>
 <img src="https://verless.dominikbraun.io/assets/img/logo-gh-0.1.0.png">
-<br>
 <br>
 </p>
 
