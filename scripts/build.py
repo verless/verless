@@ -38,7 +38,7 @@ def build(os, arch):
 
     subprocess.call(
         ["go", "build", "-v", "-o", target, "cmd/verless/main.go"],
-        env={"GOOS": os, "GOARCH": arch}
+        env={"GOOS": os, "GOARCH": arch},
     )
 
 
