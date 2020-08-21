@@ -37,9 +37,9 @@ def build(os, arch):
     go_arch = "GOARCH={0}".format(arch)
 
     binary = "verless.exe" if os == "windows" else "verless"
-    target = "../target/{0}-{1}/{2}".format(os, arch, binary)
+    target = "target/{0}-{1}/{2}".format(os, arch, binary)
 
-    subprocess.call([go_os, go_arch, "go", "build", "-v", "-o", target, "../cmd/verless/main.go"])
+    subprocess.call([go_os, go_arch, "go", "build", "-v", "-o", target, "cmd/verless/main.go"])
 
 
 def package(os, arch):
