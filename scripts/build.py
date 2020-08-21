@@ -1,3 +1,4 @@
+import shutil
 import subprocess
 
 
@@ -21,6 +22,7 @@ def matrix():
                 continue
 
             build(os, arch)
+            package(os, arch)
 
 
 def build(os, arch):
@@ -38,6 +40,14 @@ def build(os, arch):
     target = "../target/{0}-{1}/{2}".format(os, arch, binary)
 
     subprocess.run([go_os, go_arch, "go", "build", "-v", "-o", target, "../cmd/verless/main.go"])
+
+
+def package(os, arch):
+    ext = "zip" if os == "windows" else "tar"
+    src = "../target/{0}-{1}".format(os, arch)
+    dest = "../target/{0}-{1}".format(os, arch)
+
+    shutil.make_archive(src, ext, dest)
 
 
 matrix()
