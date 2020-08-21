@@ -16,17 +16,17 @@ def matrix():
         "darwin": ["386", "arm"]
     }
 
-    for os in operating_systems:
-        for arch in architectures:
+    for go_os in operating_systems:
+        for go_arch in architectures:
 
-            if os in exclusions and arch in exclusions[os]:
+            if go_os in exclusions and go_arch in exclusions[go_os]:
                 continue
 
-            build(os, arch)
-            package(os, arch)
+            build(go_os, go_arch)
+            package(go_os, go_arch)
 
 
-def build(go_os, arch):
+def build(go_os, go_arch):
     """Build the verless binary for the given operating system and
     the given platform.
 
@@ -35,29 +35,29 @@ def build(go_os, arch):
     Windows platforms.
     """
     binary = "verless.exe" if go_os == "windows" else "verless"
-    target = "target/{0}-{1}/{2}".format(go_os, arch, binary)
+    target = "target/{0}-{1}/{2}".format(go_os, go_arch, binary)
 
     env = os.environ.copy()
     env["GOOS"] = go_os
-    env["GOARCH"] = arch
+    env["GOARCH"] = go_arch
 
     subprocess.Popen(["go", "build", "-v", "-o", target, "cmd/verless/main.go"], env=env)
 
 
-def package(os, arch):
+def package(go_os, go_arch):
     """
     Package a built binary as a zip file. It expects the binary in
     ../target/<os>-<arch>, where the build function stores binaries.
 
-    :param os: The OS.
-    :param arch: The architecture.
+    :param go_os: The OS.
+    :param go_arch: The architecture.
     :return:
     """
-    ext = "zip" if os == "windows" else "tar"
-    src = "target/{0}-{1}".format(os, arch)
-    dest = "target/verless-{0}-{1}".format(os, arch)
+    ext = "zip" if go_os == "windows" else "tar"
+    src = "target/{0}-{1}".format(go_os, go_arch)
+    dest = "target/verless-{0}-{1}".format(go_os, go_arch)
 
-    shutil.make_archive(src, ext, dest)
+    shutil.make_archive(dest, ext, src)
 
 
 matrix()
