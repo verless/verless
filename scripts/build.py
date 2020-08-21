@@ -43,6 +43,14 @@ def build(os, arch):
 
 
 def package(os, arch):
+    """
+    Package a built binary as a zip file. It expects the binary in
+    ../target/<os>-<arch>, where the build function stores binaries.
+
+    :param os: The OS.
+    :param arch: The architecture.
+    :return:
+    """
     ext = "zip" if os == "windows" else "tar"
     src = "../target/{0}-{1}".format(os, arch)
     dest = "../target/{0}-{1}".format(os, arch)
