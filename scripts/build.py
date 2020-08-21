@@ -33,13 +33,13 @@ def build(os, arch):
     name will be verless for Linux and macOS and verless.exe for
     Windows platforms.
     """
-    go_os = "GOOS={0}".format(os)
-    go_arch = "GOARCH={0}".format(arch)
-
     binary = "verless.exe" if os == "windows" else "verless"
     target = "target/{0}-{1}/{2}".format(os, arch, binary)
 
-    subprocess.call(["go", "build", "-v", "-o", target, "../cmd/verless/main.go"])
+    subprocess.call(
+        ["go", "build", "-v", "-o", target, "cmd/verless/main.go"],
+        env={"GOOS": os, "GOARCH": arch}
+    )
 
 
 def package(os, arch):
@@ -52,8 +52,8 @@ def package(os, arch):
     :return:
     """
     ext = "zip" if os == "windows" else "tar"
-    src = "../target/{0}-{1}".format(os, arch)
-    dest = "../target/verless-{0}-{1}".format(os, arch)
+    src = "target/{0}-{1}".format(os, arch)
+    dest = "target/verless-{0}-{1}".format(os, arch)
 
     shutil.make_archive(src, ext, dest)
 
