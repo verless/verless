@@ -40,6 +40,47 @@ jobs:
           name: Run all tests
           command: go test -v ./...
 
+  build:
+    executor: go-container
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gomodules-v1-{{ checksum "go.mod" }}
+            - gomodules-v1-
+      - run:
+          name: Download dependencies
+          command: go mod download
+      - save_cache:
+          key: gomodules-v1-{{ checksum "go.mod" }}
+          paths: /go/pkg
+      - run:
+          name: Build binaries
+          command: python ./scripts/build.py
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - ./target
+
+  release-github:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Copy artifacts
+          command: mkdir artifacts && cp /tmp/target/*.* artifacts
+      - run:
+          name: Publish GitHub release
+          command: |
+            ghr -t "${GITHUB_TOKEN}" \
+                -u "${CIRCLE_PROJECT_USERNAME}" \
+                -r "${CIRCLE_PROJECT_REPONAME}" \
+                -c "${CIRCLE_SHA1}" \
+                -delete "${CIRCLE_TAG}" \
+                artifacts
+
 workflows:
   version: 2
   # The basic CI workflow for single commits and opened PRs.
@@ -51,8 +92,16 @@ workflows:
             - go-check
   # The workflow for delivering the verless application.
   verless-cd:
-    triggers:
-      - schedule:
+    jobs:
+      - build:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
+      - release-github:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/

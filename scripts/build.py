@@ -53,7 +53,7 @@ def package(os, arch):
     """
     ext = "zip" if os == "windows" else "tar"
     src = "../target/{0}-{1}".format(os, arch)
-    dest = "../target/{0}-{1}".format(os, arch)
+    dest = "../target/verless-{0}-{1}".format(os, arch)
 
     shutil.make_archive(src, ext, dest)
 
