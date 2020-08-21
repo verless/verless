@@ -49,3 +49,10 @@ workflows:
       - go-test:
           requires:
             - go-check
+  # The workflow for delivering the verless application.
+  verless-cd:
+    triggers:
+      - schedule:
+          filters:
+            tags:
+              only: /.*/
