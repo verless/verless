@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 
@@ -25,7 +26,7 @@ def matrix():
             package(os, arch)
 
 
-def build(os, arch):
+def build(go_os, arch):
     """Build the verless binary for the given operating system and
     the given platform.
 
@@ -33,11 +34,11 @@ def build(os, arch):
     name will be verless for Linux and macOS and verless.exe for
     Windows platforms.
     """
-    binary = "verless.exe" if os == "windows" else "verless"
-    target = "target/{0}-{1}/{2}".format(os, arch, binary)
+    binary = "verless.exe" if go_os == "windows" else "verless"
+    target = "target/{0}-{1}/{2}".format(go_os, arch, binary)
 
     env = os.environ.copy()
-    env["GOOS"] = os
+    env["GOOS"] = go_os
     env["GOARCH"] = arch
 
     subprocess.Popen(["go", "build", "-v", "-o", target, "cmd/verless/main.go"], env=env)
