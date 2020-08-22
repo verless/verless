@@ -13,9 +13,30 @@ type Page struct {
 	Description string
 	Content     string
 	Related     []*Page
-	RelatedFQNs []string
 	Template    string
-	Hide        bool
+
+	relatedFQNs []string
+	hidden      bool
+}
+
+// RelatedFQNs returns all FullyQuallifiedName uris related to the page.
+func (p *Page) RelatedFQNs() []string {
+	return p.relatedFQNs
+}
+
+// AddRelatedFQN adds a new FullyQuallifiedName uri to the page.
+func (p *Page) AddRelatedFQN(relatedFQN string) {
+	p.relatedFQNs = append(p.relatedFQNs, relatedFQN)
+}
+
+// Hidden describes if the page should be shown (false) or hidden (true).
+func (p *Page) Hidden() bool {
+	return p.hidden
+}
+
+// SetHidden shows (false) or hides (true) the page.
+func (p *Page) SetHidden(hidden bool) {
+	p.hidden = hidden
 }
 
 type IndexPage struct {
