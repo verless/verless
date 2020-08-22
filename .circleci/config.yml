@@ -63,7 +63,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
-            - *
+            - verless-*
 
   release-github:
     docker:
