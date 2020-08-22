@@ -57,10 +57,13 @@ jobs:
       - run:
           name: Build binaries
           command: python ./scripts/build.py
+      - run:
+          name: Copy archives to /tmp
+          command: mkdir /tmp && cp target/*.* /tmp
       - persist_to_workspace:
           root: /tmp
           paths:
-            - target
+            - *
 
   release-github:
     docker:
@@ -68,9 +71,9 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp
-      - run:
-          name: Copy artifacts
-          command: mkdir artifacts && cp /tmp artifacts
+      #- run:
+      #    name: Copy artifacts
+      #    command: mkdir artifacts && cp /tmp artifacts
       - run:
           name: Publish GitHub release
           command: |
@@ -79,7 +82,7 @@ jobs:
                 -r "${CIRCLE_PROJECT_REPONAME}" \
                 -c "${CIRCLE_SHA1}" \
                 -delete "${CIRCLE_TAG}" \
-                artifacts
+                /tmp
 
 workflows:
   version: 2
@@ -97,7 +100,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-            #branches:
+              #branches:
               #ignore: /.*/
       - release-github:
           requires:
