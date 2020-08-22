@@ -1,3 +1,5 @@
+import os
+import shutil
 import subprocess
 
 
@@ -14,30 +16,44 @@ def matrix():
         "darwin": ["386", "arm"]
     }
 
-    for os in operating_systems:
-        for arch in architectures:
+    for go_os in operating_systems:
+        for go_arch in architectures:
 
-            if os in exclusions and arch in exclusions[os]:
+            if go_os in exclusions and go_arch in exclusions[go_os]:
                 continue
 
-            build(os, arch)
+            build(go_os, go_arch)
+            package(go_os, go_arch)
 
 
-def build(os, arch):
+def build(go_os, go_arch):
     """Build the verless binary for the given operating system and
     the given platform.
 
-    The binary will be stored in ../target/<os>-<arch>. The binary
+    The binary will be stored in target/<os>-<arch>. The binary
     name will be verless for Linux and macOS and verless.exe for
     Windows platforms.
     """
-    go_os = "GOOS={0}".format(os)
-    go_arch = "GOARCH={0}".format(arch)
+    binary = "verless.exe" if go_os == "windows" else "verless"
+    target = "target/{0}-{1}/{2}".format(go_os, go_arch, binary)
 
-    binary = "verless.exe" if os == "windows" else "verless"
-    target = "../target/{0}-{1}/{2}".format(os, arch, binary)
+    env = os.environ.copy()
+    env["GOOS"] = go_os
+    env["GOARCH"] = go_arch
 
-    subprocess.run([go_os, go_arch, "go", "build", "-v", "-o", target, "../cmd/verless/main.go"])
+    subprocess.Popen(["go", "build", "-v", "-o", target, "cmd/verless/main.go"], env=env).wait()
+
+
+def package(go_os, go_arch):
+    """
+    Package a built binary as a zip file. It expects the binary in
+    target/<os>-<arch>, where the build function stores binaries.
+    """
+    ext = "zip" if go_os == "windows" else "tar"
+    dest = "target/verless-{0}-{1}".format(go_os, go_arch)
+    src = "target/{0}-{1}/".format(go_os, go_arch)
+
+    shutil.make_archive(dest, ext, src)
 
 
 matrix()
