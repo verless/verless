@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     tar
 
 RUN curl -LO https://github.com/verless/verless/releases/download/${VERSION}/verless-linux-amd64.tar && \
-    tar -xzvf verless-linux-amd64.tar -C /bin && \
+    tar -xvf verless-linux-amd64.tar -C /bin && \
     rm -f verless-linux-amd64.tar
 
 # The final stage which corresponds to the distributed image.
