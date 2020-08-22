@@ -1,5 +1,6 @@
 # This Dockerfile is designed for hacking on verless - the image
-# distributed on Docker Hub is built using another Dockerfile.
+# distributed on Docker Hub is built using application.Dockerfile
+# in the scripts directory.
 #
 # Build the image:
 #   $ docker image build -t verless .
