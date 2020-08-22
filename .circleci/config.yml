@@ -60,7 +60,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
-            - ./target
+            - target
 
   release-github:
     docker:
@@ -70,7 +70,7 @@ jobs:
           at: /tmp
       - run:
           name: Copy artifacts
-          command: mkdir artifacts && cp /tmp/target/*.* artifacts
+          command: mkdir artifacts && cp /tmp/*.* artifacts
       - run:
           name: Publish GitHub release
           command: |
