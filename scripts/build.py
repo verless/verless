@@ -57,7 +57,7 @@ def package(go_os, go_arch):
     dest = "target/verless-{0}-{1}".format(go_os, go_arch)
     src = "target/{0}-{1}".format(go_os, go_arch)
 
-    print(subprocess.check_output(["ls" "-l"]).decode("utf-8"))
+    print(subprocess.check_output(["ls", "-l"]).decode("utf-8"))
 
     shutil.make_archive(dest, ext, src)
 
