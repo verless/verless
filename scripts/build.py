@@ -42,7 +42,7 @@ def build(go_os, go_arch):
     env["GOARCH"] = go_arch
 
     tag = env["CIRCLE_TAG"]
-    ld_flags = "-X config.Version={0]".format(tag)
+    ld_flags = "-X config.Version={0}".format(tag)
 
     subprocess.Popen(
         ["go", "build", "-v", "-ldflags", ld_flags, "-o", target, "cmd/verless/main.go"],
