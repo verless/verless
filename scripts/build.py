@@ -41,7 +41,7 @@ def build(go_os, go_arch):
     env["GOOS"] = go_os
     env["GOARCH"] = go_arch
 
-    subprocess.Popen(["go", "build", "-v", "-o", target, "cmd/verless/main.go"], env=env)
+    subprocess.Popen(["go", "build", "-v", "-o", target, "cmd/verless/main.go"], env=env).wait()
 
 
 def package(go_os, go_arch):
@@ -55,9 +55,9 @@ def package(go_os, go_arch):
     """
     ext = "zip" if go_os == "windows" else "tar"
     dest = "target/verless-{0}-{1}".format(go_os, go_arch)
-    src = "target/{0}-{1}".format(go_os, go_arch)
+    src = "target/{0}-{1}/".format(go_os, go_arch)
 
-    print(subprocess.check_output(["ls", "-l"]).decode("utf-8"))
+    #print(subprocess.check_output(["ls", "-l"]).decode("utf-8"))
 
     shutil.make_archive(dest, ext, src)
 
