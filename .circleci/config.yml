@@ -70,7 +70,7 @@ jobs:
           at: /tmp
       - run:
           name: Copy artifacts
-          command: mkdir artifacts && cp /tmp/*.* artifacts
+          command: mkdir artifacts && cp /tmp artifacts
       - run:
           name: Publish GitHub release
           command: |
