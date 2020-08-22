@@ -104,3 +104,6 @@ workflows:
       - release-github:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
