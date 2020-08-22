@@ -45,15 +45,15 @@ func readMetadata(metadata metadata, page *model.Page) {
 	})
 
 	readList(metadata["Related"], func(val interface{}) {
-		page.RelatedFQNs = append(page.RelatedFQNs, val.(string))
+		page.AddRelatedFQN(val.(string))
 	})
 
 	readPrimitive(metadata["Template"], func(val interface{}) {
 		page.Template = val.(string)
 	})
 
-	readPrimitive(metadata["Hide"], func(val interface{}) {
-		page.Hide = val.(bool)
+	readPrimitive(metadata["Hidden"], func(val interface{}) {
+		page.SetHidden(val.(bool))
 	})
 }
 

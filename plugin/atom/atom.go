@@ -40,7 +40,7 @@ type atom struct {
 }
 
 func (a *atom) ProcessPage(route string, page *model.Page) error {
-	if page.Hide {
+	if page.Hidden() {
 		return nil
 	}
 
