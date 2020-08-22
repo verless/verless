@@ -97,8 +97,8 @@ workflows:
           filters:
             tags:
               only: /.*/
-            branches:
-              ignore: /.*/
+            #branches:
+              #ignore: /.*/
       - release-github:
           requires:
             - build
