@@ -30,7 +30,7 @@ def build(go_os, go_arch):
     """Build the verless binary for the given operating system and
     the given platform.
 
-    The binary will be stored in ../target/<os>-<arch>. The binary
+    The binary will be stored in target/<os>-<arch>. The binary
     name will be verless for Linux and macOS and verless.exe for
     Windows platforms.
     """
@@ -47,15 +47,15 @@ def build(go_os, go_arch):
 def package(go_os, go_arch):
     """
     Package a built binary as a zip file. It expects the binary in
-    ../target/<os>-<arch>, where the build function stores binaries.
+    target/<os>-<arch>, where the build function stores binaries.
 
     :param go_os: The OS.
     :param go_arch: The architecture.
     :return:
     """
     ext = "zip" if go_os == "windows" else "tar"
-    src = "target/{0}-{1}".format(go_os, go_arch)
     dest = "target/verless-{0}-{1}".format(go_os, go_arch)
+    src = "target/{0}-{1}".format(go_os, go_arch)
 
     shutil.make_archive(dest, ext, src)
 
