@@ -17,6 +17,14 @@ RUN curl -LO https://github.com/verless/verless/releases/download/${VERSION}/ver
 # The final stage which corresponds to the distributed image.
 FROM alpine:3.11.5 AS final
 
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.name="verless"
+LABEL org.label-schema.description="A simple and lightweight Static Site Generator."
+LABEL org.label-schema.url="https://github.com/verless/verless"
+LABEL org.label-schema.vcs-url="https://github.com/verless/verless"
+LABEL org.label-schema.version=${VERSION}
+LABEL org.label-schema.docker.cmd="docker container run -v $(pwd)/my-blog:/project verless/verless"
+
 COPY --from=downloader ["/bin/verless", "/bin/verless"]
 
 WORKDIR /project
