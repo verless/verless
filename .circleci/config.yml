@@ -21,7 +21,7 @@ jobs:
           name: Check Go imports
           command: python ./scripts/check_imports.py
 
-  # Run all tests.
+  # Run all Go tests.
   go-test:
     executor: go-container
     steps:
@@ -40,6 +40,7 @@ jobs:
           name: Run all tests
           command: go test -v ./...
 
+  # Build verless binaries for multiple platforms.
   build:
     executor: go-container
     steps:
@@ -65,15 +66,13 @@ jobs:
           paths:
             - verless-*
 
+  # Release the packaged binaries to GitHub.
   release-github:
     docker:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
           at: /tmp
-      #- run:
-      #    name: Copy artifacts
-      #    command: mkdir artifacts && cp /tmp artifacts
       - run:
           name: Publish GitHub release
           command: |
@@ -100,8 +99,8 @@ workflows:
           filters:
             tags:
               only: /.*/
-              #branches:
-              #ignore: /.*/
+            branches:
+              ignore: /.*/
       - release-github:
           requires:
             - build

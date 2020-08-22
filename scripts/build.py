@@ -48,16 +48,10 @@ def package(go_os, go_arch):
     """
     Package a built binary as a zip file. It expects the binary in
     target/<os>-<arch>, where the build function stores binaries.
-
-    :param go_os: The OS.
-    :param go_arch: The architecture.
-    :return:
     """
     ext = "zip" if go_os == "windows" else "tar"
     dest = "target/verless-{0}-{1}".format(go_os, go_arch)
     src = "target/{0}-{1}/".format(go_os, go_arch)
-
-    #print(subprocess.check_output(["ls", "-l"]).decode("utf-8"))
 
     shutil.make_archive(dest, ext, src)
 
