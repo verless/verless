@@ -59,10 +59,11 @@ jobs:
           name: Build binaries
           command: python ./scripts/build.py
       - run:
-          name: Copy archives to /tmp
-          command: cp target/*.* /tmp
+          name: Copy archives to /tmp/artifacts
+          command: |
+            mkdir /tmp/artifacts && cp target/*.* /tmp/artifacts
       - persist_to_workspace:
-          root: /tmp
+          root: /tmp/artifacts
           paths:
             - verless-*
 
@@ -72,7 +73,7 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: /tmp
+          at: /tmp/artifacts
       - run:
           name: Publish GitHub release
           command: |
@@ -81,7 +82,7 @@ jobs:
                 -r "${CIRCLE_PROJECT_REPONAME}" \
                 -c "${CIRCLE_SHA1}" \
                 -delete "${CIRCLE_TAG}" \
-                /tmp
+                /tmp/artifacts
 
 workflows:
   version: 2
