@@ -52,8 +52,8 @@ func (t *tags) ProcessPage(page *model.Page) error {
 	return nil
 }
 
-// Finalize invokes writeIndexPage for each tag map entry.
-func (t *tags) Finalize(site *model.Site) error {
+// PreWrite invokes writeIndexPage for each tag map entry.
+func (t *tags) PreWrite(site *model.Site) error {
 	var (
 		indexPageTpl *template.Template
 		err          error
@@ -78,6 +78,10 @@ func (t *tags) Finalize(site *model.Site) error {
 		}
 	}
 
+	return nil
+}
+
+func (t *tags) PostWrite() error {
 	return nil
 }
 
