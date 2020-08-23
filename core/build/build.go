@@ -47,7 +47,7 @@ type (
 		ProcessPage(route string, page *model.Page) error
 		// PreWrite will be invoked before writing the site.
 		PreWrite(site *model.Site) error
-		// PreWrite will be invoked after writing the site.
+		// PostWrite will be invoked after writing the site.
 		PostWrite() error
 	}
 )
