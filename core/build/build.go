@@ -45,8 +45,10 @@ type (
 		// ProcessPage will be invoked after parsing the page.
 		// Must be safe for concurrent usage.
 		ProcessPage(route string, page *model.Page) error
-		// Finalize will be invoked after processing all pages.
-		Finalize(site *model.Site) error
+		// PreWrite will be invoked before writing the site.
+		PreWrite(site *model.Site) error
+		// PostWrite will be invoked after writing the site.
+		PostWrite() error
 	}
 )
 
@@ -136,14 +138,18 @@ func Run(ctx Context) []error {
 		return []error{err}
 	}
 
+	for _, plugin := range ctx.Plugins {
+		if err := plugin.PreWrite(&site); err != nil {
+			return []error{err}
+		}
+	}
+
 	if err := ctx.Writer.Write(site); err != nil {
 		return []error{err}
 	}
 
 	for _, plugin := range ctx.Plugins {
-		// Finalize has to be called after writing the page to make
-		// sure that no files will be overwritten by the Writer.
-		if err := plugin.Finalize(&site); err != nil {
+		if err := plugin.PostWrite(); err != nil {
 			return []error{err}
 		}
 	}
