@@ -58,7 +58,11 @@ func (a *atom) ProcessPage(route string, page *model.Page) error {
 	return nil
 }
 
-func (a *atom) Finalize(_ *model.Site) error {
+func (a *atom) PreWrite(_ *model.Site) error {
+	return nil
+}
+
+func (a *atom) PostWrite() error {
 	path := filepath.Join(a.outputDir, filename)
 	atomFile, err := os.Create(path)
 	if err != nil {
