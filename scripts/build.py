@@ -3,7 +3,7 @@ import shutil
 import subprocess
 
 
-def matrix():
+def main():
     """Define a matrix of operating systems and architectures and
     build the verless binary for all permutations.
 
@@ -42,7 +42,7 @@ def build(go_os, go_arch):
     env["GOARCH"] = go_arch
 
     tag = env["CIRCLE_TAG"]
-    ld_flags = "-X config.Version={0}".format(tag)
+    ld_flags = '"-X config.Version={0}"'.format(tag)
 
     subprocess.Popen(
         ["go", "build", "-v", "-ldflags", ld_flags, "-o", target, "cmd/verless/main.go"],
@@ -52,8 +52,9 @@ def build(go_os, go_arch):
 
 def package(go_os, go_arch):
     """
-    Package a built binary as a zip file. It expects the binary in
-    target/<os>-<arch>, where the build function stores binaries.
+    Package a built binary as a zip or tar archive. It expects the
+    binary in target/<os>-<arch>, where the build function stores
+    its binaries.
     """
     ext = "zip" if go_os == "windows" else "tar"
     dest = "target/verless-{0}-{1}".format(go_os, go_arch)
@@ -62,4 +63,4 @@ def package(go_os, go_arch):
     shutil.make_archive(dest, ext, src)
 
 
-matrix()
+main()

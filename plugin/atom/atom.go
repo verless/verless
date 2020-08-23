@@ -39,12 +39,12 @@ type atom struct {
 	outputDir string
 }
 
-func (a *atom) ProcessPage(route string, page *model.Page) error {
+func (a *atom) ProcessPage(page *model.Page) error {
 	if page.Hidden() {
 		return nil
 	}
 
-	canonical := fmt.Sprintf("%s%s/%s", a.meta.Base, route, page.ID)
+	canonical := fmt.Sprintf("%s%s/%s", a.meta.Base, page.Route, page.ID)
 
 	item := &feeds.Item{
 		Title:       page.Title,
@@ -58,7 +58,11 @@ func (a *atom) ProcessPage(route string, page *model.Page) error {
 	return nil
 }
 
-func (a *atom) Finalize(_ *model.Site) error {
+func (a *atom) PreWrite(_ *model.Site) error {
+	return nil
+}
+
+func (a *atom) PostWrite() error {
 	path := filepath.Join(a.outputDir, filename)
 	atomFile, err := os.Create(path)
 	if err != nil {

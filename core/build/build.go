@@ -30,7 +30,7 @@ type (
 	// instance and registers all parsed pages in that instance.
 	Builder interface {
 		// RegisterPage must be safe for concurrent usage.
-		RegisterPage(route string, page model.Page) error
+		RegisterPage(page model.Page) error
 		Dispatch() (model.Site, error)
 	}
 
@@ -44,9 +44,11 @@ type (
 	Plugin interface {
 		// ProcessPage will be invoked after parsing the page.
 		// Must be safe for concurrent usage.
-		ProcessPage(route string, page *model.Page) error
-		// Finalize will be invoked after processing all pages.
-		Finalize(site *model.Site) error
+		ProcessPage(page *model.Page) error
+		// PreWrite will be invoked before writing the site.
+		PreWrite(site *model.Site) error
+		// PostWrite will be invoked after writing the site.
+		PostWrite() error
 	}
 )
 
@@ -136,14 +138,18 @@ func Run(ctx Context) []error {
 		return []error{err}
 	}
 
+	for _, plugin := range ctx.Plugins {
+		if err := plugin.PreWrite(&site); err != nil {
+			return []error{err}
+		}
+	}
+
 	if err := ctx.Writer.Write(site); err != nil {
 		return []error{err}
 	}
 
 	for _, plugin := range ctx.Plugins {
-		// Finalize has to be called after writing the page to make
-		// sure that no files will be overwritten by the Writer.
-		if err := plugin.Finalize(&site); err != nil {
+		if err := plugin.PostWrite(); err != nil {
 			return []error{err}
 		}
 	}
@@ -165,17 +171,18 @@ func processFile(ctx *Context, contentDir, file string) error {
 	// For a file path like example/content/blog/coffee/making-espresso.md,
 	// the resulting path will be /blog/coffee.
 	path := filepath.Dir(file)[len(contentDir):]
+	page.Route = path
 
 	// For a file name like making-espresso.md, the resulting page
 	// ID will be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
 
-	if err := ctx.Builder.RegisterPage(path, page); err != nil {
+	if err := ctx.Builder.RegisterPage(page); err != nil {
 		return err
 	}
 
 	for _, plugin := range ctx.Plugins {
-		if err := plugin.ProcessPage(path, &page); err != nil {
+		if err := plugin.ProcessPage(&page); err != nil {
 			return err
 		}
 	}

@@ -27,14 +27,14 @@ type builder struct {
 
 // RegisterPage registers a given page under a given route. It
 // is safe for concurrent usage.
-func (b *builder) RegisterPage(route string, page model.Page) error {
+func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
 	var r *model.Route
 
-	if route != "" {
-		r = b.site.CreateRoute(route)
+	if page.Route != "" {
+		r = b.site.CreateRoute(page.Route)
 	} else {
 		r = &b.site.Root
 	}
