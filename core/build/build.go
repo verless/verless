@@ -30,7 +30,7 @@ type (
 	// instance and registers all parsed pages in that instance.
 	Builder interface {
 		// RegisterPage must be safe for concurrent usage.
-		RegisterPage(route string, page model.Page) error
+		RegisterPage(page model.Page) error
 		Dispatch() (model.Site, error)
 	}
 
@@ -44,7 +44,7 @@ type (
 	Plugin interface {
 		// ProcessPage will be invoked after parsing the page.
 		// Must be safe for concurrent usage.
-		ProcessPage(route string, page *model.Page) error
+		ProcessPage(page *model.Page) error
 		// Finalize will be invoked after processing all pages.
 		Finalize(site *model.Site) error
 	}
@@ -165,17 +165,18 @@ func processFile(ctx *Context, contentDir, file string) error {
 	// For a file path like example/content/blog/coffee/making-espresso.md,
 	// the resulting path will be /blog/coffee.
 	path := filepath.Dir(file)[len(contentDir):]
+	page.Route = path
 
 	// For a file name like making-espresso.md, the resulting page
 	// ID will be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
 
-	if err := ctx.Builder.RegisterPage(path, page); err != nil {
+	if err := ctx.Builder.RegisterPage(page); err != nil {
 		return err
 	}
 
 	for _, plugin := range ctx.Plugins {
-		if err := plugin.ProcessPage(path, &page); err != nil {
+		if err := plugin.ProcessPage(&page); err != nil {
 			return err
 		}
 	}

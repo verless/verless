@@ -41,7 +41,7 @@ type tags struct {
 
 // ProcessPage creates a new map entry for each tag in the processed
 // page and adds the page to the entry's index page.l
-func (t *tags) ProcessPage(_ string, page *model.Page) error {
+func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
 		if _, exists := t.m[tag]; !exists {
 			t.createIndexPage(tag)

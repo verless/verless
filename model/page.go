@@ -3,6 +3,7 @@ package model
 import "time"
 
 type Page struct {
+	Route       string
 	ID          string
 	Title       string
 	Author      string
