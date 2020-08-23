@@ -27,7 +27,8 @@ func TestBuilder_RegisterPage(t *testing.T) {
 	setupBuilder()
 
 	for i, page := range pages {
-		if err := b.RegisterPage(getRoute(i), page); err != nil {
+		page.Route = getRoute(i)
+		if err := b.RegisterPage(page); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -53,7 +54,8 @@ func TestBuilder_Dispatch(t *testing.T) {
 	setupBuilder()
 
 	for i, page := range pages {
-		if err := b.RegisterPage(getRoute(i), page); err != nil {
+		page.Route = getRoute(i)
+		if err := b.RegisterPage(page); err != nil {
 			t.Fatal(err)
 		}
 	}

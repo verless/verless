@@ -21,7 +21,8 @@ func TestAtom_ProcessPage(t *testing.T) {
 	setupAtom()
 
 	for i, page := range pages {
-		if err := a.ProcessPage(getRoute(i), &page); err != nil {
+		page.Route = getRoute(i)
+		if err := a.ProcessPage(&page); err != nil {
 			t.Fatal(err)
 		}
 	}
