@@ -10,7 +10,7 @@ func NewRootCmd() *cobra.Command {
 	rootCmd := cobra.Command{
 		Use:     "verless",
 		Short:   `A simple and lightweight Static Site Generator.`,
-		Version: config.Version,
+		Version: config.GitTag,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Help()
 		},

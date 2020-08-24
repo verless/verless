@@ -1,8 +1,10 @@
 package config
 
 var (
-	// Version is injected when building a new release.
-	Version string = "UNDEFINED"
+	// GitTag is injected when building a new release.
+	GitTag string = "UNDEFINED"
+	// GitCommit stores the latest Git commit.
+	GitCommit string = "UNKNOWN"
 )
 
 const (
