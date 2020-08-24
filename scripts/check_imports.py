@@ -23,7 +23,7 @@ def check_imports():
     If all files are formatted appropriately, exit with status 0,
     otherwise exit with status 1 by printing all invalid files.
     """
-    output = subprocess.check_output(["/go/bin/goimports", "-l", "."])
+    output = subprocess.check_output(["goimports", "-l", "."])
     output = output.decode("utf-8")
 
     if output != "":

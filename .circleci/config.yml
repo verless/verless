@@ -18,7 +18,7 @@ jobs:
           name: Update PATH
           command: |
             echo "export PATH=$GOPATH/bin:$PATH" >> $BASH_ENV
-            ls -l $GOPATH/bin
+            ls -l /go/bin
       - run:
           name: Check Go format
           command: python ./scripts/check_fmt.py
