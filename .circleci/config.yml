@@ -8,6 +8,7 @@ executors:
       GO111MODULE: "on"
       GOPROXY: "https://proxy.golang.org"
       PATH: "${PATH}:"
+      BASH_ENV: ~/.bashrc
 
 jobs:
   # Run static Go-related checks, e.g. code formatting.
