@@ -3,6 +3,7 @@ package tags
 import (
 	"fmt"
 	"github.com/verless/verless/model"
+	"path/filepath"
 	"testing"
 )
 
@@ -40,6 +41,37 @@ func TestTags_ProcessPage(t *testing.T) {
 		}
 	}
 }
+
+func TestTags_PreWrite(t *testing.T) {
+	setupTags()
+
+	for i, page := range pages {
+		page.Route = getRoute(i)
+		if err := tg.ProcessPage(&page); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	site := model.Site{}
+
+	if err := tg.PreWrite(&site); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, page := range pages {
+		for _, tag := range page.Tags {
+			route, err := site.ResolveRoute(filepath.Join(tagsDir, tag))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(route.IndexPage.Pages) < 1 {
+				t.Errorf("expected at least %d pages for tag %s, got %d", 1, tag, 0)
+			}
+		}
+	}
+}
+
+func TestTags_PostWrite(t *testing.T) {}
 
 func setupTags() {
 	if tg == nil {
