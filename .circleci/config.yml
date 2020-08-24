@@ -7,7 +7,6 @@ executors:
     environment:
       GO111MODULE: "on"
       GOPROXY: "https://proxy.golang.org"
-      PATH: "${PATH}:"
 
 jobs:
   # Run static Go-related checks, e.g. code formatting.
@@ -16,9 +15,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Update PATH
+          name: Install goimports tool
           command: |
-            export PATH=$PATH:$GOPATH/bin
+            go get -u golang.org/x/tools/cmd/goimports
+            echo "export PATH=$GOPATH/bin:$PATH" >> $BASH_ENV
       - run:
           name: Check Go format
           command: python ./scripts/check_fmt.py
