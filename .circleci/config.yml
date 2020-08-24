@@ -15,10 +15,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Update PATH
+          name: Install goimports tool
           command: |
+            go get -u golang.org/x/tools/cmd/goimports
             echo "export PATH=$GOPATH/bin:$PATH" >> $BASH_ENV
-            ls -l /go/bin
       - run:
           name: Check Go format
           command: python ./scripts/check_fmt.py
