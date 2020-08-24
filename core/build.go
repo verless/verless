@@ -63,7 +63,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	}
 
 	if cfg.HasPlugin(tags.Key) {
-		tagsPlugin := tags.New(path, out)
+		tagsPlugin := tags.New()
 		plugins = append(plugins, tagsPlugin)
 	}
 

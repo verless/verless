@@ -4,7 +4,7 @@ import sys
 
 def check_imports():
     """
-    Run `goimports -l ..` to find all Go files whose imports aren't
+    Run `goimports -l .` to find all Go files whose imports aren't
     formatted appropriately.
 
     Imported Go packages don't only have to be ordered alphabetical,
@@ -23,7 +23,7 @@ def check_imports():
     If all files are formatted appropriately, exit with status 0,
     otherwise exit with status 1 by printing all invalid files.
     """
-    output = subprocess.check_output(["goimports", "-l", ".."])
+    output = subprocess.check_output(["goimports", "-l", "."])
     output = output.decode("utf-8")
 
     if output != "":
@@ -32,3 +32,6 @@ def check_imports():
 Run `goimports -w .` to order the imports or group and order them yourself.""".format(output)
 
         sys.exit(msg)
+
+
+check_imports()
