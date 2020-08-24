@@ -7,7 +7,6 @@ executors:
     environment:
       GO111MODULE: "on"
       GOPROXY: "https://proxy.golang.org"
-      PATH: "${PATH}:"
       BASH_ENV: ~/.bashrc
 
 jobs:
