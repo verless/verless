@@ -32,3 +32,6 @@ def check_imports():
 Run `goimports -w .` to order the imports or group and order them yourself.""".format(output)
 
         sys.exit(msg)
+
+
+check_imports()
