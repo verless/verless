@@ -16,11 +16,9 @@ const (
 
 // New creates a new tags plugin that uses templates from the given
 // build path and outputs the tag directories to outputDir.
-func New(path, outputDir string) *tags {
+func New() *tags {
 	t := tags{
-		path:      path,
-		outputDir: outputDir,
-		m:         make(map[string]*model.IndexPage),
+		m: make(map[string]*model.IndexPage),
 	}
 
 	return &t
@@ -29,9 +27,7 @@ func New(path, outputDir string) *tags {
 // tags is the actual tags plugin that maintains a map with all
 // tags from all processed pages.
 type tags struct {
-	path      string
-	outputDir string
-	m         map[string]*model.IndexPage
+	m map[string]*model.IndexPage
 }
 
 // ProcessPage creates a new map entry for each tag in the processed
