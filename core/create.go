@@ -17,13 +17,13 @@ type CreateProjectOptions struct {
 	Overwrite bool
 }
 
+// CreateExampleOptions represents options for creating
+// the verless example project.
 type CreateExampleOptions struct {
 	Overwrite bool
 }
 
-// RunCreateProject creates a new verless project. If the
-// specified project path already exists, RunCreateProject
-// returns an error unless --overwrite has been used.
+// RunCreateProject creates a new verless project.
 func RunCreateProject(path string, options CreateProjectOptions) error {
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
 		if !options.Overwrite {
@@ -38,8 +38,7 @@ func RunCreateProject(path string, options CreateProjectOptions) error {
 }
 
 // RunCreateExample creates the verless example project inside
-// the current directory. If the example directory already exists,
-// it has to be overwritten using --overwrite.
+// the current directory.
 func RunCreateExample(options CreateExampleOptions) error {
 	if _, err := os.Stat(exampleDir); !os.IsNotExist(err) {
 		if !options.Overwrite {
