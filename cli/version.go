@@ -17,7 +17,7 @@ func newVersionCmd() *cobra.Command {
 	}
 
 	versionCmd.Flags().BoolVarP(&options.Quiet, "quiet", "q",
-		false, `Only print the version number.`)
+		false, `only print the version number`)
 
 	return &versionCmd
 }
