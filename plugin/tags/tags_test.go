@@ -76,7 +76,7 @@ func TestTags_PostWrite(t *testing.T) {}
 
 func setupTags() {
 	if tg == nil {
-		tg = New("", "")
+		tg = New()
 	}
 }
 
