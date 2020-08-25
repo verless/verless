@@ -2,9 +2,10 @@ package tags
 
 import (
 	"fmt"
-	"github.com/verless/verless/model"
 	"path/filepath"
 	"testing"
+
+	"github.com/verless/verless/model"
 )
 
 var (
