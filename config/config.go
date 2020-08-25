@@ -2,6 +2,11 @@
 package config
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"path/filepath"
+
 	"github.com/spf13/viper"
 	"github.com/verless/verless/model"
 )
@@ -58,4 +63,28 @@ func FromFile(path, filename string) (Config, error) {
 	}
 
 	return config, nil
+}
+
+// WriteEmpty writes an empty configuration populated with its zero-
+// values in a YAML file.
+func WriteEmpty(path, filename string) error {
+	var (
+		cfg  = Config{}
+		file = fmt.Sprintf("%s.yml", filename)
+	)
+
+	b, err := json.Marshal(&cfg)
+	if err != nil {
+		return err
+	}
+
+	viper.SetConfigType("json")
+
+	if err := viper.ReadConfig(bytes.NewBuffer(b)); err != nil {
+		return err
+	}
+
+	viper.SetConfigType("yaml")
+
+	return viper.WriteConfigAs(filepath.Join(path, file))
 }
