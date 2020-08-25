@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	exampleDir = "my-blog"
+	exampleDir = "my-coffee-blog"
 )
 
 // CreateProjectOptions represents options for creating

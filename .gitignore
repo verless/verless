@@ -23,3 +23,6 @@ example/target/
 
 # The output path for example builds.
 test-output-dir
+
+# The example project generated with `verless create example`.
+my-coffee-blog/
