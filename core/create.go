@@ -7,9 +7,17 @@ import (
 	"github.com/verless/verless/core/create"
 )
 
+const (
+	exampleDir = "my-blog"
+)
+
 // CreateProjectOptions represents options for creating
 // a new verless project.
 type CreateProjectOptions struct {
+	Overwrite bool
+}
+
+type CreateExampleOptions struct {
 	Overwrite bool
 }
 
@@ -27,4 +35,17 @@ func RunCreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	return create.Project(path)
+}
+
+func RunCreateExample(options CreateExampleOptions) error {
+	if _, err := os.Stat(exampleDir); !os.IsNotExist(err) {
+		if !options.Overwrite {
+			return fmt.Errorf("%s already exists. use --overwrite to overwrite it", exampleDir)
+		}
+		if err := os.RemoveAll(exampleDir); err != nil {
+			return err
+		}
+	}
+
+	return create.ExampleProject(exampleDir)
 }

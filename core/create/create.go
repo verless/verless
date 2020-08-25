@@ -1,18 +1,31 @@
 package create
 
 import (
+	"github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 )
 
 // Project creates a new verless project which is an exact copy
 // of the project at the given path.
 func Project(path string) error {
-	for file, content := range files {
-		dir := filepath.Join(path, filepath.Dir(file))
+	if err := fs.MkdirAll(path, config.AssetDir, config.ContentDir, config.TemplateDir); err != nil {
+		return err
+	}
 
-		if err := os.MkdirAll(dir, 0755); err != nil {
+	if err := config.WriteEmpty(path, config.Filename); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ExampleProject(path string) error {
+	for file, content := range files {
+		dir := filepath.Dir(file)
+
+		if err := fs.MkdirAll(path, dir); err != nil {
 			return err
 		}
 
