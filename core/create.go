@@ -37,6 +37,9 @@ func RunCreateProject(path string, options CreateProjectOptions) error {
 	return create.Project(path)
 }
 
+// RunCreateExample creates the verless example project inside
+// the current directory. If the example directory already exists,
+// it has to be overwritten using --overwrite.
 func RunCreateExample(options CreateExampleOptions) error {
 	if _, err := os.Stat(exampleDir); !os.IsNotExist(err) {
 		if !options.Overwrite {

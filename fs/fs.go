@@ -55,6 +55,7 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 	return ErrStreaming
 }
 
+// MkdirAll creates all given directories inside the given path.
 func MkdirAll(path string, dirs ...string) error {
 	for _, dir := range dirs {
 		if err := os.MkdirAll(filepath.Join(path, dir), 0755); err != nil {

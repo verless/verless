@@ -5,9 +5,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"path/filepath"
+
 	"github.com/spf13/viper"
 	"github.com/verless/verless/model"
-	"path/filepath"
 )
 
 // Config represents the user configuration stored in verless.yml.
@@ -64,6 +65,8 @@ func FromFile(path, filename string) (Config, error) {
 	return config, nil
 }
 
+// WriteEmpty writes an empty configuration populated with its zero-
+// values in a YAML file.
 func WriteEmpty(path, filename string) error {
 	var (
 		cfg  = Config{}

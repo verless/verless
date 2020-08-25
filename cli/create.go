@@ -41,6 +41,7 @@ func newCreateProjectCmd() *cobra.Command {
 	return &createProjectCmd
 }
 
+// newCreateExampleCmd creates the `verless create example` command.
 func newCreateExampleCmd() *cobra.Command {
 	var (
 		options core.CreateExampleOptions

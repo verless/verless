@@ -1,10 +1,11 @@
 package create
 
 import (
-	"github.com/verless/verless/config"
-	"github.com/verless/verless/fs"
 	"io/ioutil"
 	"path/filepath"
+
+	"github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
 )
 
 // Project creates a new verless project which is an exact copy
@@ -21,6 +22,8 @@ func Project(path string) error {
 	return nil
 }
 
+// ExampleProject creates the verless example project in the
+// given path, containing all files from the example directory.
 func ExampleProject(path string) error {
 	for file, content := range files {
 		dir := filepath.Dir(file)
