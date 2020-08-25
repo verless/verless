@@ -2,8 +2,12 @@
 package config
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"github.com/spf13/viper"
 	"github.com/verless/verless/model"
+	"path/filepath"
 )
 
 // Config represents the user configuration stored in verless.yml.
@@ -58,4 +62,26 @@ func FromFile(path, filename string) (Config, error) {
 	}
 
 	return config, nil
+}
+
+func WriteEmpty(path, filename string) error {
+	var (
+		cfg  = Config{}
+		file = fmt.Sprintf("%s.yml", filename)
+	)
+
+	b, err := json.Marshal(&cfg)
+	if err != nil {
+		return err
+	}
+
+	viper.SetConfigType("json")
+
+	if err := viper.ReadConfig(bytes.NewBuffer(b)); err != nil {
+		return err
+	}
+
+	viper.SetConfigType("yaml")
+
+	return viper.WriteConfigAs(filepath.Join(path, file))
 }

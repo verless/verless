@@ -15,6 +15,7 @@ func newCreateCmd() *cobra.Command {
 	}
 
 	createCmd.AddCommand(newCreateProjectCmd())
+	createCmd.AddCommand(newCreateExampleCmd())
 
 	return &createCmd
 }
@@ -38,4 +39,22 @@ func newCreateProjectCmd() *cobra.Command {
 		false, `overwrite the directory if it already exists`)
 
 	return &createProjectCmd
+}
+
+func newCreateExampleCmd() *cobra.Command {
+	var (
+		options core.CreateExampleOptions
+	)
+
+	createExampleCmd := cobra.Command{
+		Use: "example",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return core.RunCreateExample(options)
+		},
+	}
+
+	createExampleCmd.Flags().BoolVar(&options.Overwrite, "overwrite",
+		false, `overwrite the directory if it already exists`)
+
+	return &createExampleCmd
 }
