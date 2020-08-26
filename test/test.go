@@ -13,9 +13,10 @@ import (
 
 // Formatting strings for printing test results.
 const (
-	assertFormat string = "\\033[31m%s:%d: %v\\033[39m\\n\\n"
-	okFormat     string = "\u001B[31m%s:%d: unexpected error: %s\u001B[39m\n\n"
-	equalsFormat string = "\u001B[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
+	assertFormat    string = "\\033[31m%s:%d: %v\\033[39m\\n\\n"
+	okFormat        string = "\u001B[31m%s:%d: unexpected error: %s\u001B[39m\n\n"
+	equalsFormat    string = "\u001B[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
+	notEqualsFormat string = "\u001B[31m%s:%d:\n\n\tnot exp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
 )
 
 // Assert fails the test if the condition is false.
@@ -41,6 +42,15 @@ func Equals(tb testing.TB, exp, act interface{}, options ...cmp.Option) {
 	if !cmp.Equal(exp, act, options...) {
 		_, file, line, _ := runtime.Caller(1)
 		fmt.Printf(equalsFormat, filepath.Base(file), line, exp, act)
+		tb.FailNow()
+	}
+}
+
+// Equals fails the test if exp is not equal to act.
+func NotEquals(tb testing.TB, exp, act interface{}, options ...cmp.Option) {
+	if cmp.Equal(exp, act, options...) {
+		_, file, line, _ := runtime.Caller(1)
+		fmt.Printf(notEqualsFormat, filepath.Base(file), line, exp, act)
 		tb.FailNow()
 	}
 }
