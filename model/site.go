@@ -5,8 +5,14 @@ import (
 	"strings"
 )
 
+// walkFn can be invoked for each route in the route tree.
 type walkFn func(path string, route *Route) error
 
+// Site represents the actual website. The site model is generated
+// and populated with data and content during the website build.
+//
+// Any build.Writer implementation is capable of rendering this
+// model as a static website.
 type Site struct {
 	Meta   Meta
 	Nav    Nav
@@ -14,10 +20,14 @@ type Site struct {
 	Footer Footer
 }
 
+// WalkRoutes traverses the site's route tree and invokes the given
+// walkFn on each node. Use maxDepth = -1 to traverse all nodes.
 func (s *Site) WalkRoutes(walkFn walkFn, maxDepth int) error {
 	return s.walkRoute("", &s.Root, walkFn, maxDepth, 0)
 }
 
+// walkRoute invokes the walkFn on a given route and calls itself
+// for all of its child routes.
 func (s *Site) walkRoute(path string, route *Route, walkFn walkFn, maxDepth, curDepth int) error {
 	if maxDepth != -1 && curDepth == maxDepth {
 		return nil
@@ -37,6 +47,8 @@ func (s *Site) walkRoute(path string, route *Route, walkFn walkFn, maxDepth, cur
 	return nil
 }
 
+// CreateRoute creates a new route in the route tree. Has to
+// start with a slash representing the root route, e. g. /blog.
 func (s *Site) CreateRoute(route string) *Route {
 	var (
 		node     = &s.Root
@@ -64,6 +76,8 @@ func (s *Site) CreateRoute(route string) *Route {
 	return nil
 }
 
+// ResolveRoute resolves and returns a route in the route tree.
+// Has to start with a slash representing the root route.
 func (s *Site) ResolveRoute(route string) (*Route, error) {
 	var (
 		node     = &s.Root
