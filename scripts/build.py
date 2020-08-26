@@ -47,7 +47,7 @@ def build(go_os, go_arch, git_data):
         .format(git_data["tag"], git_data["commit"])
 
     subprocess.Popen(
-        ["go", "build", "-v", "-ldflags", ld_flags, "-o", target, "cmd/verless/main.go"],
+        ["go", "build", "-v", "-ldflags", ld_flags, "-o", target, "cmd/main.go"],
         env=env
     ).wait()
 
