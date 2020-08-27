@@ -76,8 +76,8 @@ The easiest way to create a new project is to use the verless CLI:
 $ verless create project my-blog
 ```
 
-This initializes a project called `my-blog` inside a new directory, containing all required files and a small example
-site. Building the website corresponding works similarly:
+This initializes a project called `my-blog` inside a new directory, containing a small default site. Building the
+website corresponding works similarly:
 
 ```shell script
 $ verless build my-blog

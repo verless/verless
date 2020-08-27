@@ -51,7 +51,7 @@ The `verless create` command does not provide any functionality and only prints 
 
 ## verless create project
 
-`verless create project NAME` initializes a new verless standard project with all directories and files required for
+`verless create project NAME` initializes a new verless default project with all directories and files required for
 running a build. If the `NAME` directory already exists, the command will fail. Use `--overwrite` to overwrite the
 directory with the new project.
 
