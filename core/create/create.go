@@ -1,11 +1,11 @@
 package create
 
 import (
-	"github.com/verless/verless/fs"
 	"io/ioutil"
 	"path/filepath"
 
 	. "github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
 )
 
 // Project creates a new verless default project.
