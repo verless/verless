@@ -10,14 +10,8 @@ import (
 
 // Project creates a new verless default project.
 func Project(path string) error {
-	dirs := []string{
-		ContentDir,
-		TemplateDir,
-		AssetDir,
-		filepath.Join(AssetDir, "css"),
-	}
-
-	if err := fs.MkdirAll(path, dirs...); err != nil {
+	err := fs.MkdirAll(path, ContentDir, TemplateDir, AssetDir, filepath.Join(AssetDir, "css"))
+	if err != nil {
 		return err
 	}
 
