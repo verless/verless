@@ -122,7 +122,7 @@ Available in:
 | `{{.Page.Description}}` | Markdown  |                                                                                                  |
 | `{{.Page.Content}}`     | Markdown  |                                                                                                  |
 | `{{.Page.Related}}`     | Markdown  | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.     |
-| `{{.Page.Template}}`    | Markdown  | A custom template to use. This has to be a file in `templates`.                                  |
+| `{{.Page.Type}}`        | Markdown  | The page type specified in the Markdown file, which impacts the template used for rendering.     |
 
 ### Pages
 
