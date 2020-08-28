@@ -163,25 +163,20 @@ func (w *writer) removeOutDirIfExists() error {
 
 // chooseTemplate checks a page's type and a page's custom template and
 // automatically loads the correct template under consideration of the
-// following rules:
-//	1. If no type or template has been specified, use the default template.
-//	2. If a custom template has been specified, use the custom template.
-//	3. If a page type has been specified, use the respective template.
-//
-// A hard-coded custom template outweighs a page type template.
+// following priority order:
+//	1. Hard-coded custom template
+//	2. Template for specified page type
+//	3. Default template
 func chooseTemplate(pageType, pageTemplate, defaultTemplate string) (*template.Template, error) {
-	if pageType == "" && pageTemplate == "" {
-		return tpl.Get(defaultTemplate)
-	}
-
 	var pageTpl string
 
-	// Either choose the custom hard-coded template if it has been
-	// specified or use the page type template instead.
-	if pageTemplate != "" {
+	switch {
+	case pageTemplate != "":
 		pageTpl = pageTemplate
-	} else {
+	case pageType != "":
 		pageTpl = fmt.Sprintf("%s.html", pageType)
+	default:
+		pageTpl = defaultTemplate
 	}
 
 	if tpl.IsRegistered(pageTpl) {
