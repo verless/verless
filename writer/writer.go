@@ -2,12 +2,12 @@ package writer
 
 import (
 	"errors"
-	"github.com/verless/verless/fs"
 	"os"
 	"path/filepath"
 
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tpl"
 )

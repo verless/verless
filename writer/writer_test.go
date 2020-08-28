@@ -2,11 +2,11 @@
 package writer
 
 import (
-	"github.com/verless/verless/fs"
 	"os"
 	"path"
 	"testing"
 
+	"github.com/verless/verless/fs"
 	"github.com/verless/verless/test"
 )
 
