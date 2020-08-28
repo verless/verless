@@ -1,4 +1,5 @@
 // File writer_test.go tests the writer.
+
 package writer
 
 import (
