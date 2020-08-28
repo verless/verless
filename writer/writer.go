@@ -1,7 +1,6 @@
 package writer
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -14,17 +13,13 @@ import (
 	"github.com/verless/verless/tpl"
 )
 
-func New(path, outputDir string) (*writer, error) {
+func New(path, outputDir string) *writer {
 	w := writer{
 		path:      path,
 		outputDir: outputDir,
 	}
 
-	if err := w.initTemplates(); err != nil {
-		return nil, err
-	}
-
-	return &w, nil
+	return &w
 }
 
 type writer struct {
@@ -70,27 +65,6 @@ func (w *writer) Write(site model.Site) error {
 	return nil
 }
 
-func (w *writer) initTemplates() error {
-	var (
-		pageTplPath      = filepath.Join(w.path, config.TemplateDir, config.PageTpl)
-		indexPageTplPath = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
-	)
-
-	if _, err := tpl.Register(config.PageTpl, pageTplPath); err != nil {
-		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
-			return err
-		}
-	}
-
-	if _, err := tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
-		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (w *writer) writePage(route string, page page) error {
 	path := filepath.Join(w.outputDir, route, page.Page.ID)
 
@@ -103,7 +77,7 @@ func (w *writer) writePage(route string, page page) error {
 		return err
 	}
 
-	pageTpl, err := chooseTemplate(page.Page.Type, page.Page.Template, config.PageTpl)
+	pageTpl, err := w.chooseTemplate(page.Page.Type, page.Page.Template, config.PageTpl)
 	if err != nil {
 		return err
 	}
@@ -123,7 +97,7 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 		return err
 	}
 
-	indexPageTpl, err := chooseTemplate(indexPage.Type, indexPage.Template, config.IndexPageTpl)
+	indexPageTpl, err := w.chooseTemplate(indexPage.Type, indexPage.Template, config.IndexPageTpl)
 	if err != nil {
 		return err
 	}
@@ -167,7 +141,7 @@ func (w *writer) removeOutDirIfExists() error {
 //	1. Hard-coded custom template
 //	2. Template for specified page type
 //	3. Default template
-func chooseTemplate(pageType, pageTemplate, defaultTemplate string) (*template.Template, error) {
+func (w *writer) chooseTemplate(pageType, pageTemplate, defaultTemplate string) (*template.Template, error) {
 	var pageTpl string
 
 	switch {
@@ -183,5 +157,7 @@ func chooseTemplate(pageType, pageTemplate, defaultTemplate string) (*template.T
 		return tpl.Get(pageTpl)
 	}
 
-	return tpl.Register(pageTpl, pageTpl)
+	tplPath := filepath.Join(w.path, config.TemplateDir, pageTpl)
+
+	return tpl.Register(pageTpl, tplPath)
 }
