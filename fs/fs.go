@@ -65,3 +65,16 @@ func MkdirAll(path string, dirs ...string) error {
 
 	return nil
 }
+
+// Rmdir removes an entire directory along with its contents. If the
+// directory does not exist, nothing happens.
+func Rmdir(path string) error {
+	_, err := os.Stat(path)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return err
+		}
+	}
+
+	return os.RemoveAll(path)
+}

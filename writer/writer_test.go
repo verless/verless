@@ -2,6 +2,7 @@
 package writer
 
 import (
+	"github.com/verless/verless/fs"
 	"os"
 	"path"
 	"testing"
@@ -60,7 +61,7 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 
 		testCase.beforeTest()
 
-		err := w.removeOutDirIfExists()
+		err := fs.Rmdir(w.outputDir)
 
 		if testCase.expectedError == "" {
 			test.Ok(t, err)
