@@ -79,15 +79,11 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 
 // finalOutputDir determines the final output path.
 func finalOutputDir(path string, options *BuildOptions) string {
-	var outputPath string
-
 	if options.OutputDir != "" {
-		outputPath = options.OutputDir
-	} else {
-		outputPath = filepath.Join(path, config.OutputDir)
+		return options.OutputDir
 	}
 
-	return outputPath
+	return filepath.Join(path, config.OutputDir)
 }
 
 // canOverwrite determines of the output directory can be removed
