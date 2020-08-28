@@ -73,9 +73,5 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 }
 
 func setupNewWriter(t testing.TB) *writer {
-	w, err := New(testPath, testOutPath)
-	if err != nil {
-		t.Errorf("New should not throw an error: %v", err)
-	}
-	return w
+	return New(testPath, testOutPath)
 }

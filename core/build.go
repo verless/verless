@@ -39,13 +39,9 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		out     = finalOutputDir(path, &options)
 		p       = parser.NewMarkdown()
 		b       = builder.New(&cfg)
-		w, err  = writer.New(path, out)
+		w       = writer.New(path, out)
 		plugins = make([]build.Plugin, 0)
 	)
-
-	if err != nil {
-		return []error{err}
-	}
 
 	if cfg.Version == "" {
 		return []error{
