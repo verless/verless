@@ -161,9 +161,9 @@ func (w *writer) removeOutDirIfExists() error {
 	return nil
 }
 
-// chooseTemplate checks a page's type and a page's custom template
-// and automatically loads the correct template under consideration
-// of the following rules:
+// chooseTemplate checks a page's type and a page's custom template and
+// automatically loads the correct template under consideration of the
+// following rules:
 //	1. If no type or template has been specified, use the default template.
 //	2. If a custom template has been specified, use the custom template.
 //	3. If a page type has been specified, use the respective template.
