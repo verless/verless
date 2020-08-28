@@ -2,9 +2,11 @@ package writer
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"text/template"
 
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
@@ -101,7 +103,10 @@ func (w *writer) writePage(route string, page page) error {
 		return err
 	}
 
-	pageTpl, _ := tpl.Get(config.PageTpl)
+	pageTpl, err := chooseTemplate(page.Page.Type, page.Page.Template, config.PageTpl)
+	if err != nil {
+		return err
+	}
 
 	return pageTpl.Execute(file, &page)
 }
@@ -118,7 +123,10 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 		return err
 	}
 
-	indexPageTpl, _ := tpl.Get(config.IndexPageTpl)
+	indexPageTpl, err := chooseTemplate(indexPage.Type, indexPage.Template, config.IndexPageTpl)
+	if err != nil {
+		return err
+	}
 
 	return indexPageTpl.Execute(file, &indexPage)
 }
@@ -151,4 +159,34 @@ func (w *writer) removeOutDirIfExists() error {
 	}
 
 	return nil
+}
+
+// chooseTemplate checks a page's type and a page's custom template
+// and automatically loads the correct template under consideration
+// of the following rules:
+//	1. If no type or template has been specified, use the default template.
+//	2. If a custom template has been specified, use the custom template.
+//	3. If a page type has been specified, use the respective template.
+//
+// A hard-coded custom template outweighs a page type template.
+func chooseTemplate(pageType, pageTemplate, defaultTemplate string) (*template.Template, error) {
+	if pageType == "" && pageTemplate == "" {
+		return tpl.Get(defaultTemplate)
+	}
+
+	var pageTpl string
+
+	// Either choose the custom hard-coded template if it has been
+	// specified or use the page type template instead.
+	if pageTemplate != "" {
+		pageTpl = pageTemplate
+	} else {
+		pageTpl = fmt.Sprintf("%s.html", pageType)
+	}
+
+	if tpl.IsRegistered(pageTpl) {
+		return tpl.Get(pageTpl)
+	}
+
+	return tpl.Register(pageTpl, pageTpl)
 }

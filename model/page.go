@@ -15,18 +15,19 @@ type Page struct {
 	Description string
 	Content     string
 	Related     []*Page
+	Type        string
 	Template    string
 
 	relatedFQNs []string
 	hidden      bool
 }
 
-// RelatedFQNs returns all FullyQuallifiedName uris related to the page.
+// RelatedFQNs returns all FullyQualifiedName URIs related to the page.
 func (p *Page) RelatedFQNs() []string {
 	return p.relatedFQNs
 }
 
-// AddRelatedFQN adds a new FullyQuallifiedName uri to the page.
+// AddRelatedFQN adds a new FullyQualifiedName URI to the page.
 func (p *Page) AddRelatedFQN(relatedFQN string) {
 	p.relatedFQNs = append(p.relatedFQNs, relatedFQN)
 }
