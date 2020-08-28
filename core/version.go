@@ -6,6 +6,13 @@ import (
 	"github.com/verless/verless/config"
 )
 
+var (
+	// format is the default format string for printing the version.
+	format = `verless version %s
+Git tag: %s
+Git commit: %s`
+)
+
 // VersionOptions represents options for the version command.
 type VersionOptions struct {
 	// Quiet only prints the plain version number.
@@ -14,14 +21,10 @@ type VersionOptions struct {
 
 // RunVersion prints verless version information.
 func RunVersion(options VersionOptions) error {
-	var format string
-
 	if options.Quiet {
-		format = "%s"
-	} else {
-		format = "verless version %s"
+		fmt.Printf("%s", config.GitTag)
 	}
 
-	fmt.Printf(format, config.Version)
+	fmt.Printf(format, config.GitTag, config.GitTag, config.GitCommit)
 	return nil
 }

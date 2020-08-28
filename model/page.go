@@ -2,6 +2,7 @@ package model
 
 import "time"
 
+// Page represents a sub-page of the website.
 type Page struct {
 	Route       string
 	ID          string
@@ -40,6 +41,8 @@ func (p *Page) SetHidden(hidden bool) {
 	p.hidden = hidden
 }
 
+// IndexPage represents an overview page that is generated for
+// each content sub-directory.
 type IndexPage struct {
 	Page
 	Pages []*Page

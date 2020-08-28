@@ -7,7 +7,9 @@ import (
 )
 
 var (
-	s     *Site  = nil
+	// s is the Site instance used for testing.
+	s *Site = nil
+	// pages is a set of pages used for testing.
 	pages []Page = []Page{
 		{ID: "page-0"},
 		{ID: "page-1"},
@@ -16,6 +18,8 @@ var (
 	}
 )
 
+// TestSite_CreateRoute checks if all routes are created correctly
+// when pages are registered.
 func TestSite_CreateRoute(t *testing.T) {
 	setupSite()
 	registerPages()
@@ -35,6 +39,8 @@ func TestSite_CreateRoute(t *testing.T) {
 	}
 }
 
+// TestSite_ResolveRoute checks if routes are resolvable from the
+// route tree.
 func TestSite_ResolveRoute(t *testing.T) {
 	setupSite()
 	registerPages()
@@ -53,6 +59,8 @@ func TestSite_ResolveRoute(t *testing.T) {
 	}
 }
 
+// TestSite_WalkRoutes checks if the walkFn is invoked for
+// all nodes in the route tree.
 func TestSite_WalkRoutes(t *testing.T) {
 	setupSite()
 	registerPages()
@@ -73,12 +81,14 @@ func TestSite_WalkRoutes(t *testing.T) {
 	}
 }
 
+// setupSite initializes the Site if required.
 func setupSite() {
 	if s == nil {
 		s = &Site{}
 	}
 }
 
+// registerPages registers all pages in the site model.
 func registerPages() {
 	for i, page := range pages {
 		route := s.CreateRoute(getRoute(i))
@@ -86,6 +96,7 @@ func registerPages() {
 	}
 }
 
+// getRoute returns a generated route identified by a number n.
 func getRoute(n int) string {
 	return fmt.Sprintf("/route-%v", n)
 }

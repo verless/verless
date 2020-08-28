@@ -1,6 +1,7 @@
 package core_test
 
 import (
+	"log"
 	"os"
 	"testing"
 
@@ -10,11 +11,12 @@ import (
 )
 
 const (
-	// Yes, it is intention to use spaces just to test this also.
-	outTestPath       = "out test path"
+	outTestPath       = "../test-output-dir"
 	projectFolderPath = "../example"
 )
 
+// TestRunFullBuild tests a full verless build and asserts
+// that no errors arise.
 func TestRunFullBuild(t *testing.T) {
 	o := core.BuildOptions{
 		OutputDir: outTestPath,
@@ -29,5 +31,7 @@ func TestRunFullBuild(t *testing.T) {
 		test.Ok(t, err)
 	}
 
-	_ = os.RemoveAll(outTestPath)
+	if err := os.RemoveAll(outTestPath); err != nil {
+		log.Println(err)
+	}
 }

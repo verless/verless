@@ -35,10 +35,11 @@ func newBuildCmd() *cobra.Command {
 	}
 
 	buildCmd.Flags().StringVarP(&options.OutputDir, "output", "o",
-		"", `Specify an output directory.`)
+		"", `specify an output directory`)
 
 	// Overwrite should not have a shorthand to avoid accidental usage.
-	buildCmd.Flags().BoolVar(&options.Overwrite, "overwrite", false, `Allows overwriting an existing output directory.`)
+	buildCmd.Flags().BoolVar(&options.Overwrite, "overwrite",
+		false, `allows overwriting an existing output directory`)
 
 	return &buildCmd
 }

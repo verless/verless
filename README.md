@@ -2,7 +2,7 @@
 <br>
 <br>
 <br>
-<img src="https://verless.dominikbraun.io/assets/img/logo-header-0.1.0.png">
+<img src="https://verless.dominikbraun.io/assets/img/verless-github-v0.2.0.png">
 <br>
 <br>
 <br>
@@ -76,14 +76,14 @@ The easiest way to create a new project is to use the verless CLI:
 $ verless create project my-blog
 ```
 
-This initializes a project called `my-blog` inside a new directory, containing all required files. Building the
-corresponding works similarly:
+This initializes a project called `my-blog` inside a new directory, containing a small default site. Building the
+website corresponding works similarly:
 
 ```shell script
 $ verless build my-blog
 ```
 
-By default, the website is generated in `my-blog/target`. You're now good to
+By default, verless generates the website into `my-blog/target`. You're now good to
 [create your first content](https://github.com/verless/verless/tree/master/docs)!
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
