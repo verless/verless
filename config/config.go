@@ -32,16 +32,6 @@ type Config struct {
 	}
 }
 
-// HasPlugin checks if the configuration has enabled a given plugin.
-func (c Config) HasPlugin(key string) bool {
-	for _, plugin := range c.Plugins {
-		if key == plugin {
-			return true
-		}
-	}
-	return false
-}
-
 // FromFile looks for a configuration file and converts it to a Config.
 func FromFile(path, filename string) (Config, error) {
 	viper.AddConfigPath(path)

@@ -2,12 +2,12 @@ package writer
 
 import (
 	"errors"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tpl"
 )
@@ -32,7 +32,7 @@ type writer struct {
 }
 
 func (w *writer) Write(site model.Site) error {
-	if err := w.removeOutDirIfExists(); err != nil {
+	if err := fs.Rmdir(w.outputDir); err != nil {
 		return err
 	}
 
@@ -134,21 +134,4 @@ func (w *writer) copyAssetDir() error {
 	}
 
 	return copy.Copy(src, dest)
-}
-
-// removeOutDirIfExists checks if the output folder exists and tries
-// to remove it if it does.
-func (w *writer) removeOutDirIfExists() error {
-	info, err := ioutil.ReadDir(w.outputDir)
-	if os.IsNotExist(err) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	if len(info) > 0 {
-		return os.RemoveAll(w.outputDir)
-	}
-
-	return nil
 }
