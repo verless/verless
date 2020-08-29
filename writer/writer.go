@@ -2,7 +2,6 @@ package writer
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -117,23 +116,6 @@ func (w *writer) copyAssetDir() error {
 	}
 
 	return copy.Copy(src, dest)
-}
-
-// removeOutDirIfExists checks if the output folder exists and tries
-// to remove it if it does.
-func (w *writer) removeOutDirIfExists() error {
-	info, err := ioutil.ReadDir(w.outputDir)
-	if os.IsNotExist(err) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	if len(info) > 0 {
-		return os.RemoveAll(w.outputDir)
-	}
-
-	return nil
 }
 
 // chooseTemplate checks a page's type and a page's custom template and
