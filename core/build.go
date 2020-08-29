@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -36,11 +37,10 @@ type BuildOptions struct {
 // See doc.go for more information on the core architecture.
 func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	var (
-		out     = finalOutputDir(path, &options)
-		p       = parser.NewMarkdown()
-		b       = builder.New(&cfg)
-		w, err  = writer.New(path, out)
-		plugins = make([]build.Plugin, 0)
+		outputDir = finalOutputDir(path, &options)
+		p         = parser.NewMarkdown()
+		b         = builder.New(&cfg)
+		w, err    = writer.New(path, outputDir)
 	)
 
 	if err != nil {
@@ -49,22 +49,12 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 
 	if cfg.Version == "" {
 		return []error{
-			errors.New("the configuration has to include a version"),
+			errors.New("the configuration has to include the version key"),
 		}
 	}
 
-	if !canOverwrite(out, &options, &cfg) {
+	if !canOverwrite(outputDir, &options, &cfg) {
 		return []error{ErrCannotOverwrite}
-	}
-
-	if cfg.HasPlugin(atom.Key) {
-		atomPlugin := atom.New(&cfg.Site.Meta, out)
-		plugins = append(plugins, atomPlugin)
-	}
-
-	if cfg.HasPlugin(tags.Key) {
-		tagsPlugin := tags.New()
-		plugins = append(plugins, tagsPlugin)
 	}
 
 	ctx := build.Context{
@@ -72,7 +62,16 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 		Parser:  p,
 		Builder: b,
 		Writer:  w,
-		Plugins: plugins,
+		Plugins: make([]build.Plugin, 0),
+	}
+
+	plugins := loadPlugins(&cfg, outputDir)
+
+	for _, key := range cfg.Plugins {
+		if _, exists := plugins[key]; !exists {
+			return []error{fmt.Errorf("plugin %s not found", key)}
+		}
+		ctx.Plugins = append(ctx.Plugins, plugins[key]())
 	}
 
 	return build.Run(ctx)
@@ -100,4 +99,16 @@ func canOverwrite(outputDir string, options *BuildOptions, cfg *config.Config) b
 		return true
 	}
 	return false
+}
+
+// loadPlugins returns a map of all available plugins. Each entry
+// is a function that returns a fully initialized plugin instance.
+func loadPlugins(cfg *config.Config, outputDir string) map[string]func() build.Plugin {
+
+	plugins := map[string]func() build.Plugin{
+		"atom": func() build.Plugin { return atom.New(&cfg.Site.Meta, outputDir) },
+		"tags": func() build.Plugin { return tags.New() },
+	}
+
+	return plugins
 }
