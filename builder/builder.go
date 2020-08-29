@@ -11,9 +11,8 @@ import (
 // New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
-		site: model.Site{
-			Meta: cfg.Site.Meta,
-		},
+		site:  model.Site{},
+		cfg:   cfg,
 		mutex: &sync.Mutex{},
 	}
 	return &b
@@ -22,6 +21,7 @@ func New(cfg *config.Config) *builder {
 // builder represents a model builder maintaining a site model.
 type builder struct {
 	site  model.Site
+	cfg   *config.Config
 	mutex *sync.Mutex
 }
 
@@ -47,5 +47,25 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 // Dispatch finishes the model build and returns the model.
 func (b *builder) Dispatch() (model.Site, error) {
+	b.site.Meta = b.cfg.Site.Meta
+	b.addNavAndFooter()
+
 	return b.site, nil
+}
+
+// addNavAndFooter creates the site's navigation and footer items.
+func (b *builder) addNavAndFooter() {
+	for _, i := range b.cfg.Site.Nav.Items {
+		b.site.Nav.Items = append(b.site.Nav.Items, model.NavItem{
+			Label:  i.Label,
+			Target: i.Target,
+		})
+	}
+
+	for _, i := range b.cfg.Site.Footer.Items {
+		b.site.Footer.Items = append(b.site.Footer.Items, model.FooterItem{
+			Label:  i.Label,
+			Target: i.Target,
+		})
+	}
 }
