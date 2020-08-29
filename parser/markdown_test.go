@@ -6,9 +6,12 @@ import (
 )
 
 var (
+	// m is the global markdown instance used for testing.
 	m *markdown = nil
 )
 
+// TestMarkdown_ParsePage checks if a parsed Markdown file is
+// converted to a model.Page instance correctly.
 func TestMarkdown_ParsePage(t *testing.T) {
 	setupMarkdown()
 
@@ -62,6 +65,7 @@ This is a blog post.`,
 	}
 }
 
+// setupMarkdown initializes m if required.
 func setupMarkdown() {
 	if m == nil {
 		m = NewMarkdown()
