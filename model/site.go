@@ -1,8 +1,13 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"strings"
+)
+
+var (
+	ErrWrongRouteFormat = errors.New("the route has an invalid format")
 )
 
 // walkFn can be invoked for each route in the route tree.
@@ -47,9 +52,14 @@ func (s *Site) walkRoute(path string, route *Route, walkFn walkFn, maxDepth, cur
 	return nil
 }
 
-// CreateRoute creates a new route in the route tree. Has to
+// CreateRoute creates a new route in the route tree. The route has to
 // start with a slash representing the root route, e. g. /blog.
-func (s *Site) CreateRoute(route string) *Route {
+// Returns the error ErrMessageWrongRouteFormat if the given route has a invalid format.
+func (s *Site) CreateRoute(route string) (*Route, error) {
+	if !strings.HasPrefix(route, "/") {
+		return nil, fmt.Errorf("route %v: %w", route, ErrWrongRouteFormat)
+	}
+
 	var (
 		node     = &s.Root
 		segments = strings.Split(route[1:], "/")
@@ -69,11 +79,11 @@ func (s *Site) CreateRoute(route string) *Route {
 		}
 		node = node.Children[s]
 		if i == len(segments)-1 {
-			return node
+			return node, nil
 		}
 	}
 
-	return nil
+	return nil, nil
 }
 
 // ResolveRoute resolves and returns a route in the route tree.

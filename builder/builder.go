@@ -32,9 +32,13 @@ func (b *builder) RegisterPage(page model.Page) error {
 	defer b.mutex.Unlock()
 
 	var r *model.Route
+	var err error
 
 	if page.Route != "" {
-		r = b.site.CreateRoute(page.Route)
+		r, err = b.site.CreateRoute(page.Route)
+		if err != nil {
+			return err
+		}
 	} else {
 		r = &b.site.Root
 	}

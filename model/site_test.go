@@ -1,43 +1,80 @@
 package model
 
 import (
-	"fmt"
+	"errors"
 	"strings"
 	"testing"
+
+	"github.com/verless/verless/test"
 )
 
 var (
-	// s is the Site instance used for testing.
-	s *Site = nil
-	// pages is a set of pages used for testing.
-	pages []Page = []Page{
-		{ID: "page-0"},
-		{ID: "page-1"},
-		{ID: "page-2"},
-		{ID: "page-3"},
+	// testPages is a set of pages used for testing.
+	testPages []Page = []Page{
+		{ID: "page-0", Route: "/route-0"},
+		{ID: "page-1", Route: "/route-1"},
+		{ID: "page-2", Route: "/route-2"},
+		{ID: "page-3", Route: "/route-3"},
 	}
 )
 
 // TestSite_CreateRoute checks if all routes are created correctly
 // when pages are registered.
 func TestSite_CreateRoute(t *testing.T) {
-	setupSite()
-	registerPages()
+	tests := map[string]struct {
+		route         string
+		expectedError error
+	}{
+		"normal route without depth": {
+			route: "/route-0",
+		},
+		"route not starting with /": {
+			route:         "route-0",
+			expectedError: ErrWrongRouteFormat,
+		},
+		"deeper route": {
+			route: "/route-0/child-0/child1",
+		},
+		"empty route": {
+			// Todo: currently this creates a child with key ""
+			// is this expected?
+			route: "/",
+		},
+	}
 
-	for i := 0; i < len(pages); i++ {
-		segment := strings.TrimLeft(getRoute(i), "/")
+	for name, testCase := range tests {
+		t.Log(name)
 
-		if _, exists := s.Root.Children[segment]; !exists {
-			t.Fatalf("route %s does not exist", segment)
+		site := &Site{}
+
+		actual, err := site.CreateRoute(testCase.route)
+		if testCase.expectedError != nil {
+			test.Assert(t, errors.Is(err, testCase.expectedError), "expected a specific error")
+			continue
 		}
 
-		route := s.Root.Children[segment]
+		test.Ok(t, err)
+		test.NotEquals(t, nil, actual)
 
-		if len(route.Pages) < 1 {
-			t.Errorf("no pages have been added to route %s", segment)
+		routes := strings.Split(testCase.route, "/")[1:]
+
+		parent := &site.Root
+
+		for i := 0; i <= len(routes); i++ {
+			test.NotEquals(t, nil, parent)
+			test.NotEquals(t, nil, parent.IndexPage)
+
+			if i == len(routes) {
+				test.Equals(t, 0, len(parent.Children))
+			} else {
+				test.NotEquals(t, 0, len(parent.Children))
+				parent = parent.Children[routes[i]]
+			}
 		}
 	}
 }
+
+/*
 
 // TestSite_ResolveRoute checks if routes are resolvable from the
 // route tree.
@@ -81,13 +118,6 @@ func TestSite_WalkRoutes(t *testing.T) {
 	}
 }
 
-// setupSite initializes the Site if required.
-func setupSite() {
-	if s == nil {
-		s = &Site{}
-	}
-}
-
 // registerPages registers all pages in the site model.
 func registerPages() {
 	for i, page := range pages {
@@ -95,8 +125,4 @@ func registerPages() {
 		route.Pages = append(route.Pages, page)
 	}
 }
-
-// getRoute returns a generated route identified by a number n.
-func getRoute(n int) string {
-	return fmt.Sprintf("/route-%v", n)
-}
+*/

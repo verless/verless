@@ -48,10 +48,10 @@ func TestBuilder_RegisterPage(t *testing.T) {
 	for name, testCase := range tests {
 		t.Log(name)
 
-		unitUnderTest := New(&config.Config{})
+		builder := New(&config.Config{})
 
 		for _, page := range testCase.pages {
-			if err := unitUnderTest.RegisterPage(page); err != nil {
+			if err := builder.RegisterPage(page); err != nil {
 				t.Fatal(err)
 			}
 		}
@@ -61,7 +61,7 @@ func TestBuilder_RegisterPage(t *testing.T) {
 
 			routes := strings.Split(page.Route, "/")[1:]
 
-			parent := unitUnderTest.site.Root.Children[routes[0]]
+			parent := builder.site.Root.Children[routes[0]]
 			for i := 0; i < len(routes); i++ {
 				test.NotEquals(t, nil, parent)
 
@@ -76,44 +76,15 @@ func TestBuilder_RegisterPage(t *testing.T) {
 	}
 }
 
-/*
+// TestBuilder_Dispatch checks if the dispatched site model is
+// valid and contains all registered testPages.
+func TestBuilder_Dispatch(t *testing.T) {
+	tests := map[string]struct {
+	}{
+		// no tests as there is no logic yet
+	}
 
-   // TestBuilder_Dispatch checks if the dispatched site model is
-   // valid and contains all registered testPages.
-   func TestBuilder_Dispatch(t *testing.T) {
-   	b := New(&config.Config{})
-
-   	for i, page := range testPages {
-   		page.Route = getRoute(i)
-   		if err := b.RegisterPage(page); err != nil {
-   			t.Fatal(err)
-   		}
-   	}
-
-   	site, err := b.Dispatch()
-   	if err != nil {
-   		t.Fatal(err)
-   	}
-
-   	for i, page := range testPages {
-   		segment := strings.TrimLeft(getRoute(i), "/")
-
-   		if site.Root.Children == nil {
-   			t.Fatalf("root route has uninitialized children map")
-   		}
-   		if _, exists := site.Root.Children[segment]; !exists {
-   			t.Fatalf("child route %s does not exist", segment)
-   		}
-
-   		route := site.Root.Children[segment]
-
-   		if len(route.Pages) < 1 {
-   			t.Fatalf("route %s contains no testPages", segment)
-   		}
-   		if route.Pages[0].ID != page.ID {
-   			t.Errorf("expected page %s in route %s, got %s",
-   				page.ID, segment, route.Pages[0].ID)
-   		}
-   	}
-   }
-*/
+	for name, _ := range tests {
+		t.Log(name)
+	}
+}
