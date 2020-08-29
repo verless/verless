@@ -37,9 +37,9 @@ type BuildOptions struct {
 // See doc.go for more information on the core architecture.
 func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	var (
-		outputDir     = finalOutputDir(path, &options)
-		p       = parser.NewMarkdown()
-		b       = builder.New(&cfg)
+		outputDir = finalOutputDir(path, &options)
+		p         = parser.NewMarkdown()
+		b         = builder.New(&cfg)
 		w         = writer.New(path, outputDir)
 	)
 
