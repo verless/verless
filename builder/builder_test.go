@@ -96,5 +96,8 @@ func setupBuilder() {
 
 // getRoute returns a generated route identified by a number n.
 func getRoute(n int) string {
+	if n == 0 {
+		return "/"
+	}
 	return fmt.Sprintf("/route-%v", n)
 }
