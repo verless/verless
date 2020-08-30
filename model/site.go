@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrWrongRouteFormat = errors.New("the route has an invalid format")
+	ErrWrongRouteFormat       = errors.New("the route has an invalid format")
+	ErrChildRouteDoesNotExist = errors.New("child route %s does not exist")
 )
 
 // walkFn can be invoked for each route in the route tree.
@@ -89,6 +90,10 @@ func (s *Site) CreateRoute(route string) (*Route, error) {
 // ResolveRoute resolves and returns a route in the route tree.
 // Has to start with a slash representing the root route.
 func (s *Site) ResolveRoute(route string) (*Route, error) {
+	if !strings.HasPrefix(route, "/") {
+		return nil, fmt.Errorf("route %v: %w", route, ErrWrongRouteFormat)
+	}
+
 	var (
 		node     = &s.Root
 		segments = strings.Split(route[1:], "/")
@@ -100,7 +105,7 @@ func (s *Site) ResolveRoute(route string) (*Route, error) {
 
 	for i, s := range segments {
 		if _, exists := node.Children[s]; !exists {
-			return node, fmt.Errorf("child route %s does not exist", s)
+			return node, fmt.Errorf("route %v: %w", s, ErrChildRouteDoesNotExist)
 		}
 		node = node.Children[s]
 		if i == len(segments)-1 {

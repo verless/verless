@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"strings"
 	"testing"
 
@@ -35,10 +34,14 @@ func TestSite_CreateRoute(t *testing.T) {
 		"deeper route": {
 			route: "/route-0/child-0/child1",
 		},
-		"empty route": {
+		"only root": {
 			// Todo: currently this creates a child with key ""
 			// is this expected?
 			route: "/",
+		},
+		"completely empty route": {
+			route:         "",
+			expectedError: ErrWrongRouteFormat,
 		},
 	}
 
@@ -48,8 +51,7 @@ func TestSite_CreateRoute(t *testing.T) {
 		site := &Site{}
 
 		actual, err := site.CreateRoute(testCase.route)
-		if testCase.expectedError != nil {
-			test.Assert(t, errors.Is(err, testCase.expectedError), "expected a specific error")
+		if test.ExpectedError(t, testCase.expectedError, err) {
 			continue
 		}
 
@@ -74,55 +76,142 @@ func TestSite_CreateRoute(t *testing.T) {
 	}
 }
 
-/*
-
 // TestSite_ResolveRoute checks if routes are resolvable from the
 // route tree.
 func TestSite_ResolveRoute(t *testing.T) {
-	setupSite()
-	registerPages()
+	var (
+		rootOnlyRoute = Route{
+			Children: map[string]*Route{
+				"": {}, // Todo: depends on the TODO above if this is needed.
+			},
+		}
+		complexRoute = Route{
+			Children: map[string]*Route{
+				"": {}, // Todo: depends on the TODO above if this is needed.
+				"child1": {
+					Children: map[string]*Route{
+						"child1-1": {
+							Children: nil,
+						},
+					},
+				},
+				"child2": {
+					Children: map[string]*Route{
+						"child2-2": {
+							Children: nil,
+						},
+					},
+				},
+				"child3": {},
+			},
+		}
+	)
 
-	for i := 0; i < len(pages); i++ {
-		path := getRoute(i)
+	type routeTest struct {
+		route         string
+		expectedError error
+	}
 
-		route, err := s.ResolveRoute(path)
-		if err != nil {
-			t.Error(err)
+	tests := map[string]struct {
+		route        Route
+		routesToTest []routeTest
+	}{
+		"only root": {
+			route: rootOnlyRoute,
+			routesToTest: []routeTest{
+				{route: "/"},
+				{route: "", expectedError: ErrWrongRouteFormat},
+			},
+		},
+		"with children": {
+			route: complexRoute,
+			routesToTest: []routeTest{
+				{route: "", expectedError: ErrWrongRouteFormat},
+				{route: "/"},
+				{route: "/child1"},
+				{route: "/child1/child1-1"},
+				{route: "/child2"},
+				{route: "/child2/child2-2"},
+				{route: "/child3"},
+			},
+		},
+		"wrong routes": {
+			route: complexRoute,
+			routesToTest: []routeTest{
+				{route: "/child5", expectedError: ErrChildRouteDoesNotExist},
+				{route: "/child1/child5", expectedError: ErrChildRouteDoesNotExist},
+				{route: "//", expectedError: ErrChildRouteDoesNotExist},
+			},
+		},
+	}
+
+	for name, testCase := range tests {
+		t.Log(name)
+
+		site := &Site{
+			Root: testCase.route,
 		}
 
-		if len(route.Pages) < 1 {
-			t.Errorf("did not receive pages in route %s", path)
+		for _, routeToTest := range testCase.routesToTest {
+			t.Logf("\ttest route '%v'", routeToTest.route)
+			route, err := site.ResolveRoute(routeToTest.route)
+			if test.ExpectedError(t, routeToTest.expectedError, err) {
+				continue
+			}
+			test.NotEquals(t, nil, route)
 		}
 	}
 }
 
-// TestSite_WalkRoutes checks if the walkFn is invoked for
-// all nodes in the route tree.
-func TestSite_WalkRoutes(t *testing.T) {
-	setupSite()
-	registerPages()
-	count := 0
+/*
 
-	if err := s.WalkRoutes(func(path string, route *Route) error {
-		if count != 0 && len(route.Pages) < 1 {
-			return fmt.Errorf("did not receive pages in route %s", path)
-		}
-		count++
-		return nil
-	}, -1); err != nil {
-		t.Error(err)
-	}
+   // TestSite_ResolveRoute checks if routes are resolvable from the
+   // route tree.
+   func TestSite_ResolveRoute(t *testing.T) {
+   	setupSite()
+   	registerPages()
 
-	if count-1 != len(pages) {
-		t.Error("not all routes have been walked")
-	}
-}
+   	for i := 0; i < len(pages); i++ {
+   		path := getRoute(i)
 
-// registerPages registers all pages in the site model.
-func registerPages() {
-	for i, page := range pages {
-		route := s.CreateRoute(getRoute(i))
-		route.Pages = append(route.Pages, page)
-	}
-}
+   		route, err := s.ResolveRoute(path)
+   		if err != nil {
+   			t.Error(err)
+   		}
+
+   		if len(route.Pages) < 1 {
+   			t.Errorf("did not receive pages in route %s", path)
+   		}
+   	}
+   }
+
+   // TestSite_WalkRoutes checks if the walkFn is invoked for
+   // all nodes in the route tree.
+   func TestSite_WalkRoutes(t *testing.T) {
+   	setupSite()
+   	registerPages()
+   	count := 0
+
+   	if err := s.WalkRoutes(func(path string, route *Route) error {
+   		if count != 0 && len(route.Pages) < 1 {
+   			return fmt.Errorf("did not receive pages in route %s", path)
+   		}
+   		count++
+   		return nil
+   	}, -1); err != nil {
+   		t.Error(err)
+   	}
+
+   	if count-1 != len(pages) {
+   		t.Error("not all routes have been walked")
+   	}
+   }
+
+   // registerPages registers all pages in the site model.
+   func registerPages() {
+   	for i, page := range pages {
+   		route := s.CreateRoute(getRoute(i))
+   		route.Pages = append(route.Pages, page)
+   	}
+   }
 */
