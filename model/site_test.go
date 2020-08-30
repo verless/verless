@@ -51,7 +51,8 @@ func TestSite_CreateRoute(t *testing.T) {
 		site := &Site{}
 
 		actual, err := site.CreateRoute(testCase.route)
-		if testCase.expectedError != nil && test.ExpectedError(t, testCase.expectedError, err) {
+		if testCase.expectedError != nil {
+			test.ExpectedError(t, testCase.expectedError, err)
 			continue
 		} else {
 			test.Ok(t, err)
@@ -155,7 +156,8 @@ func TestSite_ResolveRoute(t *testing.T) {
 		for _, routeToTest := range testCase.routesToTest {
 			t.Logf("\ttest route '%v'", routeToTest.route)
 			route, err := site.ResolveRoute(routeToTest.route)
-			if routeToTest.expectedError != nil && test.ExpectedError(t, routeToTest.expectedError, err) {
+			if routeToTest.expectedError != nil {
+				test.ExpectedError(t, routeToTest.expectedError, err)
 				continue
 			} else {
 				test.Ok(t, err)
@@ -166,26 +168,6 @@ func TestSite_ResolveRoute(t *testing.T) {
 }
 
 /*
-
-   // TestSite_ResolveRoute checks if routes are resolvable from the
-   // route tree.
-   func TestSite_ResolveRoute(t *testing.T) {
-   	setupSite()
-   	registerPages()
-
-   	for i := 0; i < len(pages); i++ {
-   		path := getRoute(i)
-
-   		route, err := s.ResolveRoute(path)
-   		if err != nil {
-   			t.Error(err)
-   		}
-
-   		if len(route.Pages) < 1 {
-   			t.Errorf("did not receive pages in route %s", path)
-   		}
-   	}
-   }
 
    // TestSite_WalkRoutes checks if the walkFn is invoked for
    // all nodes in the route tree.
