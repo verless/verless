@@ -66,6 +66,11 @@ func TestBuilder_Dispatch(t *testing.T) {
 	}
 
 	for i, page := range pages {
+		// Skip the first page since its route is "/".
+		if i == 0 {
+			continue
+		}
+
 		segment := strings.TrimLeft(getRoute(i), "/")
 
 		if site.Root.Children == nil {
