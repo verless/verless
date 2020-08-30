@@ -1,5 +1,5 @@
 // Package test contains some simple utils for more readable tests.
-// It is based on https://github.com/benbjohnson/testing.
+// It is based on 'https://github.com/benbjohnson/testing'.
 package test
 
 import (
@@ -10,14 +10,6 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-)
-
-// Formatting strings for printing test results.
-const (
-	assertFormat    string = "\\033[31m%s:%d: %v\\033[39m\\n\\n"
-	okFormat        string = "\u001B[31m%s:%d: unexpected error: %s\u001B[39m\n\n"
-	equalsFormat    string = "\u001B[31m%s:%d:\n\n\texp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
-	notEqualsFormat string = "\u001B[31m%s:%d:\n\n\tnot exp: %#v\n\n\tgot: %#v\u001B[39m\n\n"
 )
 
 // Assert fails the test if the condition is false.
