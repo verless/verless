@@ -51,8 +51,10 @@ func TestSite_CreateRoute(t *testing.T) {
 		site := &Site{}
 
 		actual, err := site.CreateRoute(testCase.route)
-		if test.ExpectedError(t, testCase.expectedError, err) {
+		if testCase.expectedError != nil && test.ExpectedError(t, testCase.expectedError, err) {
 			continue
+		} else {
+			test.Ok(t, err)
 		}
 
 		test.Ok(t, err)
@@ -66,7 +68,8 @@ func TestSite_CreateRoute(t *testing.T) {
 			test.NotEquals(t, nil, parent)
 			test.NotEquals(t, nil, parent.IndexPage)
 
-			if i == len(routes) {
+			// check also special case "" -> no child with "" should be created
+			if i == len(routes) || routes[i] == "" {
 				test.Equals(t, 0, len(parent.Children))
 			} else {
 				test.NotEquals(t, 0, len(parent.Children))
@@ -81,13 +84,10 @@ func TestSite_CreateRoute(t *testing.T) {
 func TestSite_ResolveRoute(t *testing.T) {
 	var (
 		rootOnlyRoute = Route{
-			Children: map[string]*Route{
-				"": {}, // Todo: depends on the TODO above if this is needed.
-			},
+			Children: map[string]*Route{},
 		}
 		complexRoute = Route{
 			Children: map[string]*Route{
-				"": {}, // Todo: depends on the TODO above if this is needed.
 				"child1": {
 					Children: map[string]*Route{
 						"child1-1": {
@@ -155,8 +155,10 @@ func TestSite_ResolveRoute(t *testing.T) {
 		for _, routeToTest := range testCase.routesToTest {
 			t.Logf("\ttest route '%v'", routeToTest.route)
 			route, err := site.ResolveRoute(routeToTest.route)
-			if test.ExpectedError(t, routeToTest.expectedError, err) {
+			if routeToTest.expectedError != nil && test.ExpectedError(t, routeToTest.expectedError, err) {
 				continue
+			} else {
+				test.Ok(t, err)
 			}
 			test.NotEquals(t, nil, route)
 		}
