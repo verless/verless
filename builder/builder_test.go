@@ -84,12 +84,35 @@ func TestBuilder_Dispatch(t *testing.T) {
 		// no tests as there is no logic yet
 	}
 
+	for name, _ := range tests {
+		t.Log(name)
+	}
+}
+
+/*
+// TestBuilder_Dispatch checks if the dispatched site model is
+// valid and contains all registered pages.
+func TestBuilder_Dispatch(t *testing.T) {
+	setupBuilder()
+
+	for i, page := range pages {
+		page.Route = getRoute(i)
+		if err := b.RegisterPage(page); err != nil {
+			t.Fatal(err)
+		}
+	}
+
 	site, err := b.Dispatch()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	for i, page := range pages {
+		// Skip the first page since its route is "/".
+		if i == 0 {
+			continue
+		}
+
 		segment := strings.TrimLeft(getRoute(i), "/")
 
 		if site.Root.Children == nil {
@@ -111,12 +134,18 @@ func TestBuilder_Dispatch(t *testing.T) {
 	}
 }
 
-	for name, _ := range tests {
-		t.Log(name)
+// setupBuilder initializes the builder if required.
+func setupBuilder() {
+	if b == nil {
+		b = New(&config.Config{})
 	}
 }
 
 // getRoute returns a generated route identified by a number n.
 func getRoute(n int) string {
+	if n == 0 {
+		return "/"
+	}
 	return fmt.Sprintf("/route-%v", n)
 }
+*/
