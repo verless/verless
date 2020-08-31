@@ -35,8 +35,6 @@ func TestSite_CreateRoute(t *testing.T) {
 			route: "/route-0/child-0/child1",
 		},
 		"only root": {
-			// Todo: currently this creates a child with key ""
-			// is this expected?
 			route: "/",
 		},
 		"completely empty route": {
