@@ -31,17 +31,17 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	var r *model.Route
+	var n *model.Node
 
 	// ToDo: Just use CreateRoute here without the if condition.
 	if page.Route != "/" {
-		r = b.site.CreateRoute(page.Route)
+		n = b.site.CreateRoute(page.Route)
 	} else {
-		r = &b.site.Root
+		n = &b.site.Root
 	}
 
-	r.Pages = append(r.Pages, page)
-	r.IndexPage.Pages = append(r.IndexPage.Pages, &page)
+	n.Pages = append(n.Pages, page)
+	n.IndexPage.Pages = append(n.IndexPage.Pages, &page)
 
 	return nil
 }
