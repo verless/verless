@@ -33,9 +33,9 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 	var n *model.Node
 
-	// ToDo: Just use CreateRoute here without the if condition.
+	// ToDo: Just use CreateNode here without the if condition.
 	if page.Route != "/" {
-		n = b.site.CreateRoute(page.Route)
+		n = b.site.CreateNode(page.Route)
 	} else {
 		n = &b.site.Root
 	}

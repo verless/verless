@@ -47,9 +47,9 @@ func (s *Site) walkRoute(path string, node *Node, walkFn walkFn, maxDepth, curDe
 	return nil
 }
 
-// CreateRoute creates a new node in the route tree. The route has
+// CreateNode creates a new node in the route tree. The route has
 // to start with a slash representing the root route, e. g. /blog.
-func (s *Site) CreateRoute(route string) *Node {
+func (s *Site) CreateNode(route string) *Node {
 	if route == "/" {
 		return &s.Root
 	}

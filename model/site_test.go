@@ -91,8 +91,8 @@ func setupSite() {
 // registerPages registers all pages in the site model.
 func registerPages() {
 	for i, page := range pages {
-		route := s.CreateRoute(getRoute(i))
-		route.Pages = append(route.Pages, page)
+		node := s.CreateNode(getRoute(i))
+		node.Pages = append(node.Pages, page)
 	}
 }
 
