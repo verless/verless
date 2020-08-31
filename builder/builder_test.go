@@ -66,6 +66,11 @@ func TestBuilder_Dispatch(t *testing.T) {
 	}
 
 	for i, page := range pages {
+		// Skip the first page since its route is "/".
+		if i == 0 {
+			continue
+		}
+
 		segment := strings.TrimLeft(getRoute(i), "/")
 
 		if site.Root.Children == nil {
@@ -96,5 +101,8 @@ func setupBuilder() {
 
 // getRoute returns a generated route identified by a number n.
 func getRoute(n int) string {
+	if n == 0 {
+		return "/"
+	}
 	return fmt.Sprintf("/route-%v", n)
 }

@@ -50,12 +50,16 @@ func (s *Site) walkRoute(path string, route *Route, walkFn walkFn, maxDepth, cur
 // CreateRoute creates a new route in the route tree. Has to
 // start with a slash representing the root route, e. g. /blog.
 func (s *Site) CreateRoute(route string) *Route {
+	if route == "/" {
+		return &s.Root
+	}
+
 	var (
 		node     = &s.Root
 		segments = strings.Split(route[1:], "/")
 	)
 
-	if node == &s.Root && s.Root.Children == nil {
+	if s.Root.Children == nil {
 		s.Root.Children = make(map[string]*Route)
 	}
 
@@ -79,12 +83,16 @@ func (s *Site) CreateRoute(route string) *Route {
 // ResolveRoute resolves and returns a route in the route tree.
 // Has to start with a slash representing the root route.
 func (s *Site) ResolveRoute(route string) (*Route, error) {
+	if route == "/" {
+		return &s.Root, nil
+	}
+
 	var (
 		node     = &s.Root
 		segments = strings.Split(route[1:], "/")
 	)
 
-	if node == &s.Root && s.Root.Children == nil {
+	if s.Root.Children == nil {
 		s.Root.Children = make(map[string]*Route)
 	}
 
