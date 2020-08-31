@@ -84,7 +84,39 @@ func TestBuilder_Dispatch(t *testing.T) {
 		// no tests as there is no logic yet
 	}
 
+	site, err := b.Dispatch()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i, page := range pages {
+		segment := strings.TrimLeft(getRoute(i), "/")
+
+		if site.Root.Children == nil {
+			t.Fatalf("root route has uninitialized children map")
+		}
+		if _, exists := site.Root.Children[segment]; !exists {
+			t.Fatalf("child route %s does not exist", segment)
+		}
+
+		route := site.Root.Children[segment]
+
+		if len(route.Pages) < 1 {
+			t.Fatalf("route %s contains no pages", segment)
+		}
+		if route.Pages[0].ID != page.ID {
+			t.Errorf("expected page %s in route %s, got %s",
+				page.ID, segment, route.Pages[0].ID)
+		}
+	}
+}
+
 	for name, _ := range tests {
 		t.Log(name)
 	}
+}
+
+// getRoute returns a generated route identified by a number n.
+func getRoute(n int) string {
+	return fmt.Sprintf("/route-%v", n)
 }
