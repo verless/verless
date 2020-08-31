@@ -114,7 +114,7 @@ Available in:
 | `{{.Page.Route}}`       | File path | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.               |
 | `{{.Page.ID}}`          | Markdown  | Useful for creating links to other pages.                                                        |
 | `{{.Page.Title}}`       | Markdown  |                                                                                                  |
-| `{{.Page.Author}}`      | Markdown  | For the global website author, see `{{.Meta.Author`.                                             |
+| `{{.Page.Author}}`      | Markdown  | For the global website author, see `{{.Meta.Author}}`.                                           |
 | `{{.Page.Date}}`        | Markdown  |                                                                                                  |
 | `{{.Page.Tags}}`        | Markdown  | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.       |
 | `{{.Page.Img}}`         | Markdown  | It is recommended to use an URL like `/assets/img/picture.jpg`.                                  |
