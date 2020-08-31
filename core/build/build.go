@@ -171,7 +171,10 @@ func processFile(ctx *Context, contentDir, file string) error {
 	// For a file path like example/content/blog/coffee/making-espresso.md,
 	// the resulting path will be /blog/coffee.
 	path := filepath.Dir(file)[len(contentDir):]
-	page.Route = path
+	if path == "" {
+		path = "/"
+	}
+	page.Route = filepath.ToSlash(path)
 
 	// For a file name like making-espresso.md, the resulting page
 	// ID will be making-espresso.

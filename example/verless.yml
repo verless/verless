@@ -12,15 +12,13 @@ site:
   # Settings for your website's navigation.
   nav:
     items:
-      - label: Instagram
-        target: https://instagram.com
-    overwrite: false
+      - label: Home
+        target: http://localhost
   # Settings for your website's footer.
   footer:
     items:
       - label: Home
         target: http://localhost
-    overwrite: false
 # Enable plugins for your project.
 plugins:
   - atom

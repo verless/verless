@@ -34,7 +34,8 @@ func (b *builder) RegisterPage(page model.Page) error {
 	var r *model.Route
 	var err error
 
-	if page.Route != "" {
+	// ToDo: Just use CreateRoute here without the if condition.
+	if page.Route != "/" {
 		r, err = b.site.CreateRoute(page.Route)
 		if err != nil {
 			return err

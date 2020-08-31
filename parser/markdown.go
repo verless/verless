@@ -10,6 +10,7 @@ import (
 	"github.com/yuin/goldmark/parser"
 )
 
+// NewMarkdown initializes and returns a new Markdown parser.
 func NewMarkdown() *markdown {
 	m := markdown{
 		gm: goldmark.New(
@@ -19,10 +20,14 @@ func NewMarkdown() *markdown {
 	return &m
 }
 
+// markdown is an internal type that satisfies the build.Parser
+// interface and thus can be used for retrieving model.Pages.
 type markdown struct {
 	gm goldmark.Markdown
 }
 
+// ParsePage converts the byte contents of a Markdown file to
+// an instance of model.Page.
 func (m *markdown) ParsePage(src []byte) (model.Page, error) {
 	var (
 		page model.Page

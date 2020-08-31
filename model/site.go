@@ -63,12 +63,16 @@ func (s *Site) CreateRoute(route string) (*Route, error) {
 		return nil, fmt.Errorf(ErrMessageAnyRouteError, route, ErrWrongRouteFormat)
 	}
 
+	if route == "/" {
+		return &s.Root, nil
+	}
+
 	var (
 		node     = &s.Root
 		segments = strings.Split(route[1:], "/")
 	)
 
-	if node == &s.Root && s.Root.Children == nil {
+	if s.Root.Children == nil {
 		s.Root.Children = make(map[string]*Route)
 	}
 
@@ -96,12 +100,16 @@ func (s *Site) ResolveRoute(route string) (*Route, error) {
 		return nil, fmt.Errorf(ErrMessageAnyRouteError, route, ErrWrongRouteFormat)
 	}
 
+	if route == "/" {
+		return &s.Root, nil
+	}
+
 	var (
 		node     = &s.Root
 		segments = strings.Split(route[1:], "/")
 	)
 
-	if node == &s.Root && s.Root.Children == nil {
+	if s.Root.Children == nil {
 		s.Root.Children = make(map[string]*Route)
 	}
 
