@@ -66,14 +66,40 @@ func NotEquals(tb testing.TB, exp, act interface{}, options ...cmp.Option) bool 
 	return false
 }
 
-// ExpectError fails if the error is not the given error, using errors.Is.
-// It returns true, if the test did not fail.
-func ExpectedError(tb testing.TB, exp, act error) bool {
+type ExpectedErrorResult int
+
+const (
+	IsCorrectNil ExpectedErrorResult = iota
+	IsCorrectErr
+	IsWrongErr
+)
+
+// ExpectError checks if the actual error is expected given error, using errors.Is.
+// If the expected error is nil, it returns IsCorrectNil if the actual error is also nil.
+// Else it returns IsWrongErr.
+// If the expected error is not nil, it returns IsCorrectErr if the actual error matches.
+// Else it returns IsWrongErr.
+//
+// In all cases the test Fails if expected does not match actual.
+//
+// The three states are useful if you want to check for errors and do different things based on the result.
+// For example if the actual error is only in some cases not nil and you want to continue execution in that case,
+// but stop on the other cases.
+func ExpectedError(tb testing.TB, exp, act error) ExpectedErrorResult {
+	if exp == nil {
+		if Ok(tb, act) {
+			return IsCorrectNil
+		}
+		fmt.Printf("expected NO error, got \n%v", act)
+		tb.Fail()
+		return IsWrongErr
+	}
+
 	if errors.Is(act, exp) {
-		return true
+		return IsCorrectErr
 	}
 
 	fmt.Printf("expected error \n%v, got \n%v", exp, act)
 	tb.Fail()
-	return false
+	return IsWrongErr
 }
