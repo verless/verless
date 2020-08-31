@@ -57,7 +57,7 @@ This reference shows all available YAML keys for providing metadata. **All keys 
 * **`Img`** _(String)_: An image URL like `assets/img/image.jpg`.
 * **`Credit`** _(String)_: Copyright credit for `Img` or other contents.
 * **`Description`** _(String)_: The page's description.
-* **`Related`** _(Array)_: A list of related pages. Has to contain verless paths like `/blog/making-barista-quality-espresso` to be resolved as [Pages](https://github.com/verless/verless/blob/master/docs/template-reference.md#page).
+* **`Related`** _(Array)_: A list of related pages. Has to contain verless paths like `/blog/making-barista-quality-espresso`. This list will be available as `{{.Related}}` in the `page.html` template and contains [Page](https://github.com/verless/verless/blob/master/docs/template-reference.md#page) instances.
     - **`<verless path>`** _(String)_: The path to a related page.
 * **`Type`** _(String)_: The page's content type which automatically defines the template to be used. If the content type is `blog`, a template called `blog.html` will be used for rendering.
 * **`Template`** _(String)_: A custom template that should be used for rendering the page. If the template is `startpage.html`, a template called `startpage.html` will be used for rendering. 
