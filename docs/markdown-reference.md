@@ -52,7 +52,7 @@ This reference shows all available YAML keys for providing metadata. **All keys 
 * **`Title`** _(String)_: The page's title.
 * **`Author`** _(String)_: The page's author.
 * **`Date`** _(String)_: The creation date in the form `YYYY-MM-DD`.
-* **`Tags`** _(Array)_: A list of page tags (see [tags plugin](https://github.com/verless/verless/blob/master/docs/plugin-reference.md#tags)).
+* **`Tags`** _(Array)_: A list of page tags. Enable the [tags plugin](https://github.com/verless/verless/blob/master/docs/plugin-reference.md#tags) for tag support.
     - **`<tag>`** _(String)_: A page tag.
 * **`Img`** _(String)_: An image URL like `assets/img/image.jpg`.
 * **`Credit`** _(String)_: Copyright credit for `Img` or other contents.
