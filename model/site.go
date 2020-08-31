@@ -80,9 +80,9 @@ func (s *Site) CreateNode(route string) *Node {
 	return nil
 }
 
-// ResolveRoute resolves and returns a route in the route tree.
+// ResolveNode resolves and returns a route in the route tree.
 // Has to start with a slash representing the root route.
-func (s *Site) ResolveRoute(route string) (*Node, error) {
+func (s *Site) ResolveNode(route string) (*Node, error) {
 	if route == "/" {
 		return &s.Root, nil
 	}

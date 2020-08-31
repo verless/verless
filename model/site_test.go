@@ -48,12 +48,12 @@ func TestSite_ResolveRoute(t *testing.T) {
 	for i := 0; i < len(pages); i++ {
 		path := getRoute(i)
 
-		route, err := s.ResolveRoute(path)
+		node, err := s.ResolveNode(path)
 		if err != nil {
 			t.Error(err)
 		}
 
-		if len(route.Pages) < 1 {
+		if len(node.Pages) < 1 {
 			t.Errorf("did not receive pages in route %s", path)
 		}
 	}

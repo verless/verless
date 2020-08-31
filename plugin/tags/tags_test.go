@@ -61,11 +61,11 @@ func TestTags_PreWrite(t *testing.T) {
 
 	for _, page := range pages {
 		for _, tag := range page.Tags {
-			route, err := site.ResolveRoute(filepath.Join(tagsDir, tag))
+			node, err := site.ResolveNode(filepath.Join(tagsDir, tag))
 			if err != nil {
 				t.Fatal(err)
 			}
-			if len(route.IndexPage.Pages) < 1 {
+			if len(node.IndexPage.Pages) < 1 {
 				t.Errorf("expected at least %d pages for tag %s, got %d", 1, tag, 0)
 			}
 		}
