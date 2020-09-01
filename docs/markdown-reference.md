@@ -60,7 +60,6 @@ This reference shows all available YAML keys for providing metadata. **All keys 
 * **`Related`** _(Array)_: A list of related pages. Has to contain verless paths like `/blog/making-barista-quality-espresso`. This list will be available as `{{.Related}}` in the `page.html` template and contains [Page](https://github.com/verless/verless/blob/master/docs/template-reference.md#page) instances.
     - **`<verless path>`** _(String)_: The path to a related page.
 * **`Type`** _(String)_: The page's content type which automatically defines the template to be used. If the content type is `blog`, a template called `blog.html` will be used for rendering. In future verless versions, content types may provide more configurations other than just the template to use.
-* **`Template`** _(String)_: A custom template that should be used for rendering the page. If the template is `startpage.html`, a template called `startpage.html` will be used for rendering. Using this makes sense for special pages that only exist once.
 * **`Hidden`** _(Bool)_: Don't include the page in lists like [`{{.Pages}}`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages).
 
 <p align="center">
