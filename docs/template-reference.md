@@ -143,7 +143,7 @@ Available in:
 |---------------------|-------------|------------------------------------------------------------------------------------------------|
 | `{{.Footer.Items}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
 
-### Footer
+### FooterItem
 
 Available in:
 * `{{.Footer.Items}}`
