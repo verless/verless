@@ -38,9 +38,9 @@ func (w *writer) Write(site model.Site) error {
 
 	w.site = site
 
-	err := w.site.WalkTree(func(path string, node *model.Node) error {
+	err := w.site.WalkTree(func(route string, node *model.Node) error {
 		for _, p := range node.Pages {
-			if err := w.writePage(path, page{
+			if err := w.writePage(route, page{
 				Meta:   &w.site.Meta,
 				Nav:    &w.site.Nav,
 				Page:   &p,
@@ -49,7 +49,7 @@ func (w *writer) Write(site model.Site) error {
 				return err
 			}
 		}
-		return w.writeIndexPage(path, indexPage{
+		return w.writeIndexPage(route, indexPage{
 			Meta:      &w.site.Meta,
 			Nav:       &w.site.Nav,
 			IndexPage: &node.IndexPage,

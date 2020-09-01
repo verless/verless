@@ -38,8 +38,8 @@ func (s *Site) walkTreeNode(route string, node *Node, walkFn walkFn, maxDepth, c
 		return err
 	}
 
-	for path, child := range node.Children {
-		if err := s.walkTreeNode(path, child, walkFn, maxDepth, curDepth); err != nil {
+	for r, child := range node.Children {
+		if err := s.walkTreeNode(r, child, walkFn, maxDepth, curDepth); err != nil {
 			return err
 		}
 	}
