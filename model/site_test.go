@@ -66,9 +66,9 @@ func TestSite_WalkRoutes(t *testing.T) {
 	registerPages()
 	count := 0
 
-	if err := s.WalkRoutes(func(path string, route *Node) error {
-		if count != 0 && len(route.Pages) < 1 {
-			return fmt.Errorf("did not receive pages in route %s", path)
+	if err := s.WalkRoutes(func(path string, node *Node) error {
+		if count != 0 && len(node.Pages) < 1 {
+			return fmt.Errorf("did not receive pages in node %s", path)
 		}
 		count++
 		return nil
