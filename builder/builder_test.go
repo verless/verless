@@ -34,16 +34,16 @@ func TestBuilder_RegisterPage(t *testing.T) {
 	}
 
 	for i, page := range pages {
-		route, err := b.site.ResolveRoute(getRoute(i))
+		node, err := b.site.ResolveNode(getRoute(i))
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(route.Pages) < 1 {
+		if len(node.Pages) < 1 {
 			t.Fatalf("route %s contains no pages", getRoute(i))
 		}
-		if route.Pages[0].ID != page.ID {
+		if node.Pages[0].ID != page.ID {
 			t.Errorf("expected page %s in route %s, got %s",
-				page.ID, getRoute(i), route.Pages[0].ID)
+				page.ID, getRoute(i), node.Pages[0].ID)
 		}
 	}
 }
