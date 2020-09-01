@@ -7,14 +7,35 @@ import (
 )
 
 const (
+	// dateFormat is the default date format expected for
+	// the Date field in Markdown files.
 	dateFormat = "2006-01-02"
 )
 
 type (
+	// metadata represents a set of metadata.
 	metadata map[string]interface{}
+
+	// assignFn is a function that takes a value and assigns
+	// that value to an enclosed struct field. For example:
+	//
+	//	setID := func(val interface{}) {
+	//		user.ID = val.(int)
+	//	}
+	//
+	//	func setter(setID assignFn) {
+	//		setID(1)
+	//	}
+	//
+	//	setter(setID)
+	//
+	// Type-asserting val to int in a closure avoids that the
+	// setter function has to be re-written for each data type.
 	assignFn func(val interface{})
 )
 
+// readMetadata reads values from a metadata map and assigns the
+// values to the fields of a model.Page instance.
 func readMetadata(metadata metadata, page *model.Page) {
 	readPrimitive(metadata["Title"], func(val interface{}) {
 		page.Title = val.(string)
@@ -57,6 +78,8 @@ func readMetadata(metadata metadata, page *model.Page) {
 	})
 }
 
+// readPrimitive converts a field to a primitive value and
+// invokes the assignFn with that value.
 func readPrimitive(field interface{}, assign assignFn) {
 	if field == nil {
 		return
@@ -65,6 +88,8 @@ func readPrimitive(field interface{}, assign assignFn) {
 	assign(field)
 }
 
+// readPrimitive converts a field to a date and invokes the
+// assignFn with that date.
 func readDate(field interface{}, assign assignFn) {
 	if field == nil {
 		return
@@ -78,6 +103,8 @@ func readDate(field interface{}, assign assignFn) {
 	assign(date)
 }
 
+// readList converts a field to a list and invokes the
+// assignFn for each item in that list.
 func readList(field interface{}, assign assignFn) {
 	if field == nil {
 		return

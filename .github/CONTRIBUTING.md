@@ -53,7 +53,7 @@ Most importantly, there are some hard rules for code:
 * All code has to be testable, maintainable and extendable.
 * All code has to follow the [Effective Go](https://golang.org/doc/effective_go.html) guidelines.
 * All code has to be formatted with `gofmt -s`.
-* All type declarations and methods have to be documented briefly, even if they're private.
+* All exported types, methods and variables have to be documented briefly.
 * All code has to pass the CI jobs successfully.
 
 There also are some 'soft' recommendations that apply to most cases:
