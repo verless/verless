@@ -38,7 +38,7 @@ func (w *writer) Write(site model.Site) error {
 
 	w.site = site
 
-	err := w.site.WalkRoutes(func(path string, node *model.Node) error {
+	err := w.site.WalkTree(func(path string, node *model.Node) error {
 		for _, p := range node.Pages {
 			if err := w.writePage(path, page{
 				Meta:   &w.site.Meta,

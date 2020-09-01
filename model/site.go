@@ -6,7 +6,7 @@ import (
 )
 
 // walkFn can be invoked for each node in the route tree.
-type walkFn func(path string, node *Node) error
+type walkFn func(route string, node *Node) error
 
 // Site represents the actual website. The site model is generated
 // and populated with data and content during the website build.
@@ -20,26 +20,26 @@ type Site struct {
 	Footer Footer
 }
 
-// WalkRoutes traverses the site's route tree and invokes the given
+// WalkTree traverses the site's route tree and invokes the given
 // walkFn on each node. Use maxDepth = -1 to traverse all nodes.
-func (s *Site) WalkRoutes(walkFn walkFn, maxDepth int) error {
-	return s.walkRoute("", &s.Root, walkFn, maxDepth, 0)
+func (s *Site) WalkTree(walkFn walkFn, maxDepth int) error {
+	return s.walkTreeNode("", &s.Root, walkFn, maxDepth, 0)
 }
 
-// walkRoute invokes the walkFn on a given node and calls itself
+// walkTreeNode invokes the walkFn on a given node and calls itself
 // for all of its child nodes.
-func (s *Site) walkRoute(path string, node *Node, walkFn walkFn, maxDepth, curDepth int) error {
+func (s *Site) walkTreeNode(route string, node *Node, walkFn walkFn, maxDepth, curDepth int) error {
 	if maxDepth != -1 && curDepth == maxDepth {
 		return nil
 	}
 	curDepth++
 
-	if err := walkFn(path, node); err != nil {
+	if err := walkFn(route, node); err != nil {
 		return err
 	}
 
 	for path, child := range node.Children {
-		if err := s.walkRoute(path, child, walkFn, maxDepth, curDepth); err != nil {
+		if err := s.walkTreeNode(path, child, walkFn, maxDepth, curDepth); err != nil {
 			return err
 		}
 	}

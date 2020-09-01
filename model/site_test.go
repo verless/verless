@@ -46,29 +46,29 @@ func TestSite_ResolveRoute(t *testing.T) {
 	registerPages()
 
 	for i := 0; i < len(pages); i++ {
-		path := getRoute(i)
+		route := getRoute(i)
 
-		node, err := s.ResolveNode(path)
+		node, err := s.ResolveNode(route)
 		if err != nil {
 			t.Error(err)
 		}
 
 		if len(node.Pages) < 1 {
-			t.Errorf("did not receive pages in route %s", path)
+			t.Errorf("did not receive pages in route %s", route)
 		}
 	}
 }
 
-// TestSite_WalkRoutes checks if the walkFn is invoked for
+// TestSite_WalkTree checks if the walkFn is invoked for
 // all nodes in the route tree.
-func TestSite_WalkRoutes(t *testing.T) {
+func TestSite_WalkTree(t *testing.T) {
 	setupSite()
 	registerPages()
 	count := 0
 
-	if err := s.WalkRoutes(func(path string, node *Node) error {
+	if err := s.WalkTree(func(route string, node *Node) error {
 		if count != 0 && len(node.Pages) < 1 {
-			return fmt.Errorf("did not receive pages in node %s", path)
+			return fmt.Errorf("did not receive pages in node %s", route)
 		}
 		count++
 		return nil
