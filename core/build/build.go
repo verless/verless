@@ -3,6 +3,7 @@ package build
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
@@ -59,6 +60,7 @@ type Context struct {
 	Builder Builder
 	Writer  Writer
 	Plugins []Plugin
+	Types   map[string]*model.Type
 }
 
 // Run executes the build using the provided build context.
@@ -179,6 +181,12 @@ func processFile(ctx *Context, contentDir, file string) error {
 	// For a file name like making-espresso.md, the resulting page
 	// ID will be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
+
+	if t, exists := ctx.Types[page.ProvidedType()]; !exists {
+		return fmt.Errorf("%s: type %s has not been declared in verless.yml", file, page.ProvidedType())
+	} else {
+		page.Type = t
+	}
 
 	if err := ctx.Builder.RegisterPage(page); err != nil {
 		return err

@@ -27,6 +27,7 @@ type Config struct {
 		}
 	}
 	Plugins []string
+	Types   map[string]*model.Type
 	Build   struct {
 		Overwrite bool
 	}
