@@ -17,18 +17,18 @@ var (
 		{ID: "page-3", Route: "/route-3"},
 	}
 
-	rootOnlyRoute = Route{
-		Children: map[string]*Route{},
+	rootOnlyNode = Node{
+		Children: map[string]*Node{},
 	}
-	complexRoute = Route{
-		Children: map[string]*Route{
+	complexNode = Node{
+		Children: map[string]*Node{
 			"child1": {
-				Children: map[string]*Route{
+				Children: map[string]*Node{
 					"child1-1": {
 						Pages: []Page{
 							{}, // any page
 						},
-						Children: map[string]*Route{
+						Children: map[string]*Node{
 							"child1-2": {
 								Pages: []Page{
 									{}, // any page
@@ -39,7 +39,7 @@ var (
 				},
 			},
 			"child2": {
-				Children: map[string]*Route{
+				Children: map[string]*Node{
 					"child2-2": {
 						Pages: []Page{
 							{}, // any page
@@ -56,9 +56,9 @@ var (
 	}
 )
 
-// TestSite_CreateRoute checks if all routes are created correctly
+// TestSite_CreateNode checks if all routes are created correctly
 // when pages are registered.
-func TestSite_CreateRoute(t *testing.T) {
+func TestSite_CreateNode(t *testing.T) {
 	tests := map[string]struct {
 		route         string
 		expectedError error
@@ -87,7 +87,7 @@ func TestSite_CreateRoute(t *testing.T) {
 
 		site := &Site{}
 
-		actual, err := site.CreateRoute(testCase.route)
+		actual, err := site.CreateNode(testCase.route)
 		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
 			continue
 		}
@@ -113,27 +113,27 @@ func TestSite_CreateRoute(t *testing.T) {
 	}
 }
 
-// TestSite_ResolveRoute checks if routes are resolvable from the
+// TestSite_ResolveNode checks if routes are resolvable from the
 // route tree.
-func TestSite_ResolveRoute(t *testing.T) {
+func TestSite_ResolveNode(t *testing.T) {
 	type routeTest struct {
 		route         string
 		expectedError error
 	}
 
 	tests := map[string]struct {
-		route        Route
+		route        Node
 		routesToTest []routeTest
 	}{
 		"only root": {
-			route: rootOnlyRoute,
+			route: rootOnlyNode,
 			routesToTest: []routeTest{
 				{route: "/"},
 				{route: "", expectedError: ErrWrongRouteFormat},
 			},
 		},
 		"with children": {
-			route: complexRoute,
+			route: complexNode,
 			routesToTest: []routeTest{
 				{route: "", expectedError: ErrWrongRouteFormat},
 				{route: "/"},
@@ -145,11 +145,11 @@ func TestSite_ResolveRoute(t *testing.T) {
 			},
 		},
 		"wrong routes": {
-			route: complexRoute,
+			route: complexNode,
 			routesToTest: []routeTest{
-				{route: "/child5", expectedError: ErrChildRouteDoesNotExist},
-				{route: "/child1/child5", expectedError: ErrChildRouteDoesNotExist},
-				{route: "//", expectedError: ErrChildRouteDoesNotExist},
+				{route: "/child5", expectedError: ErrChildNodeDoesNotExist},
+				{route: "/child1/child5", expectedError: ErrChildNodeDoesNotExist},
+				{route: "//", expectedError: ErrChildNodeDoesNotExist},
 			},
 		},
 	}
@@ -163,7 +163,7 @@ func TestSite_ResolveRoute(t *testing.T) {
 
 		for _, routeToTest := range testCase.routesToTest {
 			t.Logf("\ttest route '%v'", routeToTest.route)
-			route, err := site.ResolveRoute(routeToTest.route)
+			route, err := site.ResolveNode(routeToTest.route)
 			if test.ExpectedError(t, routeToTest.expectedError, err) == test.IsCorrectNil {
 				test.NotEquals(t, nil, route)
 			}
@@ -171,40 +171,40 @@ func TestSite_ResolveRoute(t *testing.T) {
 	}
 }
 
-// TestSite_WalkRoutes checks if the walkFn is invoked for
+// TestSite_WalkTree checks if the walkFn is invoked for
 // all nodes in the route tree, counts the found pages and checks if returned errors are handled.
-func TestSite_WalkRoutes(t *testing.T) {
+func TestSite_WalkTree(t *testing.T) {
 	aSimpleError := errors.New("an error")
 
 	tests := map[string]struct {
-		route             Route
+		route             Node
 		expectedError     error
 		routeCount        int
 		pageCount         int
-		alternativeWalkFn func(path string, route *Route) error
+		alternativeWalkFn func(path string, route *Node) error
 		depth             int
 	}{
 		"only root": {
-			route:      rootOnlyRoute,
+			route:      rootOnlyNode,
 			routeCount: 1,
 			pageCount:  0,
 			depth:      -1,
 		},
 		"with children": {
-			route:      complexRoute,
+			route:      complexNode,
 			routeCount: 7,
 			pageCount:  5,
 			depth:      -1,
 		},
 		"less depth": {
-			route:      complexRoute,
+			route:      complexNode,
 			routeCount: 4,
 			pageCount:  1,
 			depth:      2,
 		},
 		"throw error": {
-			route: complexRoute,
-			alternativeWalkFn: func(path string, route *Route) error {
+			route: complexNode,
+			alternativeWalkFn: func(path string, route *Node) error {
 				return aSimpleError
 			},
 			expectedError: aSimpleError,
@@ -225,14 +225,14 @@ func TestSite_WalkRoutes(t *testing.T) {
 		walkFn := testCase.alternativeWalkFn
 
 		if walkFn == nil {
-			walkFn = func(path string, route *Route) error {
+			walkFn = func(path string, node *Node) error {
 				routeCount++
-				pageCount += len(route.Pages)
+				pageCount += len(node.Pages)
 				return nil
 			}
 		}
 
-		err := site.WalkRoutes(walkFn, testCase.depth)
+		err := site.WalkTree(walkFn, testCase.depth)
 
 		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
 			continue

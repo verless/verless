@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{{.Page.Title}}</title>
-        <meta name="author" content="{{.Meta.Author}}" />
-        <meta name="description" content="{{.Page.Description}}" />
-        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
-    </head>
-    <body>
-        <main>
-            <h1>{{.Page.Title}}</h1>
-            <h4>{{.Page.Description}}</h4>
+<head>
+    <title>{{.Page.Title}}</title>
+    <meta name="author" content="{{.Meta.Author}}"/>
+    <meta name="description" content="{{.Page.Description}}"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css"/>
+</head>
+<body>
+<main>
+    <h1>{{.Page.Title}}</h1>
+    <h4>{{.Page.Description}}</h4>
 
-            {{if .Page.Img}}
-                <img src="{{.Page.Img}}" alt="{{.Page.Title}}" />
-                <p><small>Image: {{.Page.Credit}}</small></p>
-            {{end}}
+    {{if .Page.Img}}
+        <img src="{{.Page.Img}}" alt="{{.Page.Title}}"/>
+        <p><small>Image: {{.Page.Credit}}</small></p>
+    {{end}}
 
-            {{if .Page.Date}}
-                <p>Posted on {{.Page.Date.Format "Jan 2 2006"}}</p>
-            {{end}}
+    {{if .Page.Date}}
+        <p>Posted on {{.Page.Date.Format "Jan 2 2006"}}</p>
+    {{end}}
 
-            {{.Page.Content}}
-        </main>
-    </body>
+    {{.Page.Content}}
+    {{.Footer.Items}}
+    {{.Nav}}
+    {{.Meta}}
+</main>
+</body>
 </html>

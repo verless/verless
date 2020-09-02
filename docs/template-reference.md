@@ -109,20 +109,20 @@ Available in:
 * `page.html`
 * `index-page.html`
 
-| Field                   | Source    | Description                                                                                      |
-|-------------------------|-----------|--------------------------------------------------------------------------------------------------|
-| `{{.Page.Route}}`       | File path | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.               |
-| `{{.Page.ID}}`          | Markdown  | Useful for creating links to other pages.                                                        |
-| `{{.Page.Title}}`       | Markdown  |                                                                                                  |
-| `{{.Page.Author}}`      | Markdown  | For the global website author, see `{{.Meta.Author`.                                             |
-| `{{.Page.Date}}`        | Markdown  |                                                                                                  |
-| `{{.Page.Tags}}`        | Markdown  | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.       |
-| `{{.Page.Img}}`         | Markdown  | It is recommended to use an URL like `/assets/img/picture.jpg`.                                  |
-| `{{.Page.Credit}}`      | Markdown  | This may be the image credit or something related.                                               |
-| `{{.Page.Description}}` | Markdown  |                                                                                                  |
-| `{{.Page.Content}}`     | Markdown  |                                                                                                  |
-| `{{.Page.Related}}`     | Markdown  | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.     |
-| `{{.Page.Template}}`    | Markdown  | A custom template to use. This has to be a file in `templates`.                                  |
+| Field                   | Source   | Description                                                                                      |
+|-------------------------|----------|--------------------------------------------------------------------------------------------------|
+| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.               |
+| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages.                                                        |
+| `{{.Page.Title}}`       | Markdown |                                                                                                  |
+| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                             |
+| `{{.Page.Date}}`        | Markdown |                                                                                                  |
+| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.       |
+| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                                  |
+| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                               |
+| `{{.Page.Description}}` | Markdown |                                                                                                  |
+| `{{.Page.Content}}`     | Markdown |                                                                                                  |
+| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.     |
+| `{{.Page.Template}}`    | Markdown | A custom template to use. This has to be a file in `templates`.                                  |
 
 ### Pages
 
@@ -143,7 +143,7 @@ Available in:
 |---------------------|-------------|------------------------------------------------------------------------------------------------|
 | `{{.Footer.Items}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
 
-### Footer
+### FooterItem
 
 Available in:
 * `{{.Footer.Items}}`
