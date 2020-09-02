@@ -5,16 +5,10 @@ import (
 	"time"
 )
 
-var (
-	// m is the global markdown instance used for testing.
-	m *markdown = nil
-)
-
 // TestMarkdown_ParsePage checks if a parsed Markdown file is
 // converted to a model.Page instance correctly.
 func TestMarkdown_ParsePage(t *testing.T) {
-	setupMarkdown()
-
+	parser := NewMarkdown()
 	tests := []struct {
 		src     string
 		title   string
@@ -40,7 +34,7 @@ This is a blog post.`,
 	}
 
 	for _, test := range tests {
-		page, err := m.ParsePage([]byte(test.src))
+		page, err := parser.ParsePage([]byte(test.src))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -62,12 +56,5 @@ This is a blog post.`,
 		if page.Content != test.content {
 			t.Errorf("expected content %s, got %s", test.content, page.Content)
 		}
-	}
-}
-
-// setupMarkdown initializes m if required.
-func setupMarkdown() {
-	if m == nil {
-		m = NewMarkdown()
 	}
 }

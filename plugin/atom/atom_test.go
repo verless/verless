@@ -5,55 +5,51 @@ import (
 	"testing"
 
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/test"
 )
 
 var (
-	a     *atom        = nil
-	pages []model.Page = []model.Page{
-		{ID: "page-0"},
-		{ID: "page-1"},
-		{ID: "page-2"},
-		{ID: "page-3"},
+	// testPages is a set of pages used for testing.
+	testPages = []model.Page{
+		{ID: "page-0", Route: "/route-0"},
+		{ID: "page-1", Route: "/route-1/route-22/route-333"},
+		{ID: "page-2", Route: "/route-2"},
+		{ID: "page-3", Route: "/route-3"},
 	}
 )
 
 func TestAtom_ProcessPage(t *testing.T) {
-	setupAtom()
-
-	for i, page := range pages {
-		page.Route = getRoute(i)
-		if err := a.ProcessPage(&page); err != nil {
-			t.Fatal(err)
-		}
+	tests := map[string]struct {
+		pages         []model.Page
+		expectedError error
+	}{
+		"normal pages": {
+			pages: testPages,
+		},
 	}
 
-	if len(a.feed.Items) != len(pages) {
-		t.Fatalf("expected %d stored pages, got %d", len(pages), len(a.feed.Items))
-	}
+	for name, testCase := range tests {
+		t.Log(name)
 
-	for i := 0; i < len(pages); i++ {
-		item := a.feed.Items[i]
-
-		if item.Title != pages[i].Title {
-			t.Errorf("expected title %s, got %s", pages[i].Title, item.Title)
-		}
-
-		canonical := fmt.Sprintf("%s%s/%s", a.meta.Base, getRoute(i), pages[i].ID)
-
-		if item.Link.Href != canonical {
-			t.Errorf("expected link %s, got %s", canonical, item.Link.Href)
-		}
-	}
-}
-
-func setupAtom() {
-	if a == nil {
-		a = New(&model.Meta{
+		a := New(&model.Meta{
 			Base: "https://example.com",
 		}, "")
-	}
-}
 
-func getRoute(n int) string {
-	return fmt.Sprintf("/route-%v", n)
+		for i, page := range testCase.pages {
+			t.Logf("process page number %v, route '%v'", i, page.Route)
+			err := a.ProcessPage(&page)
+			if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
+				return
+			}
+
+			item := a.feed.Items[i]
+			test.Equals(t, page.Title, item.Title)
+			test.Equals(t, page.Title, item.Title)
+
+			canonicalLink := fmt.Sprintf("%s%s/%s", a.meta.Base, page.Route, page.ID)
+			test.Equals(t, canonicalLink, item.Link.Href)
+		}
+
+		test.Equals(t, len(testCase.pages), len(a.feed.Items))
+	}
 }
