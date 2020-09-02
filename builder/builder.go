@@ -11,9 +11,8 @@ import (
 // New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
-		site: model.Site{
-			Meta: cfg.Site.Meta,
-		},
+		site:  model.Site{},
+		cfg:   cfg,
 		mutex: &sync.Mutex{},
 	}
 	return &b
@@ -22,6 +21,7 @@ func New(cfg *config.Config) *builder {
 // builder represents a model builder maintaining a site model.
 type builder struct {
 	site  model.Site
+	cfg   *config.Config
 	mutex *sync.Mutex
 }
 
@@ -48,5 +48,9 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 // Dispatch finishes the model build and returns the model.
 func (b *builder) Dispatch() (model.Site, error) {
+	b.site.Meta = b.cfg.Site.Meta
+	b.site.Nav = b.cfg.Site.Nav
+	b.site.Footer = b.cfg.Site.Footer
+
 	return b.site, nil
 }
