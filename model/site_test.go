@@ -66,9 +66,9 @@ func TestSite_WalkTree(t *testing.T) {
 	registerPages()
 	count := 0
 
-	if err := s.WalkTree(func(route string, node *Node) error {
+	if err := s.WalkTree(func(node *Node) error {
 		if count != 0 && len(node.Pages) < 1 {
-			return fmt.Errorf("did not receive pages in node %s", route)
+			return fmt.Errorf("did not receive pages")
 		}
 		count++
 		return nil
