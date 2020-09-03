@@ -11,10 +11,10 @@ import (
 var (
 	// testPages is a set of pages used for testing.
 	testPages = []model.Page{
-		{ID: "page-0", Route: "/route-0"},
-		{ID: "page-1", Route: "/route-1/route-22/route-333"},
-		{ID: "page-2", Route: "/route-2"},
-		{ID: "page-3", Route: "/route-3"},
+		{ID: "page-0", Route: "/route-0", Title: "Page 1"},
+		{ID: "page-1", Route: "/route-1/route-22/route-333", Title: "Page 2"},
+		{ID: "page-2", Route: "/route-2", Title: "Page 3"},
+		{ID: "page-3", Route: "/route-3", Title: "Page 4"},
 	}
 )
 
@@ -43,7 +43,6 @@ func TestAtom_ProcessPage(t *testing.T) {
 			}
 
 			item := a.feed.Items[i]
-			test.Equals(t, page.Title, item.Title)
 			test.Equals(t, page.Title, item.Title)
 
 			canonicalLink := fmt.Sprintf("%s%s/%s", a.meta.Base, page.Route, page.ID)
