@@ -52,7 +52,9 @@ func (t *tags) PreWrite(site *model.Site) error {
 	}
 
 	for tag, indexPage := range t.m {
-		node, err := site.CreateNode(filepath.Join(tagsDir, tag))
+		path := filepath.ToSlash(filepath.Join(tagsDir, tag))
+
+		node, err := site.CreateNode(path)
 		if err != nil {
 			return err
 		}
