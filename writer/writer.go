@@ -1,9 +1,9 @@
 package writer
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
+	"text/template"
 
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
@@ -12,17 +12,13 @@ import (
 	"github.com/verless/verless/tpl"
 )
 
-func New(path, outputDir string) (*writer, error) {
+func New(path, outputDir string) *writer {
 	w := writer{
 		path:      path,
 		outputDir: outputDir,
 	}
 
-	if err := w.initTemplates(); err != nil {
-		return nil, err
-	}
-
-	return &w, nil
+	return &w
 }
 
 type writer struct {
@@ -68,27 +64,6 @@ func (w *writer) Write(site model.Site) error {
 	return nil
 }
 
-func (w *writer) initTemplates() error {
-	var (
-		pageTplPath      = filepath.Join(w.path, config.TemplateDir, config.PageTpl)
-		indexPageTplPath = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
-	)
-
-	if _, err := tpl.Register(config.PageTpl, pageTplPath); err != nil {
-		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
-			return err
-		}
-	}
-
-	if _, err := tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
-		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (w *writer) writePage(route string, page page) error {
 	path := filepath.Join(w.outputDir, route, page.Page.ID)
 
@@ -101,7 +76,10 @@ func (w *writer) writePage(route string, page page) error {
 		return err
 	}
 
-	pageTpl, _ := tpl.Get(config.PageTpl)
+	pageTpl, err := w.loadTemplate(page.Page.Type, config.PageTpl)
+	if err != nil {
+		return err
+	}
 
 	return pageTpl.Execute(file, &page)
 }
@@ -118,9 +96,31 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 		return err
 	}
 
-	indexPageTpl, _ := tpl.Get(config.IndexPageTpl)
+	indexPageTpl, err := w.loadTemplate(indexPage.Type, config.IndexPageTpl)
+	if err != nil {
+		return err
+	}
 
 	return indexPageTpl.Execute(file, &indexPage)
+}
+
+func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Template, error) {
+	var pageTpl string
+
+	switch {
+	case t != nil && t.Template != "":
+		pageTpl = t.Template
+	default:
+		pageTpl = defaultTpl
+	}
+
+	if tpl.IsRegistered(pageTpl) {
+		return tpl.Get(pageTpl)
+	}
+
+	tplPath := filepath.Join(w.path, config.TemplateDir, pageTpl)
+
+	return tpl.Register(pageTpl, tplPath)
 }
 
 func (w *writer) copyAssetDir() error {

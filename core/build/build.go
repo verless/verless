@@ -3,6 +3,7 @@ package build
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
@@ -59,6 +60,7 @@ type Context struct {
 	Builder Builder
 	Writer  Writer
 	Plugins []Plugin
+	Types   map[string]*model.Type
 }
 
 // Run executes the build using the provided build context.
@@ -180,6 +182,10 @@ func processFile(ctx *Context, contentDir, file string) error {
 	// ID will be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
 
+	if err := setType(&page, ctx.Types); err != nil {
+		return err
+	}
+
 	if err := ctx.Builder.RegisterPage(page); err != nil {
 		return err
 	}
@@ -190,5 +196,23 @@ func processFile(ctx *Context, contentDir, file string) error {
 		}
 	}
 
+	return nil
+}
+
+// setType sets the Type field of a page if a page type has been
+// provided by the user. Returns an error if the provided page type
+// has not been configured in the given types map.
+func setType(page *model.Page, types map[string]*model.Type) error {
+	providedType := page.ProvidedType()
+
+	if providedType == "" {
+		return nil
+	}
+
+	if _, exists := types[providedType]; !exists {
+		return fmt.Errorf("%s: type %s has not been declared in verless.yml", page.ID, providedType)
+	}
+
+	page.Type = types[providedType]
 	return nil
 }
