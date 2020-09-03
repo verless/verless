@@ -58,6 +58,7 @@ func (s *Site) walkTreeNode(route string, node *Node, walkFn walkFn, maxDepth, c
 // CreateNode creates a new node in the route tree. The route has
 // to start with a slash representing the root route, e. g. /blog.
 // Returns the error ErrMessageWrongRouteFormat if the given route has a invalid format.
+// This is the case when the route does not start with a '/'.
 func (s *Site) CreateNode(route string) (*Node, error) {
 	if !strings.HasPrefix(route, "/") {
 		return nil, fmt.Errorf(ErrMessageAnyRouteError, route, ErrWrongRouteFormat)
@@ -95,6 +96,8 @@ func (s *Site) CreateNode(route string) (*Node, error) {
 
 // ResolveNode resolves and returns a route in the route tree.
 // Has to start with a slash representing the root route.
+// Returns the error ErrMessageWrongRouteFormat if the given route has a invalid format.
+// This is the case when the route does not start with a '/'.
 func (s *Site) ResolveNode(route string) (*Node, error) {
 	if !strings.HasPrefix(route, "/") {
 		return nil, fmt.Errorf(ErrMessageAnyRouteError, route, ErrWrongRouteFormat)
