@@ -1,85 +1,92 @@
 package tags
 
 import (
-	"fmt"
-	"path/filepath"
 	"testing"
 
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/test"
 )
 
 var (
-	tg    *tags        = nil
-	pages []model.Page = []model.Page{
-		{ID: "page-0", Tags: []string{"t-1", "t-2"}},
-		{ID: "page-1", Tags: []string{"t-1", "t-3"}},
-		{ID: "page-2", Tags: []string{"t-2", "t-3"}},
-		{ID: "page-3", Tags: []string{"t-2"}},
+	// testPages is a set of pages used for testing.
+	testPages = []model.Page{
+		{ID: "page-0", Route: "/route-0", Tags: []string{"t-1", "t-2"}},
+		{ID: "page-1", Route: "/route-1", Tags: []string{"t-1", "t-3"}},
+		{ID: "page-2", Route: "/route-2", Tags: []string{"t-2", "t-3"}},
+		{ID: "page-3", Route: "/route-3", Tags: []string{"t-2"}},
 	}
 )
 
 func TestTags_ProcessPage(t *testing.T) {
-	setupTags()
-
-	for i, page := range pages {
-		page.Route = getRoute(i)
-		if err := tg.ProcessPage(&page); err != nil {
-			t.Fatal(err)
-		}
+	tests := map[string]struct {
+		pages         []model.Page
+		expectedError error
+	}{
+		"normal pages": {
+			pages: testPages,
+		},
 	}
 
-	for _, page := range pages {
-		for _, tag := range page.Tags {
-			if _, exists := tg.m[tag]; !exists {
-				t.Fatalf("key for tag %s does not exist", tag)
+	for name, testCase := range tests {
+		t.Log(name)
+
+		tagger := New()
+
+		for i, page := range testCase.pages {
+			t.Logf("process page number %v, route '%v'", i, page.Route)
+			err := tagger.ProcessPage(&page)
+			if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
+				return
 			}
-			if tg.m[tag] == nil {
-				t.Fatalf("IndexPage for tag %s is nil", tag)
-			}
-			if len(tg.m[tag].Pages) < 1 {
-				t.Errorf("expected at least %d pages for tag %s, got %d", 1, tag, 0)
+
+			for _, tag := range page.Tags {
+				taggerTag, exists := tagger.m[tag]
+
+				test.Assert(t, exists, "tag should exist")
+				test.NotEquals(t, nil, taggerTag)
+				test.Assert(t, len(tagger.m[tag].Pages) > 0, "tag should exist")
 			}
 		}
 	}
 }
 
 func TestTags_PreWrite(t *testing.T) {
-	setupTags()
+	tests := map[string]struct {
+		tagsIndexPages map[string]*model.IndexPage
+		expectedError  error
+	}{
+		"normal index pages": {
+			tagsIndexPages: map[string]*model.IndexPage{
+				"test1": {},
+				"test2": {},
+				"test3": {},
+			},
+		},
+	}
 
-	for i, page := range pages {
-		page.Route = getRoute(i)
-		if err := tg.ProcessPage(&page); err != nil {
-			t.Fatal(err)
+	for name, testCase := range tests {
+		t.Log(name)
+
+		tagger := New()
+		tagger.m = testCase.tagsIndexPages
+		s := model.Site{}
+		err := tagger.PreWrite(&s)
+		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
+			continue
 		}
-	}
 
-	site := model.Site{}
+		tags, ok := s.Root.Children["tags"]
+		test.Equals(t, true, ok)
+		test.NotEquals(t, nil, tags)
 
-	if err := tg.PreWrite(&site); err != nil {
-		t.Fatal(err)
-	}
-
-	for _, page := range pages {
-		for _, tag := range page.Tags {
-			node, err := site.ResolveNode(filepath.Join(tagsDir, tag))
-			if err != nil {
-				t.Fatal(err)
-			}
-			if len(node.IndexPage.Pages) < 1 {
-				t.Errorf("expected at least %d pages for tag %s, got %d", 1, tag, 0)
-			}
+		for tag := range tagger.m {
+			child, ok := tags.Children[tag]
+			test.Equals(t, true, ok)
+			test.NotEquals(t, nil, child)
+			test.NotEquals(t, nil, child.IndexPage)
+			test.NotEquals(t, nil, child.IndexPage.Page)
 		}
 	}
 }
 
 func TestTags_PostWrite(t *testing.T) {}
-
-func setupTags() {
-	if tg == nil {
-		tg = New()
-	}
-}
-
-func getRoute(n int) string {
-	return fmt.Sprintf("/route-%v", n)
-}

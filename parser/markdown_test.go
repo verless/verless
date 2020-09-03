@@ -3,18 +3,14 @@ package parser
 import (
 	"testing"
 	"time"
-)
 
-var (
-	// m is the global markdown instance used for testing.
-	m *markdown = nil
+	"github.com/verless/verless/test"
 )
 
 // TestMarkdown_ParsePage checks if a parsed Markdown file is
 // converted to a model.Page instance correctly.
 func TestMarkdown_ParsePage(t *testing.T) {
-	setupMarkdown()
-
+	parser := NewMarkdown()
 	tests := []struct {
 		src     string
 		title   string
@@ -39,35 +35,14 @@ This is a blog post.`,
 		},
 	}
 
-	for _, test := range tests {
-		page, err := m.ParsePage([]byte(test.src))
+	for _, testCase := range tests {
+		page, err := parser.ParsePage([]byte(testCase.src))
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if page.Title != test.title {
-			t.Errorf("expected title %s, got %s", test.title, page.Title)
-		}
-
-		if len(page.Tags) != len(test.tags) {
-			t.Fatalf("expected %d tags, got %d", len(test.tags), len(page.Tags))
-		}
-
-		for i, tag := range page.Tags {
-			if tag != test.tags[i] {
-				t.Errorf("expected tag %s, got %s", test.tags[i], tag)
-			}
-		}
-
-		if page.Content != test.content {
-			t.Errorf("expected content %s, got %s", test.content, page.Content)
-		}
-	}
-}
-
-// setupMarkdown initializes m if required.
-func setupMarkdown() {
-	if m == nil {
-		m = NewMarkdown()
+		test.Equals(t, testCase.title, page.Title)
+		test.Equals(t, testCase.tags, page.Tags)
+		test.Equals(t, testCase.content, page.Content)
 	}
 }

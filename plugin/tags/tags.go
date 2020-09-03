@@ -46,10 +46,18 @@ func (t *tags) ProcessPage(page *model.Page) error {
 // PreWrite registers each index page in the site model. Those index
 // pages will be rendered by the writer.
 func (t *tags) PreWrite(site *model.Site) error {
-	_ = site.CreateNode(tagsDir)
+	_, err := site.CreateNode(tagsDir)
+	if err != nil {
+		return err
+	}
 
 	for tag, indexPage := range t.m {
-		node := site.CreateNode(filepath.Join(tagsDir, tag))
+		path := filepath.ToSlash(filepath.Join(tagsDir, tag))
+
+		node, err := site.CreateNode(path)
+		if err != nil {
+			return err
+		}
 		node.IndexPage = *indexPage
 	}
 

@@ -1,8 +1,16 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"strings"
+)
+
+var (
+	ErrMessageAnyRouteError = "route '%v': %w"
+
+	ErrWrongRouteFormat      = errors.New("the route has an invalid format")
+	ErrChildNodeDoesNotExist = errors.New("child node does not exist")
 )
 
 // walkFn is invoked by WalkTree for each node in the route tree.
@@ -49,9 +57,15 @@ func (s *Site) walkTreeNode(node *Node, walkFn walkFn, maxDepth, curDepth int) e
 
 // CreateNode creates a new node in the route tree. The route has
 // to start with a slash representing the root route, e. g. /blog.
-func (s *Site) CreateNode(route string) *Node {
+// Returns the error ErrMessageWrongRouteFormat if the given route has a invalid format.
+// This is the case when the route does not start with a '/'.
+func (s *Site) CreateNode(route string) (*Node, error) {
+	if !strings.HasPrefix(route, "/") {
+		return nil, fmt.Errorf(ErrMessageAnyRouteError, route, ErrWrongRouteFormat)
+	}
+
 	if route == "/" {
-		return &s.Root
+		return &s.Root, nil
 	}
 
 	var (
@@ -75,16 +89,22 @@ func (s *Site) CreateNode(route string) *Node {
 		}
 		node = node.Children[s]
 		if i == len(segments)-1 {
-			return node
+			return node, nil
 		}
 	}
 
-	return nil
+	return nil, nil
 }
 
 // ResolveNode resolves and returns a route in the route tree.
 // Has to start with a slash representing the root route.
+// Returns the error ErrMessageWrongRouteFormat if the given route has a invalid format.
+// This is the case when the route does not start with a '/'.
 func (s *Site) ResolveNode(route string) (*Node, error) {
+	if !strings.HasPrefix(route, "/") {
+		return nil, fmt.Errorf(ErrMessageAnyRouteError, route, ErrWrongRouteFormat)
+	}
+
 	if route == "/" {
 		return &s.Root, nil
 	}
@@ -100,7 +120,7 @@ func (s *Site) ResolveNode(route string) (*Node, error) {
 
 	for i, s := range segments {
 		if _, exists := node.Children[s]; !exists {
-			return node, fmt.Errorf("child route %s does not exist", s)
+			return node, fmt.Errorf(ErrMessageAnyRouteError, s, ErrChildNodeDoesNotExist)
 		}
 		node = node.Children[s]
 		if i == len(segments)-1 {
