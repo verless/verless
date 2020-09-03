@@ -1,9 +1,10 @@
 package parser
 
 import (
-	"github.com/verless/verless/test"
 	"testing"
 	"time"
+
+	"github.com/verless/verless/test"
 )
 
 // TestMarkdown_ParsePage checks if a parsed Markdown file is
