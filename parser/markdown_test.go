@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"github.com/verless/verless/test"
 	"testing"
 	"time"
 )
@@ -33,28 +34,14 @@ This is a blog post.`,
 		},
 	}
 
-	for _, test := range tests {
-		page, err := parser.ParsePage([]byte(test.src))
+	for _, testCase := range tests {
+		page, err := parser.ParsePage([]byte(testCase.src))
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if page.Title != test.title {
-			t.Errorf("expected title %s, got %s", test.title, page.Title)
-		}
-
-		if len(page.Tags) != len(test.tags) {
-			t.Fatalf("expected %d tags, got %d", len(test.tags), len(page.Tags))
-		}
-
-		for i, tag := range page.Tags {
-			if tag != test.tags[i] {
-				t.Errorf("expected tag %s, got %s", test.tags[i], tag)
-			}
-		}
-
-		if page.Content != test.content {
-			t.Errorf("expected content %s, got %s", test.content, page.Content)
-		}
+		test.Equals(t, testCase.title, page.Title)
+		test.Equals(t, testCase.tags, page.Tags)
+		test.Equals(t, testCase.content, page.Content)
 	}
 }
