@@ -1,10 +1,10 @@
 package tags
 
 import (
-	"github.com/verless/verless/test"
 	"testing"
 
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/test"
 )
 
 var (
