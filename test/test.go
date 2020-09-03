@@ -1,5 +1,5 @@
 // Package test contains some simple utils for more readable tests.
-// It is based on 'https://github.com/benbjohnson/testing'.
+// It is based on https://github.com/benbjohnson/testing.
 package test
 
 import (
@@ -12,8 +12,8 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-// Assert fails the test if the condition is false.
-// It returns true, if the test did not fail.
+// Assert fails the test if the condition is false. It returns true, if
+// the test did not fail.
 func Assert(tb testing.TB, condition bool, msg string, v ...interface{}) bool {
 	if condition {
 		return true
@@ -27,8 +27,8 @@ func Assert(tb testing.TB, condition bool, msg string, v ...interface{}) bool {
 
 }
 
-// Ok fails the test if an err is not nil.
-// It returns true, if the test did not fail.
+// Ok fails the test if an err is not nil. It returns true, if the test
+// did not fail.
 func Ok(tb testing.TB, err error) bool {
 	if err == nil {
 		return true
@@ -40,8 +40,8 @@ func Ok(tb testing.TB, err error) bool {
 	return false
 }
 
-// Equals fails the test if exp is not equal to act.
-// It returns true, if the test did not fail.
+// Equals fails the test if exp is not equal to act. It returns true, if
+// the test did not fail.
 func Equals(tb testing.TB, exp, act interface{}, options ...cmp.Option) bool {
 	if cmp.Equal(exp, act, options...) {
 		return true
@@ -53,8 +53,8 @@ func Equals(tb testing.TB, exp, act interface{}, options ...cmp.Option) bool {
 	return false
 }
 
-// NotEquals fails the test if exp is equal to act.
-// It returns true, if the test did not fail.
+// NotEquals fails the test if exp is equal to act. It returns true, if
+// the test did not fail.
 func NotEquals(tb testing.TB, exp, act interface{}, options ...cmp.Option) bool {
 	if !cmp.Equal(exp, act, options...) {
 		return true
@@ -69,22 +69,24 @@ func NotEquals(tb testing.TB, exp, act interface{}, options ...cmp.Option) bool 
 type ExpectedErrorResult int
 
 const (
+	// IsCorrectNil is returned if both the expected and the actual
+	// error are nil.
 	IsCorrectNil ExpectedErrorResult = iota
+	// IsCorrectErr is returned if both the expected and the actual
+	// error are not nil and identical.
 	IsCorrectErr
+	// IsWrongErr is returned if the expected and the actual error
+	// don't match.
 	IsWrongErr
 )
 
-// ExpectError checks if the actual error is expected given error, using errors.Is.
-// If the expected error is nil, it returns IsCorrectNil if the actual error is also nil.
-// Else it returns IsWrongErr.
-// If the expected error is not nil, it returns IsCorrectErr if the actual error matches.
-// Else it returns IsWrongErr.
+// ExpectError checks if the actual error is expected given error, using
+// errors.Is. In all cases the test Fails if expected does not match actual.
 //
-// In all cases the test Fails if expected does not match actual.
-//
-// The three states are useful if you want to check for errors and do different things based on the result.
-// For example if the actual error is only in some cases not nil and you want to continue execution in that case,
-// but stop on the other cases.
+// The three states are useful if you want to check for errors and do different
+// things based on the result. For example if the actual error is only in some
+// cases not nil and you want to continue execution in that case, but stop on
+// the other cases.
 func ExpectedError(tb testing.TB, exp, act error) ExpectedErrorResult {
 	if exp == nil {
 		if Ok(tb, act) {
