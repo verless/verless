@@ -1,108 +1,88 @@
 package builder
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/test"
 )
 
 var (
-	// b is the builder instance used for testing.
-	b *builder = nil
-	// pages is a set of pages used for testing.
-	pages []model.Page = []model.Page{
-		{ID: "page-0"},
-		{ID: "page-1"},
-		{ID: "page-2"},
-		{ID: "page-3"},
+	// testPages is a set of pages used for testing.
+	testPages []model.Page = []model.Page{
+		{ID: "page-0", Route: "/route-0"},
+		{ID: "page-1", Route: "/route-1"},
+		{ID: "page-2", Route: "/route-2"},
+		{ID: "page-3", Route: "/route-3"},
 	}
 )
 
-// TestBuilder_RegisterPage checks if the pages can be resolved
+// TestBuilder_RegisterPage checks if the testPages can be resolved
 // from the site model exactly like they've been registered.
 func TestBuilder_RegisterPage(t *testing.T) {
-	setupBuilder()
-
-	for i, page := range pages {
-		page.Route = getRoute(i)
-		if err := b.RegisterPage(page); err != nil {
-			t.Fatal(err)
-		}
+	tests := map[string]struct {
+		pages []model.Page
+	}{
+		"register one testPage": {
+			pages: testPages[:1],
+		},
+		"register several testPages": {
+			pages: testPages,
+		},
+		"register with child pages": {
+			pages: append(testPages,
+				model.Page{ID: "child-0", Route: "/route-0/child-0"},
+				model.Page{ID: "child-1", Route: "/route-0/child-0/child-1"},
+				model.Page{ID: "child-2", Route: "/route-1/child-2"},
+			),
+		},
+		"register with child pages whose parent doesn't exist": {
+			pages: append(testPages,
+				model.Page{ID: "child-1", Route: "/route-0/child-0/child-1"},
+			),
+		},
 	}
 
-	for i, page := range pages {
-		node, err := b.site.ResolveNode(getRoute(i))
-		if err != nil {
-			t.Fatal(err)
+	for name, testCase := range tests {
+		t.Log(name)
+
+		builder := New(&config.Config{})
+
+		for _, page := range testCase.pages {
+			if err := builder.RegisterPage(page); err != nil {
+				t.Fatal(err)
+			}
 		}
-		if len(node.Pages) < 1 {
-			t.Fatalf("route %s contains no pages", getRoute(i))
-		}
-		if node.Pages[0].ID != page.ID {
-			t.Errorf("expected page %s in route %s, got %s",
-				page.ID, getRoute(i), node.Pages[0].ID)
+
+		for _, page := range testCase.pages {
+			t.Logf("route %v", page.Route)
+
+			segments := strings.Split(page.Route, "/")[1:]
+
+			parent := builder.site.Root
+			for i := 0; i < len(segments); i++ {
+				test.NotEquals(t, nil, parent)
+				parent = *parent.Children[segments[i]]
+				if i == len(segments)-1 {
+					test.Equals(t, page.ID, parent.Pages[0].ID)
+					test.Assert(t, parent.IndexPage.Pages[0] == &parent.Pages[0], "the index page has to point to the actual page")
+				}
+			}
 		}
 	}
 }
 
 // TestBuilder_Dispatch checks if the dispatched site model is
-// valid and contains all registered pages.
+// valid and contains all registered testPages.
 func TestBuilder_Dispatch(t *testing.T) {
-	setupBuilder()
-
-	for i, page := range pages {
-		page.Route = getRoute(i)
-		if err := b.RegisterPage(page); err != nil {
-			t.Fatal(err)
-		}
+	tests := map[string]struct {
+	}{
+		// no tests as there is no logic yet
 	}
 
-	site, err := b.Dispatch()
-	if err != nil {
-		t.Fatal(err)
+	for name, _ := range tests {
+		t.Log(name)
 	}
-
-	for i, page := range pages {
-		// Skip the first page since its route is "/".
-		if i == 0 {
-			continue
-		}
-
-		segment := strings.TrimLeft(getRoute(i), "/")
-
-		if site.Root.Children == nil {
-			t.Fatalf("root route has uninitialized children map")
-		}
-		if _, exists := site.Root.Children[segment]; !exists {
-			t.Fatalf("child route %s does not exist", segment)
-		}
-
-		route := site.Root.Children[segment]
-
-		if len(route.Pages) < 1 {
-			t.Fatalf("route %s contains no pages", segment)
-		}
-		if route.Pages[0].ID != page.ID {
-			t.Errorf("expected page %s in route %s, got %s",
-				page.ID, segment, route.Pages[0].ID)
-		}
-	}
-}
-
-// setupBuilder initializes the builder if required.
-func setupBuilder() {
-	if b == nil {
-		b = New(&config.Config{})
-	}
-}
-
-// getRoute returns a generated route identified by a number n.
-func getRoute(n int) string {
-	if n == 0 {
-		return "/"
-	}
-	return fmt.Sprintf("/route-%v", n)
 }
