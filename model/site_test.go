@@ -181,7 +181,7 @@ func TestSite_WalkTree(t *testing.T) {
 		expectedError     error
 		routeCount        int
 		pageCount         int
-		alternativeWalkFn func(path string, route *Node) error
+		alternativeWalkFn func(node *Node) error
 		depth             int
 	}{
 		"only root": {
@@ -204,7 +204,7 @@ func TestSite_WalkTree(t *testing.T) {
 		},
 		"throw error": {
 			route: complexNode,
-			alternativeWalkFn: func(path string, route *Node) error {
+			alternativeWalkFn: func(node *Node) error {
 				return aSimpleError
 			},
 			expectedError: aSimpleError,
@@ -225,7 +225,7 @@ func TestSite_WalkTree(t *testing.T) {
 		walkFn := testCase.alternativeWalkFn
 
 		if walkFn == nil {
-			walkFn = func(path string, node *Node) error {
+			walkFn = func(node *Node) error {
 				routeCount++
 				pageCount += len(node.Pages)
 				return nil
