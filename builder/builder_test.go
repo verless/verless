@@ -59,17 +59,17 @@ func TestBuilder_RegisterPage(t *testing.T) {
 		for _, page := range testCase.pages {
 			t.Logf("route %v", page.Route)
 
-			routes := strings.Split(page.Route, "/")[1:]
+			segments := strings.Split(page.Route, "/")[1:]
 
-			parent := builder.site.Root.Children[routes[0]]
-			for i := 0; i < len(routes); i++ {
+			parent := builder.site.Root.Children[segments[0]]
+			for i := 0; i < len(segments); i++ {
 				test.NotEquals(t, nil, parent)
 
-				if i == len(routes)-1 {
+				if i == len(segments)-1 {
 					test.Equals(t, page.ID, parent.Pages[0].ID)
 					test.Assert(t, parent.IndexPage.Pages[0] == &parent.Pages[0], "the index page has to point to the actual page")
 				} else {
-					parent = parent.Children[routes[i+1]]
+					parent = parent.Children[segments[i+1]]
 				}
 			}
 		}
