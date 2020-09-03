@@ -18,19 +18,19 @@ type Page struct {
 	Type        *Type
 	Template    string
 
-	relatedFQNs  []string
-	providedType string
-	hidden       bool
+	providedRelated []string
+	providedType    string
+	hidden          bool
 }
 
-// RelatedFQNs returns all Fully Qualified Name URIs related to the page.
-func (p *Page) RelatedFQNs() []string {
-	return p.relatedFQNs
+// ProvidedRelated returns all Fully Qualified Name URIs related to the page.
+func (p *Page) ProvidedRelated() []string {
+	return p.providedRelated
 }
 
-// AddRelatedFQN adds a new Fully Qualified Name URI to the page.
-func (p *Page) AddRelatedFQN(relatedFQN string) {
-	p.relatedFQNs = append(p.relatedFQNs, relatedFQN)
+// AddProvidedRelated adds a new Fully Qualified Name URI to the page.
+func (p *Page) AddProvidedRelated(relatedFQN string) {
+	p.providedRelated = append(p.providedRelated, relatedFQN)
 }
 
 // ProvidedType returns the user-provided page type.
