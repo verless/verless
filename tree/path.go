@@ -17,15 +17,21 @@ func IsRootPath(path string) bool {
 // package, meaning that it can be used in functions like CreateNode
 // or ResolveNode.
 func IsValidPath(path string) bool {
+	if path == "" {
+		return false
+	}
 	return strings.HasPrefix(path, RootPath)
 }
 
 // Edges returns the tree edges for a path. Those edges will be
 // used by the tree package to traverse a node's children.
+//
+// Passing an invalid path leads to undefined behavior. Check the
+// path's validity using IsValidPath first.
 func Edges(path string) []string {
 	if IsRootPath(path) {
 		return []string{}
 	}
 
-	return strings.Split(path, delimiter)
+	return strings.Split(path[1:], delimiter)
 }
