@@ -17,6 +17,8 @@ var (
 	}
 )
 
+// TestTags_ProcessPage checks if the tags plugin creates a new map
+// entry for each tag and stores the respective pages in those entries.
 func TestTags_ProcessPage(t *testing.T) {
 	tests := map[string]struct {
 		pages         []model.Page
@@ -50,6 +52,8 @@ func TestTags_ProcessPage(t *testing.T) {
 	}
 }
 
+// TestTags_PreWrite checks if the tags plugin registers all tags as
+// dedicated routes in the site model.
 func TestTags_PreWrite(t *testing.T) {
 	tests := map[string]struct {
 		tagsIndexPages map[string]*model.IndexPage

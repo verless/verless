@@ -18,6 +18,8 @@ var (
 	}
 )
 
+// TestAtom_ProcessPage checks if the atom plugin creates a new
+// RSS feed item for each processed page.
 func TestAtom_ProcessPage(t *testing.T) {
 	tests := map[string]struct {
 		pages         []model.Page
