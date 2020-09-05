@@ -120,3 +120,37 @@ func TestResolveNode(t *testing.T) {
 		}
 	}
 }
+
+func TestWalk(t *testing.T) {
+	tests := map[string]struct {
+		depth int
+		count int
+	}{
+		"nodes with max depth 1": {
+			depth: 1,
+			count: 3,
+		},
+		"nodes with max depth 2": {
+			depth: 2,
+			count: 5,
+		},
+		"all nodes": {
+			depth: -1,
+			count: 5,
+		},
+	}
+
+	for name, testCase := range tests {
+		t.Log(name)
+
+		count := 0
+
+		err := Walk(&root, func(node Node) error {
+			count++
+			return nil
+		}, testCase.depth)
+
+		test.Equals(t, nil, err)
+		test.Equals(t, testCase.count, count)
+	}
+}

@@ -91,14 +91,14 @@ func ResolveNode(path string, root Node) (Node, error) {
 // For each node, walkFn will be invoked. As soon as an error arises
 // in one of the walkFns, the error is handed up to the caller.
 //
-// If maxDepth is reached, Walk will return. If maxDepth is set to -1,
-// Walk will walk down the entire tree.
+// maxDepth is counted starting from 0, which represents the root
+// node. Set maxDepth to -1 to walk down the entire tree.
 func Walk(root Node, walkFn func(node Node) error, maxDepth int) error {
 	return walkNode(root, walkFn, maxDepth, 0)
 }
 
 func walkNode(node Node, walkFn func(node Node) error, maxDepth, curDepth int) error {
-	if curDepth == maxDepth {
+	if maxDepth != -1 && curDepth-1 == maxDepth {
 		return nil
 	}
 
