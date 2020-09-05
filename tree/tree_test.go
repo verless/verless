@@ -1,6 +1,10 @@
 package tree
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/verless/verless/test"
+)
 
 type testNode struct {
 	children map[string]Node
@@ -10,11 +14,15 @@ func (t *testNode) Children() map[string]Node {
 	return t.children
 }
 
-func (t *testNode) CreateChild(edge string) {
+func (t *testNode) InitChild(edge string) {
 	child := &testNode{
 		children: make(map[string]Node),
 	}
 	t.children[edge] = child
+}
+
+func (t *testNode) CreateChild(edge string, node Node) {
+	t.children[edge] = node
 }
 
 var root = testNode{
@@ -33,10 +41,6 @@ var root = testNode{
 }
 
 func TestCreateNode(t *testing.T) {
-	root := &testNode{
-		children: make(map[string]Node),
-	}
-
 	tests := map[string]struct {
 		path        string
 		isValidPath bool
@@ -53,17 +57,30 @@ func TestCreateNode(t *testing.T) {
 			path:        "/blog/coffee",
 			isValidPath: true,
 		},
-		"invalid path with depth 1": {
-			path: "blog",
-		},
-		"invalid path with depth 2": {
-			path: "blog/coffee",
-		},
 	}
 
 	for name, testCase := range tests {
 		t.Log(name)
 
-		_ = CreateNode(testCase.path, root, &testNode{})
+		root := &testNode{
+			children: make(map[string]Node),
+		}
+
+		err := CreateNode(testCase.path, root, &testNode{})
+
+		if testCase.isValidPath {
+			test.Equals(t, nil, err)
+		} else {
+			test.NotEquals(t, nil, err)
+		}
+
+		var n Node = root
+		edges := Edges(testCase.path)
+
+		for _, edge := range edges {
+			_, exists := n.Children()[edge]
+			test.Equals(t, true, exists)
+			n = n.Children()[edge]
+		}
 	}
 }
