@@ -1,8 +1,9 @@
 package tree
 
 import (
-	"github.com/verless/verless/test"
 	"testing"
+
+	"github.com/verless/verless/test"
 )
 
 // TestIsRootPath checks if the IsRootPath function correctly
