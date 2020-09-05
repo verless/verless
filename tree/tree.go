@@ -13,23 +13,26 @@ type Node interface {
 	// expected to be edge names that link the node to its child.
 	Children() map[string]Node
 
-	// CreateChild should initialize a new child node that is linked
-	// to the current node by the given edge name.
+	// InitChild should initialize a new child node that is linked
+	// to the current node via the given edge name.
 	//
-	// This implies that a node initialized with CreateChild can be
-	// loaded with Children afterwards, and is available under the edge
-	// name passed to CreateChild:
-	//
-	//	n.CreateChild("c")
-	//	c := n.Children()["c"]
-	//
-	// Handling edge naming collisions is up to the implementation.
-	CreateChild(edge string)
+	// This implies that a node initialized with InitChild can be
+	// loaded with Children afterwards, and is available under the
+	// edge name passed to CreateChild.
+	InitChild(edge string)
+
+	// CreateChild should create a new child node that is linked to
+	// the current node via the given edge name. Its behavior should
+	// be analogous to InitChild.
+	CreateChild(edge string, child Node)
 }
 
 // CreateNode stores a node under a given tree path. It follows the
 // path starting from the root node and creates all required children
 // using Node.CreateChild if they don't exist yet.
+//
+// Passing an invalid tree path to CreateNode will lead to undefined
+// behavior. Check the path using IsValidPath first.
 func CreateNode(path string, root Node, node Node) error {
 	if !IsValidPath(path) {
 		return fmt.Errorf("%s is not a valid tree path", path)
@@ -39,10 +42,17 @@ func CreateNode(path string, root Node, node Node) error {
 	}
 
 	n := root
+	edges := Edges(path)
 
-	for _, edge := range Edges(path) {
+	for i, edge := range edges {
 		if _, exists := n.Children()[edge]; !exists {
-			n.CreateChild(edge)
+			// If the current edge is the last one of the tree path,
+			// this is the edge where the node has to be created.
+			if i == len(edges)-1 {
+				n.CreateChild(edge, node)
+				return nil
+			}
+			n.InitChild(edge)
 		}
 		n = n.Children()[edge]
 	}
