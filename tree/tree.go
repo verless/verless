@@ -64,7 +64,9 @@ func CreateNode(path string, root Node, node Node) error {
 // traverses all child nodes until the last edge is reached.
 //
 // Returns the node linked to the last edge in the path or an error if
-// it cannot be resolved.
+// it cannot be resolved. Passing an invalid tree path to ResolveNode
+// will lead to undefined behavior. Check the path using IsValidPath
+// first.
 func ResolveNode(path string, root Node) (Node, error) {
 	if !IsValidPath(path) {
 		return nil, fmt.Errorf("%s is not a valid tree path", path)

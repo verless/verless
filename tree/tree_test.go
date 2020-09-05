@@ -84,3 +84,39 @@ func TestCreateNode(t *testing.T) {
 		}
 	}
 }
+
+func TestResolveNode(t *testing.T) {
+	tests := map[string]struct {
+		path           string
+		IsExistingPath bool
+	}{
+		"root path": {
+			path:           RootPath,
+			IsExistingPath: true,
+		},
+		"path with depth 1": {
+			path:           "/blog",
+			IsExistingPath: true,
+		},
+		"path with depth 2": {
+			path:           "/blog/coffee",
+			IsExistingPath: true,
+		},
+		"not existing path": {
+			path: "/coffee",
+		},
+	}
+
+	for name, testCase := range tests {
+		t.Log(name)
+
+		node, err := ResolveNode(testCase.path, &root)
+
+		if testCase.IsExistingPath {
+			test.Equals(t, nil, err)
+			test.NotEquals(t, nil, node)
+		} else {
+			test.NotEquals(t, nil, err)
+		}
+	}
+}
