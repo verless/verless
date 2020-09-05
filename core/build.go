@@ -1,11 +1,11 @@
 package core
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/pkg/errors"
 	"github.com/verless/verless/builder"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/build"
@@ -35,7 +35,7 @@ type BuildOptions struct {
 // configuration.
 //
 // See doc.go for more information on the core architecture.
-func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
+func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 	var (
 		outputDir = finalOutputDir(path, &options)
 		p         = parser.NewMarkdown()
@@ -44,13 +44,11 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 	)
 
 	if cfg.Version == "" {
-		return []error{
-			errors.New("the configuration has to include the version key"),
-		}
+		return errors.New("the configuration has to include the version key")
 	}
 
 	if !canOverwrite(outputDir, &options, &cfg) {
-		return []error{ErrCannotOverwrite}
+		return ErrCannotOverwrite
 	}
 
 	ctx := build.Context{
@@ -66,12 +64,20 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) []error {
 
 	for _, key := range cfg.Plugins {
 		if _, exists := plugins[key]; !exists {
-			return []error{fmt.Errorf("plugin %s not found", key)}
+			return fmt.Errorf("plugin %s not found", key)
 		}
 		ctx.Plugins = append(ctx.Plugins, plugins[key]())
 	}
 
-	return build.Run(ctx)
+	errs := build.Run(ctx)
+
+	if len(errs) == 1 {
+		return errs[0]
+	} else if len(errs) > 1 {
+		return errors.Errorf("several errors occurred while building: %v", errs)
+	}
+
+	return nil
 }
 
 // finalOutputDir determines the final output path.

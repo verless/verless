@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/verless/verless/core"
 )
@@ -12,15 +11,13 @@ func newServeCmd() *cobra.Command {
 		options core.ServeOptions
 	)
 
-	buildCmd := cobra.Command{
+	serveCmd := cobra.Command{
 		Use: "serve PROJECT",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			errs := core.RunServe(args[0], options)
+			err := core.RunServe(args[0], options)
 
-			if len(errs) == 1 {
-				return errs[0]
-			} else if len(errs) > 1 {
-				return errors.Errorf("several errors occurred while serving: %v", errs)
+			if err != nil {
+				return err
 			}
 
 			return nil
@@ -28,5 +25,13 @@ func newServeCmd() *cobra.Command {
 		Args: cobra.ExactArgs(1),
 	}
 
-	return &buildCmd
+	serveCmd.Flags().Uint16VarP(&options.Port, "port", "p",
+		8080, `specify the port for the web server`)
+
+	serveCmd.Flags().BoolVarP(&options.Build, "build", "b",
+		false, `build the project before serving, allows using all flags which are valid for verless build`)
+
+	addBuildOptions(&serveCmd, &options.BuildOptions)
+
+	return &serveCmd
 }

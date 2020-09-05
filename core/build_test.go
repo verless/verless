@@ -26,10 +26,8 @@ func TestRunFullBuild(t *testing.T) {
 	cfg, err := config.FromFile(projectFolderPath, config.Filename)
 	test.Ok(t, err)
 
-	errs := core.RunBuild("../example", o, cfg)
-	for _, err := range errs {
-		test.Ok(t, err)
-	}
+	err = core.RunBuild("../example", o, cfg)
+	test.Ok(t, err)
 
 	if err := os.RemoveAll(outTestPath); err != nil {
 		log.Println(err)
