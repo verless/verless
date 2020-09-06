@@ -29,6 +29,8 @@ type BuildOptions struct {
 	OutputDir string
 	// Overwrite specifies that the output folder can be overwritten.
 	Overwrite bool
+	// RecompileTemplates forces a recompile of all templates.
+	RecompileTemplates bool
 }
 
 // RunBuild triggers a build using the provided options and user
@@ -40,7 +42,7 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 		outputDir = finalOutputDir(path, &options)
 		p         = parser.NewMarkdown()
 		b         = builder.New(&cfg)
-		w         = writer.New(path, outputDir)
+		w         = writer.New(path, outputDir, options.RecompileTemplates)
 	)
 
 	if cfg.Version == "" {
@@ -52,12 +54,13 @@ func RunBuild(path string, options BuildOptions, cfg config.Config) error {
 	}
 
 	ctx := build.Context{
-		Path:    path,
-		Parser:  p,
-		Builder: b,
-		Writer:  w,
-		Plugins: make([]build.Plugin, 0),
-		Types:   cfg.Types,
+		Path:               path,
+		Parser:             p,
+		Builder:            b,
+		Writer:             w,
+		Plugins:            make([]build.Plugin, 0),
+		Types:              cfg.Types,
+		RecompileTemplates: options.RecompileTemplates,
 	}
 
 	plugins := loadPlugins(&cfg, outputDir)

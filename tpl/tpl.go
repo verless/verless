@@ -11,13 +11,15 @@ var (
 	ErrAlreadyRegistered = errors.New("template has already been registered")
 )
 
-func Register(key string, path string) (*template.Template, error) {
+func Register(key string, path string, recompileTemplates bool) (*template.Template, error) {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
 	}
 
-	if _, exists := templates[key]; exists {
-		return nil, ErrAlreadyRegistered
+	if !recompileTemplates {
+		if _, exists := templates[key]; exists {
+			return nil, ErrAlreadyRegistered
+		}
 	}
 
 	tpl, err := template.ParseFiles(path)
