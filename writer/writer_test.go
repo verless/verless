@@ -17,7 +17,6 @@ const (
 )
 
 func TestWriter_removeOutDirIfExists(t *testing.T) {
-
 	tests := map[string]struct {
 		// beforeTest is a callback which creates the folders/files
 		// to test a specific testcase.
@@ -75,5 +74,5 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 }
 
 func setupNewWriter(t testing.TB) *writer {
-	return New(testPath, testOutPath)
+	return New(testPath, testOutPath, false)
 }
