@@ -10,10 +10,13 @@ type testNode struct {
 	children map[string]Node
 }
 
+// Children simply returns the entire children map.
 func (t *testNode) Children() map[string]Node {
 	return t.children
 }
 
+// InitChild initializes a new child node on its own and registers
+// it as a child linked to the current node by the given edge.
 func (t *testNode) InitChild(edge string) {
 	child := &testNode{
 		children: make(map[string]Node),
@@ -21,6 +24,8 @@ func (t *testNode) InitChild(edge string) {
 	t.children[edge] = child
 }
 
+// CreateChild registers a node as a child linked to the current
+// node by the given edge.
 func (t *testNode) CreateChild(edge string, node Node) {
 	t.children[edge] = node
 }
@@ -40,6 +45,8 @@ var root = testNode{
 	},
 }
 
+// TestCreateNode checks if all nodes that have been created with
+// a given tree path can be resolved in that path correctly.
 func TestCreateNode(t *testing.T) {
 	tests := map[string]struct {
 		path string
@@ -76,6 +83,9 @@ func TestCreateNode(t *testing.T) {
 	}
 }
 
+// TestResolveNode checks if the ResolveNode function can resolve
+// nodes in a pre-defined tree correctly and returns the expected
+// errors for non-existing paths.
 func TestResolveNode(t *testing.T) {
 	tests := map[string]struct {
 		path          string
@@ -106,6 +116,8 @@ func TestResolveNode(t *testing.T) {
 	}
 }
 
+// TestWalk checks if the Walk function invokes the walkFn for as
+// many nodes as expected, depending on a given maxWidth.
 func TestWalk(t *testing.T) {
 	tests := map[string]struct {
 		depth int
