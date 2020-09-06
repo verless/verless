@@ -13,8 +13,8 @@ var (
 	ErrChildNodeDoesNotExist = errors.New("child node does not exist")
 )
 
-// walkFn can be invoked for each node in the route tree.
-type walkFn func(route string, node *Node) error
+// walkFn is invoked by WalkTree for each node in the route tree.
+type walkFn func(node *Node) error
 
 // Site represents the actual website. The site model is generated
 // and populated with data and content during the website build.
@@ -31,23 +31,23 @@ type Site struct {
 // WalkTree traverses the site's route tree and invokes the given
 // walkFn on each node. Use maxDepth = -1 to traverse all nodes.
 func (s *Site) WalkTree(walkFn walkFn, maxDepth int) error {
-	return s.walkTreeNode("", &s.Root, walkFn, maxDepth, 0)
+	return s.walkTreeNode(&s.Root, walkFn, maxDepth, 0)
 }
 
 // walkTreeNode invokes the walkFn on a given node and calls itself
 // for all of its child nodes.
-func (s *Site) walkTreeNode(route string, node *Node, walkFn walkFn, maxDepth, curDepth int) error {
+func (s *Site) walkTreeNode(node *Node, walkFn walkFn, maxDepth, curDepth int) error {
 	if maxDepth != -1 && curDepth == maxDepth {
 		return nil
 	}
 	curDepth++
 
-	if err := walkFn(route, node); err != nil {
+	if err := walkFn(node); err != nil {
 		return err
 	}
 
-	for r, child := range node.Children {
-		if err := s.walkTreeNode(r, child, walkFn, maxDepth, curDepth); err != nil {
+	for _, child := range node.Children {
+		if err := s.walkTreeNode(child, walkFn, maxDepth, curDepth); err != nil {
 			return err
 		}
 	}
@@ -80,9 +80,11 @@ func (s *Site) CreateNode(route string) (*Node, error) {
 	for i, s := range segments {
 		if _, exists := node.Children[s]; !exists {
 			node.Children[s] = &Node{
-				Children:  make(map[string]*Node),
-				Pages:     make([]Page, 0),
-				IndexPage: IndexPage{},
+				Children: make(map[string]*Node),
+				Pages:    make([]Page, 0),
+				IndexPage: IndexPage{
+					Page: Page{Route: route},
+				},
 			}
 		}
 		node = node.Children[s]
