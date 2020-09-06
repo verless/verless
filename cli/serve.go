@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"net"
+
 	"github.com/spf13/cobra"
 	"github.com/verless/verless/core"
 )
@@ -30,6 +32,9 @@ func newServeCmd() *cobra.Command {
 
 	serveCmd.Flags().BoolVarP(&options.Build, "build", "b",
 		false, `build the project before serving, allows using all flags which are valid for verless build`)
+
+	serveCmd.Flags().IPVarP(&options.IP, "ip", "i",
+		net.IP{0, 0, 0, 0}, `specify the ip to listen on, it has to be a valid IPv4 or IPv6`)
 
 	addBuildOptions(&serveCmd, &options.BuildOptions)
 

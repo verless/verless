@@ -1,6 +1,7 @@
 package core
 
 import (
+	"net"
 	"os"
 
 	"github.com/verless/verless/config"
@@ -15,6 +16,9 @@ type ServeOptions struct {
 
 	// Build enables automatic building of the verless project before serving.
 	Build bool
+
+	// IP specifies the ip to listen on in combination with the port.
+	IP net.IP
 }
 
 // RunServe
@@ -41,5 +45,5 @@ func RunServe(path string, options ServeOptions) error {
 	}
 
 	// Then serve it.
-	return serve.Run(serve.Context{Path: targetFiles, Port: options.Port})
+	return serve.Run(serve.Context{Path: targetFiles, Port: options.Port, IP: options.IP})
 }
