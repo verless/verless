@@ -30,7 +30,7 @@ type ServeOptions struct {
 // RunServe
 func RunServe(path string, options ServeOptions) error {
 	// First check if the passed path is a verless project (valid verless cfg).
-	cfg, err := config.FromFile(path, config.Filename)
+	_, err := config.FromFile(path, config.Filename)
 	if err != nil {
 		return err
 	}
@@ -64,6 +64,12 @@ func RunServe(path string, options ServeOptions) error {
 						return
 					}
 					log.Println("rebuild")
+					// Re-read config as it may have changed also.
+					cfg, err := config.FromFile(path, config.Filename)
+					if err != nil {
+						log.Println("rebuild error:", err)
+						continue
+					}
 					err = RunBuild(path, options.BuildOptions, cfg)
 					if err != nil {
 						log.Println("rebuild error:", err)
