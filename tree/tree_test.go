@@ -45,8 +45,8 @@ var root = testNode{
 	},
 }
 
-// TestCreateNode checks if all nodes that have been created with
-// a given tree path can be resolved in that path correctly.
+// TestCreateNode checks if the CreateNode registers all nodes
+// under the given tree paths correctly.
 func TestCreateNode(t *testing.T) {
 	tests := map[string]struct {
 		path string
