@@ -11,12 +11,12 @@ var (
 	ErrAlreadyRegistered = errors.New("template has already been registered")
 )
 
-func Register(key string, path string, recompileTemplates bool) (*template.Template, error) {
+func Register(key string, path string, force bool) (*template.Template, error) {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
 	}
 
-	if !recompileTemplates {
+	if !force {
 		if _, exists := templates[key]; exists {
 			return nil, ErrAlreadyRegistered
 		}
