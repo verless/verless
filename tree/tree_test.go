@@ -42,20 +42,16 @@ var root = testNode{
 
 func TestCreateNode(t *testing.T) {
 	tests := map[string]struct {
-		path        string
-		isValidPath bool
+		path string
 	}{
 		"root path": {
-			path:        RootPath,
-			isValidPath: true,
+			path: RootPath,
 		},
 		"path with depth 1": {
-			path:        "/blog",
-			isValidPath: true,
+			path: "/blog",
 		},
 		"path with depth 2": {
-			path:        "/blog/coffee",
-			isValidPath: true,
+			path: "/blog/coffee",
 		},
 	}
 
@@ -67,12 +63,7 @@ func TestCreateNode(t *testing.T) {
 		}
 
 		err := CreateNode(testCase.path, root, &testNode{})
-
-		if testCase.isValidPath {
-			test.Equals(t, nil, err)
-		} else {
-			test.NotEquals(t, nil, err)
-		}
+		test.Ok(t, err)
 
 		var n Node = root
 		edges := Edges(testCase.path)
@@ -87,36 +78,30 @@ func TestCreateNode(t *testing.T) {
 
 func TestResolveNode(t *testing.T) {
 	tests := map[string]struct {
-		path           string
-		IsExistingPath bool
+		path          string
+		expectedError error
 	}{
 		"root path": {
-			path:           RootPath,
-			IsExistingPath: true,
+			path: RootPath,
 		},
 		"path with depth 1": {
-			path:           "/blog",
-			IsExistingPath: true,
+			path: "/blog",
 		},
 		"path with depth 2": {
-			path:           "/blog/coffee",
-			IsExistingPath: true,
+			path: "/blog/coffee",
 		},
 		"not existing path": {
-			path: "/coffee",
+			path:          "/coffee",
+			expectedError: ErrEdgeNotFound,
 		},
 	}
 
 	for name, testCase := range tests {
 		t.Log(name)
 
-		node, err := ResolveNode(testCase.path, &root)
-
-		if testCase.IsExistingPath {
-			test.Equals(t, nil, err)
-			test.NotEquals(t, nil, node)
-		} else {
-			test.NotEquals(t, nil, err)
+		_, err := ResolveNode(testCase.path, &root)
+		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
+			continue
 		}
 	}
 }
