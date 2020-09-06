@@ -4,7 +4,17 @@
 // in a tree structure as well as reading pages from it.
 package tree
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var (
+	// ErrInvalidPath indicates that a path is not formally valid.
+	ErrInvalidPath = errors.New("path is not a valid tree path")
+	// ErrEdgeNotFound indicates that an edge cannot be found.
+	ErrEdgeNotFound = errors.New("edge does not exist")
+)
 
 // Node represents a tree node which contains a value. Each node has
 // zero or more child nodes (children).
@@ -35,7 +45,7 @@ type Node interface {
 // behavior. Check the path using IsValidPath first.
 func CreateNode(path string, root Node, node Node) error {
 	if !IsValidPath(path) {
-		return fmt.Errorf("%s is not a valid tree path", path)
+		return fmt.Errorf("create node %s: %w", path, ErrInvalidPath)
 	}
 	if IsRootPath(path) {
 		return nil
@@ -46,8 +56,8 @@ func CreateNode(path string, root Node, node Node) error {
 
 	for i, edge := range edges {
 		if _, exists := n.Children()[edge]; !exists {
-			// If the current edge is the last one of the tree path,
-			// this is the edge where the node has to be created.
+			// If the current edge is the last one of the tree path, this
+			// is the edge where the node has to be created.
 			if i == len(edges)-1 {
 				n.CreateChild(edge, node)
 				return nil
@@ -69,7 +79,7 @@ func CreateNode(path string, root Node, node Node) error {
 // first.
 func ResolveNode(path string, root Node) (Node, error) {
 	if !IsValidPath(path) {
-		return nil, fmt.Errorf("%s is not a valid tree path", path)
+		return nil, fmt.Errorf("resolve node %s: %w", path, ErrInvalidPath)
 	}
 	if IsRootPath(path) {
 		return root, nil
@@ -78,8 +88,10 @@ func ResolveNode(path string, root Node) (Node, error) {
 	n := root
 
 	for _, edge := range Edges(path) {
+		// Stop traversing the tree when an edge cannot be found.
 		if _, exists := n.Children()[edge]; !exists {
-			return nil, fmt.Errorf("edge %s does not exist", edge)
+			return nil, fmt.
+				Errorf("resolve node %s: edge %s: %w", path, edge, ErrEdgeNotFound)
 		}
 		n = n.Children()[edge]
 	}
