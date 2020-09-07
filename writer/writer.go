@@ -12,19 +12,21 @@ import (
 	"github.com/verless/verless/tpl"
 )
 
-func New(path, outputDir string) *writer {
+func New(path, outputDir string, recompileTemplates bool) *writer {
 	w := writer{
-		path:      path,
-		outputDir: outputDir,
+		path:               path,
+		outputDir:          outputDir,
+		recompileTemplates: recompileTemplates,
 	}
 
 	return &w
 }
 
 type writer struct {
-	path      string
-	outputDir string
-	site      model.Site
+	path               string
+	outputDir          string
+	site               model.Site
+	recompileTemplates bool
 }
 
 func (w *writer) Write(site model.Site) error {
@@ -114,13 +116,13 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		pageTpl = defaultTpl
 	}
 
-	if tpl.IsRegistered(pageTpl) {
+	if !w.recompileTemplates && tpl.IsRegistered(pageTpl) {
 		return tpl.Get(pageTpl)
 	}
 
 	tplPath := filepath.Join(w.path, config.TemplateDir, pageTpl)
 
-	return tpl.Register(pageTpl, tplPath)
+	return tpl.Register(pageTpl, tplPath, w.recompileTemplates)
 }
 
 func (w *writer) copyAssetDir() error {

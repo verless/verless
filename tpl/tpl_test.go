@@ -16,13 +16,40 @@ const (
 )
 
 func TestRegister(t *testing.T) {
-	pageTplPath := filepath.Join(projectFolderPath, config.TemplateDir, config.PageTpl)
+	// Don't use a map here as the execution order is important here.
+	tests := []struct {
+		testName      string
+		force         bool
+		expectedError error
+		key           string
+	}{
+		{
+			testName: "first template",
+			key:      "test key",
+		},
+		{
+			testName: "second template",
+			key:      "test key2",
+		},
+		{
+			testName:      "same template again",
+			key:           "test key2",
+			expectedError: ErrAlreadyRegistered,
+		},
+		{
+			testName: "same template again with force true",
+			key:      "test key2",
+			force:    true,
+		},
+	}
 
-	_, err := Register(config.PageTpl, pageTplPath)
-	test.Ok(t, err)
+	for _, testCase := range tests {
+		t.Logf("Testing '%s'", testCase.testName)
+		pageTplPath := filepath.Join(projectFolderPath, config.TemplateDir, config.PageTpl)
 
-	_, err = Register(config.PageTpl, pageTplPath)
-	test.Assert(t, err != nil, "template has already been registered")
+		_, err := Register(testCase.key, pageTplPath, testCase.force)
+		test.ExpectedError(t, testCase.expectedError, err)
+	}
 }
 
 func TestGet(t *testing.T) {

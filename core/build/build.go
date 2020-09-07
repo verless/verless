@@ -55,12 +55,13 @@ type (
 
 // Context provides all components required for running a build.
 type Context struct {
-	Path    string
-	Parser  Parser
-	Builder Builder
-	Writer  Writer
-	Plugins []Plugin
-	Types   map[string]*model.Type
+	Path               string
+	Parser             Parser
+	Builder            Builder
+	Writer             Writer
+	Plugins            []Plugin
+	Types              map[string]*model.Type
+	RecompileTemplates bool
 }
 
 // Run executes the build using the provided build context.
