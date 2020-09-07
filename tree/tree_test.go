@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/verless/verless/test"
@@ -119,9 +120,12 @@ func TestResolveNode(t *testing.T) {
 // TestWalk checks if the Walk function invokes the walkFn for as
 // many nodes as expected, depending on a given maxWidth.
 func TestWalk(t *testing.T) {
+	testErr := errors.New("this is a test error")
+
 	tests := map[string]struct {
-		depth int
-		count int
+		depth         int
+		count         int
+		expectedError error
 	}{
 		"nodes with max depth 1": {
 			depth: 1,
@@ -135,6 +139,11 @@ func TestWalk(t *testing.T) {
 			depth: -1,
 			count: 5,
 		},
+		"with error": {
+			depth:         -1,
+			count:         0,
+			expectedError: testErr,
+		},
 	}
 
 	for name, testCase := range tests {
@@ -144,10 +153,13 @@ func TestWalk(t *testing.T) {
 
 		err := Walk(&root, func(node Node) error {
 			count++
-			return nil
+			return testCase.expectedError
 		}, testCase.depth)
 
-		test.Equals(t, nil, err)
+		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
+			continue
+		}
+
 		test.Equals(t, testCase.count, count)
 	}
 }
