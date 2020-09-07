@@ -1,4 +1,4 @@
-// Package watch provides verless' ability to watch and rebuild a project
+// Package watch provides verless' ability to watch and rebuild a project.
 package watch
 
 import (
