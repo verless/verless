@@ -1,7 +1,12 @@
 // Package tree provides functions for performing operations related
-// to tree data structures. A website's page structure can be easily
-// depicted as a tree, so these functions are used for storing pages
-// in a tree structure as well as reading pages from it.
+// to tree data structures.
+//
+// A website's page structure can be easily depicted as a tree, so these
+// functions are used for storing pages in a tree structure as well as
+// reading pages from it.
+//
+// The package exclusively uses terminology for tree data structures:
+// https://en.wikipedia.org/wiki/Tree_(data_structure)#Terminology
 package tree
 
 import (
@@ -16,8 +21,8 @@ var (
 	ErrEdgeNotFound = errors.New("edge does not exist")
 )
 
-// Node represents a tree node which contains a value. Each node has
-// zero or more child nodes (children).
+// Node represents a tree node which contains a value and has zero or
+// more child nodes connected via edges.
 type Node interface {
 	// Children should return a map of child nodes. The map keys are
 	// expected to be edge names that link the node to its child.
