@@ -60,9 +60,12 @@ func RunServe(path string, options ServeOptions) error {
 			}
 		}
 
+		firstBuildFinished := make(chan bool)
+
 		// Start rebuild goroutine.
 		// If watch is not enabled, it's still used for the initial build.
 		go func() {
+			first := true
 			for {
 				select {
 				case _, ok := <-rebuildCh:
@@ -79,6 +82,12 @@ func RunServe(path string, options ServeOptions) error {
 					err = RunBuild(path, options.BuildOptions, cfg)
 					if err != nil {
 						log.Println("rebuild error:", err)
+					}
+
+					if first {
+						firstBuildFinished <- true
+						close(firstBuildFinished)
+						first = false
 					}
 				case _, ok := <-done:
 					// Stops the goroutine if requested to.
@@ -98,6 +107,7 @@ func RunServe(path string, options ServeOptions) error {
 			done <- true
 			close(done)
 		}
+		<-firstBuildFinished
 	}
 
 	// If the target folder doesn't exist, return an error.
