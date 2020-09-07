@@ -16,18 +16,20 @@ type ServeOptions struct {
 	// Port specifies the port to run the server at.
 	Port uint16
 
+	// IP specifies the ip to listen on in combination with the port.
+	IP net.IP
+
 	// Build enables automatic building of the verless project before serving.
 	// Build is ignored when Watch is true.
 	Build bool
 
 	// Build enables automatic building of the verless project before and while serving.
 	Watch bool
-
-	// IP specifies the ip to listen on in combination with the port.
-	IP net.IP
 }
 
-// RunServe
+// RunServe serves a verless project using a simple file server.
+// It can build the project automatically if ServeOptions.Build is true and
+// even watch the whole project directory for changes if ServeOptions.Watch is true.
 func RunServe(path string, options ServeOptions) error {
 	// First check if the passed path is a verless project (valid verless cfg).
 	_, err := config.FromFile(path, config.Filename)
@@ -46,12 +48,16 @@ func RunServe(path string, options ServeOptions) error {
 
 		// Only watch if needed.
 		if options.Watch {
-			watch.Run(watch.Context{
+			err := watch.Run(watch.Context{
 				IgnorePath: targetFiles,
 				Path:       path,
 				ChangedCh:  rebuildCh,
 				StopCh:     done,
 			})
+
+			if err != nil {
+				return err
+			}
 		}
 
 		// Start rebuild goroutine.

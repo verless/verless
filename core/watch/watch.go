@@ -39,6 +39,7 @@ func Run(ctx Context) error {
 					return
 				}
 
+				// Avoid to trigger if the (folder) ctx.IgnorePath itself gets created / removed (e.g. if the target folder gets deleted).
 				if strings.HasPrefix(event.Name, ctx.IgnorePath) {
 					continue
 				}
