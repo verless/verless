@@ -50,7 +50,7 @@ func RunServe(path string, options ServeOptions) error {
 				IgnorePath: targetFiles,
 				Path:       path,
 				ChangedCh:  rebuildCh,
-				DoneCh:     done,
+				StopCh:     done,
 			})
 		}
 
@@ -75,6 +75,8 @@ func RunServe(path string, options ServeOptions) error {
 						log.Println("rebuild error:", err)
 					}
 				case _, ok := <-done:
+					// Stops the goroutine if requested to.
+					// Triggers on closing of the done channel.
 					if !ok {
 						return
 					}

@@ -15,6 +15,8 @@ type Context struct {
 	IP   net.IP
 }
 
+// Run starts a file server serving the already built project
+// For this it uses the provided information of the context.
 func Run(ctx Context) error {
 	var uri string
 	if ctx.IP.To4() == nil {
@@ -27,7 +29,7 @@ func Run(ctx Context) error {
 	fs := http.FileServer(http.Dir(ctx.Path))
 	http.Handle("/", fs)
 
-	log.Printf("verless serving '%v' on %v\n", ctx.Path, uri)
+	log.Printf("(ser)verless serving '%v' on %v\n", ctx.Path, uri)
 	err := http.ListenAndServe(uri, fs)
 	return err
 }

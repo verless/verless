@@ -1,4 +1,5 @@
-// Package watch provides verless' ability to watch and rebuild a project.
+// Package watch provides verless' ability to watch a project
+// and react to changes in a verless project.
 package watch
 
 import (
@@ -15,9 +16,13 @@ type Context struct {
 	Path       string
 	IgnorePath string
 	ChangedCh  chan<- string
-	DoneCh     <-chan bool
+	StopCh     <-chan bool
 }
 
+// Run watches a verless project for changes and writes the changed
+// files to the passed Context.ChangedCh channel.
+// To stop the watcher just close the Context.StopCh channel.
+// Context.IgnorePath can be used to ignore a path inside the given Context.Path.
 func Run(ctx Context) error {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -29,6 +34,7 @@ func Run(ctx Context) error {
 
 			select {
 			case event, ok := <-watcher.Events:
+				// This case catches if an event occurred to a watched file.
 				if !ok {
 					return
 				}
@@ -41,11 +47,14 @@ func Run(ctx Context) error {
 					ctx.ChangedCh <- event.Name
 				}
 			case err, ok := <-watcher.Errors:
+				// This case catches if an error occurred while watching the files.
 				if !ok {
 					return
 				}
 				log.Println("watch error:", err)
-			case _, ok := <-ctx.DoneCh:
+			case _, ok := <-ctx.StopCh:
+				// This case catches if the watching should be stopped.
+				// It just watches for a closed channel.
 				if !ok {
 					return
 				}
