@@ -16,7 +16,7 @@ type ServeOptions struct {
 	// Port specifies the port to run the server at.
 	Port uint16
 
-	// IP specifies the ip to listen on in combination with the port.
+	// IP specifies the IP to listen on in combination with the port.
 	IP net.IP
 
 	// Build enables automatic building of the verless project before serving.
