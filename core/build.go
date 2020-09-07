@@ -29,7 +29,7 @@ type BuildOptions struct {
 	OutputDir string
 	// Overwrite specifies that the output folder can be overwritten.
 	Overwrite bool
-	// RecompileTemplates forces a recompile of all templates.
+	// RecompileTemplates forces a recompilation of all templates.
 	RecompileTemplates bool
 }
 
