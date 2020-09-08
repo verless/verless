@@ -18,7 +18,7 @@ A content file has to meet the following requirements:
 Each file in the `content` directory will be converted to a
 [Page](https://github.com/verless/verless/blob/master/docs/template-reference.md#page).
 
-The path of the Markdown file inside `content` defines the route for the corresponding page: A Markdown file stored as
+The path of the Markdown file inside `content` defines the route for the corresponding page. A Markdown file stored as
 `content/blog/making-barista-quality-espresso.md` will be converted to a page whose URL is
 `/blog/making-barista-quality-espresso`.
 
@@ -28,7 +28,7 @@ The path of the Markdown file inside `content` defines the route for the corresp
 ## Metadata
 
 While the URL for a page is inferred from its filename, other metadata is parsed from the Markdown file. Verless uses
-the _YAML Front Matter_ for this: There's a short YAML section at the beginning of the Markdown file.
+the _YAML Front Matter_ - a short YAML section at the beginning - for this:
 
 ```markdown
 ---
@@ -59,7 +59,7 @@ This reference shows all available YAML keys for providing metadata. **All keys 
 * **`Description`** _(String)_: The page's description.
 * **`Related`** _(Array)_: A list of related pages. Has to contain verless paths like `/blog/making-barista-quality-espresso`. This list will be available as `{{.Related}}` in the `page.html` template and contains [Page](https://github.com/verless/verless/blob/master/docs/template-reference.md#page) instances.
     - **`<verless path>`** _(String)_: The path to a related page.
-* **`Type`** _(String)_: The page's content type which automatically defines the template to be used. If the content type is `blog`, a template called `blog.html` will be used for rendering. In future verless versions, content types may provide more configurations other than just the template to use.
+* **`Type`** _(String)_: The page type. Has to be declared in the [`types` section](https://github.com/verless/verless/blob/master/docs/configuration-reference.md#configuration-key-reference) of your configuration.
 * **`Hidden`** _(Bool)_: Don't include the page in lists like [`{{.Pages}}`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages).
 
 <p align="center">
