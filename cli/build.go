@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
@@ -21,25 +20,22 @@ func newBuildCmd() *cobra.Command {
 				return err
 			}
 
-			errs := core.RunBuild(args[0], options, cfg)
-
-			if len(errs) == 1 {
-				return errs[0]
-			} else if len(errs) > 1 {
-				return errors.Errorf("several errors occurred while building: %v", errs)
-			}
-
-			return nil
+			err = core.RunBuild(args[0], options, cfg)
+			return err
 		},
 		Args: cobra.ExactArgs(1),
 	}
 
+	addBuildOptions(&buildCmd, &options)
+
+	return &buildCmd
+}
+
+func addBuildOptions(buildCmd *cobra.Command, options *core.BuildOptions) {
 	buildCmd.Flags().StringVarP(&options.OutputDir, "output", "o",
 		"", `specify an output directory`)
 
 	// Overwrite should not have a shorthand to avoid accidental usage.
 	buildCmd.Flags().BoolVar(&options.Overwrite, "overwrite",
 		false, `allows overwriting an existing output directory`)
-
-	return &buildCmd
 }

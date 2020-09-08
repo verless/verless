@@ -1,9 +1,9 @@
 package writer
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
+	"text/template"
 
 	"github.com/otiai10/copy"
 	"github.com/verless/verless/config"
@@ -12,23 +12,21 @@ import (
 	"github.com/verless/verless/tpl"
 )
 
-func New(path, outputDir string) (*writer, error) {
+func New(path, outputDir string, recompileTemplates bool) *writer {
 	w := writer{
-		path:      path,
-		outputDir: outputDir,
+		path:               path,
+		outputDir:          outputDir,
+		recompileTemplates: recompileTemplates,
 	}
 
-	if err := w.initTemplates(); err != nil {
-		return nil, err
-	}
-
-	return &w, nil
+	return &w
 }
 
 type writer struct {
-	path      string
-	outputDir string
-	site      model.Site
+	path               string
+	outputDir          string
+	site               model.Site
+	recompileTemplates bool
 }
 
 func (w *writer) Write(site model.Site) error {
@@ -38,9 +36,9 @@ func (w *writer) Write(site model.Site) error {
 
 	w.site = site
 
-	err := w.site.WalkRoutes(func(path string, route *model.Route) error {
-		for _, p := range route.Pages {
-			if err := w.writePage(path, page{
+	err := w.site.WalkTree(func(node *model.Node) error {
+		for _, p := range node.Pages {
+			if err := w.writePage(p.Route, page{
 				Meta:   &w.site.Meta,
 				Nav:    &w.site.Nav,
 				Page:   &p,
@@ -49,10 +47,10 @@ func (w *writer) Write(site model.Site) error {
 				return err
 			}
 		}
-		return w.writeIndexPage(path, indexPage{
+		return w.writeIndexPage(node.IndexPage.Route, indexPage{
 			Meta:      &w.site.Meta,
 			Nav:       &w.site.Nav,
-			IndexPage: &route.IndexPage,
+			IndexPage: &node.IndexPage,
 			Footer:    &w.site.Footer,
 		})
 	}, -1)
@@ -63,27 +61,6 @@ func (w *writer) Write(site model.Site) error {
 
 	if err := w.copyAssetDir(); err != nil {
 		return err
-	}
-
-	return nil
-}
-
-func (w *writer) initTemplates() error {
-	var (
-		pageTplPath      = filepath.Join(w.path, config.TemplateDir, config.PageTpl)
-		indexPageTplPath = filepath.Join(w.path, config.TemplateDir, config.IndexPageTpl)
-	)
-
-	if _, err := tpl.Register(config.PageTpl, pageTplPath); err != nil {
-		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
-			return err
-		}
-	}
-
-	if _, err := tpl.Register(config.IndexPageTpl, indexPageTplPath); err != nil {
-		if !errors.Is(err, tpl.ErrAlreadyRegistered) {
-			return err
-		}
 	}
 
 	return nil
@@ -101,7 +78,10 @@ func (w *writer) writePage(route string, page page) error {
 		return err
 	}
 
-	pageTpl, _ := tpl.Get(config.PageTpl)
+	pageTpl, err := w.loadTemplate(page.Page.Type, config.PageTpl)
+	if err != nil {
+		return err
+	}
 
 	return pageTpl.Execute(file, &page)
 }
@@ -118,9 +98,31 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 		return err
 	}
 
-	indexPageTpl, _ := tpl.Get(config.IndexPageTpl)
+	indexPageTpl, err := w.loadTemplate(indexPage.Type, config.IndexPageTpl)
+	if err != nil {
+		return err
+	}
 
 	return indexPageTpl.Execute(file, &indexPage)
+}
+
+func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Template, error) {
+	var pageTpl string
+
+	switch {
+	case t != nil && t.Template != "":
+		pageTpl = t.Template
+	default:
+		pageTpl = defaultTpl
+	}
+
+	if !w.recompileTemplates && tpl.IsRegistered(pageTpl) {
+		return tpl.Get(pageTpl)
+	}
+
+	tplPath := filepath.Join(w.path, config.TemplateDir, pageTpl)
+
+	return tpl.Register(pageTpl, tplPath, w.recompileTemplates)
 }
 
 func (w *writer) copyAssetDir() error {

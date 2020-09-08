@@ -15,20 +15,32 @@ type Page struct {
 	Description string
 	Content     string
 	Related     []*Page
+	Type        *Type
 	Template    string
 
-	relatedFQNs []string
-	hidden      bool
+	providedRelated []string
+	providedType    string
+	hidden          bool
 }
 
-// RelatedFQNs returns all FullyQuallifiedName uris related to the page.
-func (p *Page) RelatedFQNs() []string {
-	return p.relatedFQNs
+// ProvidedRelated returns all Fully Qualified Name URIs related to the page.
+func (p *Page) ProvidedRelated() []string {
+	return p.providedRelated
 }
 
-// AddRelatedFQN adds a new FullyQuallifiedName uri to the page.
-func (p *Page) AddRelatedFQN(relatedFQN string) {
-	p.relatedFQNs = append(p.relatedFQNs, relatedFQN)
+// AddProvidedRelated adds a new Fully Qualified Name URI to the page.
+func (p *Page) AddProvidedRelated(relatedFQN string) {
+	p.providedRelated = append(p.providedRelated, relatedFQN)
+}
+
+// ProvidedType returns the user-provided page type.
+func (p *Page) ProvidedType() string {
+	return p.providedType
+}
+
+// SetProvidedType sets the user-provided page type.
+func (p *Page) SetProvidedType(providedType string) {
+	p.providedType = providedType
 }
 
 // Hidden describes if the page should be shown (false) or hidden (true).
@@ -46,4 +58,9 @@ func (p *Page) SetHidden(hidden bool) {
 type IndexPage struct {
 	Page
 	Pages []*Page
+}
+
+// Type represents a page type.
+type Type struct {
+	Template string
 }

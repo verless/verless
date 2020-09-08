@@ -10,23 +10,12 @@ import (
 type Config struct {
 	Version string
 	Site    struct {
-		Meta model.Meta
-		Nav  struct {
-			Items []struct {
-				Label  string
-				Target string
-			}
-			Overwrite bool
-		}
-		Footer struct {
-			Items []struct {
-				Label  string
-				Target string
-			}
-			Overwrite bool
-		}
+		Meta   model.Meta
+		Nav    model.Nav
+		Footer model.Footer
 	}
 	Plugins []string
+	Types   map[string]*model.Type
 	Build   struct {
 		Overwrite bool
 	}

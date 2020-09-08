@@ -39,6 +39,9 @@ Note that all configuration keys except `version` are optional.
         * **`items`** _(Array)_:
             * **`label`** _(String_): The footer item's label, e.g. `Home`.   
               **`target`** _(String)_: The footer item's target URL in the form `https://example.com`. Needs to be enclosed in quotes.
+* **`types`** _(Map)_:
+    * **`<type>`** _(Object)_: A page type.
+        * **`template`** _(String)_: The template to use for rendering pages of `<type>`.
 * **`plugins`** _(Array)_:
     - **`<plugin key>`** _(String)_: The key of the plugin to be used. You can find the plugin key in the [plugin reference](#plugin-reference).
 * **`build`** _(Map)_:
