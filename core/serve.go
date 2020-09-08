@@ -60,9 +60,12 @@ func RunServe(path string, options ServeOptions) error {
 			}
 		}
 
+		firstBuildFinished := make(chan bool)
+
 		// Start rebuild goroutine.
 		// If watch is not enabled, it's still used for the initial build.
 		go func() {
+			first := true
 			for {
 				select {
 				case _, ok := <-rebuildCh:
@@ -80,6 +83,12 @@ func RunServe(path string, options ServeOptions) error {
 					if err != nil {
 						log.Println("rebuild error:", err)
 					}
+
+					if first {
+						firstBuildFinished <- true
+						close(firstBuildFinished)
+						first = false
+					}
 				case _, ok := <-done:
 					// Stops the goroutine if requested to.
 					// Triggers on closing of the done channel.
@@ -90,8 +99,9 @@ func RunServe(path string, options ServeOptions) error {
 			}
 		}()
 
-		// Trigger an initial rebuild.
+		// Trigger and wait for the initial rebuild.
 		rebuildCh <- path
+		<-firstBuildFinished
 
 		// Stop rebuilding goroutine if not watching.
 		if !options.Watch {
