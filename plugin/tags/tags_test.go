@@ -73,7 +73,7 @@ func TestTags_PreWrite(t *testing.T) {
 
 		tagger := New()
 		tagger.m = testCase.tagsIndexPages
-		s := model.Site{}
+		s := model.NewSite()
 		err := tagger.PreWrite(&s)
 		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
 			continue

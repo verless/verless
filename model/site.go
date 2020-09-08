@@ -14,3 +14,10 @@ type Site struct {
 	Root   *Node
 	Footer Footer
 }
+
+func NewSite() Site {
+	site := Site{
+		Root: NewNode(),
+	}
+	return site
+}

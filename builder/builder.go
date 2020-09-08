@@ -12,9 +12,7 @@ import (
 // New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
-		site: model.Site{
-			Root: model.NewNode(),
-		},
+		site:  model.NewSite(),
 		cfg:   cfg,
 		mutex: &sync.Mutex{},
 	}
