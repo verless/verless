@@ -99,15 +99,15 @@ func RunServe(path string, options ServeOptions) error {
 			}
 		}()
 
-		// Trigger an initial rebuild.
+		// Trigger and wait for the initial rebuild.
 		rebuildCh <- path
+		<-firstBuildFinished
 
 		// Stop rebuilding goroutine if not watching.
 		if !options.Watch {
 			done <- true
 			close(done)
 		}
-		<-firstBuildFinished
 	}
 
 	// If the target folder doesn't exist, return an error.
