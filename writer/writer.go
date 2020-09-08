@@ -1,7 +1,6 @@
 package writer
 
 import (
-	"github.com/verless/verless/tree"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -11,6 +10,7 @@ import (
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tpl"
+	"github.com/verless/verless/tree"
 )
 
 func New(path, outputDir string, recompileTemplates bool) *writer {

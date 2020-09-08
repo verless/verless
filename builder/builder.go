@@ -2,11 +2,11 @@
 package builder
 
 import (
-	"github.com/verless/verless/tree"
 	"sync"
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/tree"
 )
 
 // New creates a new builder instance.
