@@ -30,6 +30,7 @@ func (n *Node) CreateChild(edge string, child tree.Node) {
 	n.children[edge] = child
 }
 
+// NewNode creates a new, fully initialized Node instance.
 func NewNode() *Node {
 	node := Node{
 		children: map[string]tree.Node{},

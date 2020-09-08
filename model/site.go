@@ -15,6 +15,7 @@ type Site struct {
 	Footer Footer
 }
 
+// NewSite creates a new, fully initialized Site instance.
 func NewSite() Site {
 	site := Site{
 		Root: NewNode(),
