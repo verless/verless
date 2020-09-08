@@ -11,6 +11,6 @@ type walkFn func(node *Node) error
 type Site struct {
 	Meta   Meta
 	Nav    Nav
-	Root   Node
+	Root   *Node
 	Footer Footer
 }

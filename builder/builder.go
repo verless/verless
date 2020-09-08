@@ -12,7 +12,9 @@ import (
 // New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
-		site:  model.Site{},
+		site: model.Site{
+			Root: model.NewNode(),
+		},
 		cfg:   cfg,
 		mutex: &sync.Mutex{},
 	}
@@ -36,7 +38,7 @@ func (b *builder) RegisterPage(page model.Page) error {
 	node.Pages = append(node.Pages, page)
 	node.IndexPage.Pages = append(node.IndexPage.Pages, &node.Pages[len(node.Pages)-1])
 
-	if err := tree.CreateNode(page.Route, &b.site.Root, nil); err != nil {
+	if err := tree.CreateNode(page.Route, b.site.Root, node); err != nil {
 		return err
 	}
 

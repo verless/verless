@@ -79,16 +79,16 @@ func TestTags_PreWrite(t *testing.T) {
 			continue
 		}
 
-		tags, ok := s.Root.Children["tags"]
+		tags, ok := s.Root.Children()["tags"]
 		test.Equals(t, true, ok)
 		test.NotEquals(t, nil, tags)
 
 		for tag := range tagger.m {
-			child, ok := tags.Children[tag]
+			child, ok := tags.Children()[tag]
 			test.Equals(t, true, ok)
 			test.NotEquals(t, nil, child)
-			test.NotEquals(t, nil, child.IndexPage)
-			test.NotEquals(t, nil, child.IndexPage.Page)
+			test.NotEquals(t, nil, child.(*model.Node).IndexPage)
+			test.NotEquals(t, nil, child.(*model.Node).IndexPage.Page)
 		}
 	}
 }
