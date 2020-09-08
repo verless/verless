@@ -61,6 +61,10 @@ directory with the new project.
 |---------------|-------|--------|---------------|---------------------------------------------------------|
 | `--overwrite` | -     | Bool   | `--overwrite` | Overwrite the specified directory if it already exists. |
 
+## verless serve
+
+`verless serve PROJECT` starts a tiny webserver that serves your static site.
+
 ## verless version
 
 `verless version` prints the installed verless version.
