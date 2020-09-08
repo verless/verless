@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"github.com/verless/verless/tree"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -36,8 +37,8 @@ func (w *writer) Write(site model.Site) error {
 
 	w.site = site
 
-	err := w.site.WalkTree(func(node *model.Node) error {
-		for _, p := range node.Pages {
+	err := tree.Walk(&w.site.Root, func(node tree.Node) error {
+		for _, p := range node.(*model.Node).Pages {
 			if err := w.writePage(p.Route, page{
 				Meta:   &w.site.Meta,
 				Nav:    &w.site.Nav,
@@ -47,10 +48,13 @@ func (w *writer) Write(site model.Site) error {
 				return err
 			}
 		}
-		return w.writeIndexPage(node.IndexPage.Route, indexPage{
+
+		ip := node.(*model.Node).IndexPage
+
+		return w.writeIndexPage(ip.Route, indexPage{
 			Meta:      &w.site.Meta,
 			Nav:       &w.site.Nav,
-			IndexPage: &node.IndexPage,
+			IndexPage: &ip,
 			Footer:    &w.site.Footer,
 		})
 	}, -1)

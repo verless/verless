@@ -2,6 +2,7 @@
 package builder
 
 import (
+	"github.com/verless/verless/tree"
 	"sync"
 
 	"github.com/verless/verless/config"
@@ -31,13 +32,13 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	node, err := b.site.CreateNode(page.Route)
-	if err != nil {
-		return err
-	}
-
+	node := model.NewNode()
 	node.Pages = append(node.Pages, page)
 	node.IndexPage.Pages = append(node.IndexPage.Pages, &node.Pages[len(node.Pages)-1])
+
+	if err := tree.CreateNode(page.Route, &b.site.Root, nil); err != nil {
+		return err
+	}
 
 	return nil
 }
