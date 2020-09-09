@@ -63,7 +63,17 @@ directory with the new project.
 
 ## verless serve
 
-`verless serve PROJECT` starts a tiny webserver that serves your static site.
+`verless serve PROJECT` starts a tiny webserver that serves your static site. By default, verless listens to port 8080
+on all network interfaces, so your project is available under `localhost:8080` for example.
+
+The `--watch` flag is useful for local development because verless re-builds your website when a file has changed, so
+you're able to view your changes immediately.
+
+| Option    | Short | Type   | Example          | Description                                                        |
+|-----------|-------|--------|------------------|--------------------------------------------------------------------|
+| `--port`  | `-p`  | UInt16 | `--port 8000`    | The TCP port for serving the static site.                          |
+| `--watch` | `-w`  | Bool   | `--watch`        | Watch all project file and re-build the site if something changed. |
+| `--ip`    | `-i`  | String | `--ip 127.0.0.1` | The network address for serving the static site.                   |
 
 ## verless version
 
