@@ -9,6 +9,7 @@ This is an overview for the verless CLI and its commands.
 * [`verless build`](#verless-build)
 * [`verless create`](#verless-create)
 * [`verless create project`](#verless-create-project)
+* [`verless serve`](#verless-serve)
 * [`verless version`](#verless-version)
 
 ## Installation
