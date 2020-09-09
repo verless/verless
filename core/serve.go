@@ -48,16 +48,14 @@ func RunServe(path string, options ServeOptions) error {
 
 		// Only watch if needed.
 		if options.Watch {
-			err := watch.Run(watch.Context{
-				IgnorePath: targetFiles,
-				Path:       path,
-				ChangedCh:  rebuildCh,
-				StopCh:     done,
-			})
-
-			if err != nil {
-				return err
-			}
+			go func() {
+				watch.Run(watch.Context{
+					IgnorePath: targetFiles,
+					Path:       path,
+					ChangedCh:  rebuildCh,
+					StopCh:     done,
+				})
+			}()
 		}
 
 		firstBuildFinished := make(chan bool)
