@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 
+	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/serve"
 	"github.com/verless/verless/core/watch"
@@ -42,6 +43,8 @@ func RunServe(path string, options ServeOptions) error {
 	// If yes, build it if requested to do so.
 	options.BuildOptions.RecompileTemplates = options.Watch
 
+	memMapFs := afero.NewMemMapFs()
+
 	done := make(chan bool)
 	if options.Build || options.Watch {
 		rebuildCh := make(chan string)
@@ -77,7 +80,7 @@ func RunServe(path string, options ServeOptions) error {
 						log.Println("rebuild error:", err)
 						continue
 					}
-					err = RunBuild(path, options.BuildOptions, cfg)
+					err = RunBuild(memMapFs, path, options.BuildOptions, cfg)
 					if err != nil {
 						log.Println("rebuild error:", err)
 					}
@@ -114,7 +117,7 @@ func RunServe(path string, options ServeOptions) error {
 	}
 
 	// Then serve it.
-	err = serve.Run(serve.Context{Path: targetFiles, Port: options.Port, IP: options.IP})
+	err = serve.Run(memMapFs, serve.Context{Path: targetFiles, Port: options.Port, IP: options.IP})
 
 	// Stop building goroutine just to be sure.
 	done <- true

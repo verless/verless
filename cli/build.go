@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
@@ -20,7 +21,7 @@ func newBuildCmd() *cobra.Command {
 				return err
 			}
 
-			err = core.RunBuild(args[0], options, cfg)
+			err = core.RunBuild(afero.NewOsFs(), args[0], options, cfg)
 			return err
 		},
 		Args: cobra.ExactArgs(1),

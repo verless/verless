@@ -3,9 +3,10 @@ package serve
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"net/http"
+
+	"github.com/spf13/afero"
 )
 
 // Context provides all components required for serving an already built project.
@@ -17,19 +18,16 @@ type Context struct {
 
 // Run starts a file server serving the already built project
 // For this it uses the provided information of the context.
-func Run(ctx Context) error {
-	var uri string
+func Run(fs afero.Fs, ctx Context) error {
+	uri := fmt.Sprintf("%v:%v", ctx.IP, ctx.Port)
+
 	if ctx.IP.To4() == nil {
 		uri = fmt.Sprintf("[%v]:%v", ctx.IP, ctx.Port)
-	} else {
-		uri = fmt.Sprintf("%v:%v", ctx.IP, ctx.Port)
-
 	}
 
-	fs := http.FileServer(http.Dir(ctx.Path))
-	http.Handle("/", fs)
+	httpFs := afero.NewHttpFs(fs)
+	server := http.FileServer(httpFs.Dir(ctx.Path))
+	http.Handle("/", server)
 
-	log.Printf("(ser)verless serving '%v' on %v\n", ctx.Path, uri)
-	err := http.ListenAndServe(uri, fs)
-	return err
+	return http.ListenAndServe(uri, server)
 }

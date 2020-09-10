@@ -6,14 +6,16 @@ import (
 	"text/template"
 
 	"github.com/otiai10/copy"
+	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tpl"
 )
 
-func New(path, outputDir string, recompileTemplates bool) *writer {
+func New(fs afero.Fs, path, outputDir string, recompileTemplates bool) *writer {
 	w := writer{
+		fs:                 fs,
 		path:               path,
 		outputDir:          outputDir,
 		recompileTemplates: recompileTemplates,
@@ -23,6 +25,7 @@ func New(path, outputDir string, recompileTemplates bool) *writer {
 }
 
 type writer struct {
+	fs                 afero.Fs
 	path               string
 	outputDir          string
 	site               model.Site
@@ -30,7 +33,7 @@ type writer struct {
 }
 
 func (w *writer) Write(site model.Site) error {
-	if err := fs.Rmdir(w.outputDir); err != nil {
+	if err := fs.Rmdir(w.fs, w.outputDir); err != nil {
 		return err
 	}
 
