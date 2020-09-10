@@ -4,6 +4,7 @@ package watch
 
 import (
 	"log"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -26,9 +27,6 @@ func Run(ctx Context) error {
 	w := watcher.New()
 	w.FilterOps(watcher.Write)
 
-	//r := regexp.MustCompile("^\\.[^.]+$")
-	//w.AddFilterHook(watcher.RegexFilterHook(r, false))
-
 	go func() {
 		for {
 
@@ -37,14 +35,12 @@ func Run(ctx Context) error {
 				if !ok {
 					return
 				}
-
-				// Avoid emitting an event if the (folder) ctx.IgnorePath itself gets created / removed (e.g. if the target folder gets deleted).
+				if filepath.Ext(event.Path) == "" {
+					continue
+				}
 				if strings.HasPrefix(event.Path, ctx.IgnorePath) {
 					continue
 				}
-
-				log.Println("STH HAPPEND!", event.Path)
-
 				ctx.ChangedCh <- event.Path
 
 			case err, ok := <-w.Error:
@@ -52,13 +48,6 @@ func Run(ctx Context) error {
 					return
 				}
 				log.Println("watcher error:", err)
-
-				//case _, ok := <-ctx.StopCh:
-				//	// This case catches if the watching should be stopped.
-				//	// It just watches for a closed channel.
-				//	if !ok {
-				//		return
-				//	}
 			}
 		}
 	}()
