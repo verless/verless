@@ -1,14 +1,12 @@
 package core
 
 import (
-	"log"
-	"net"
-	"os"
-
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/serve"
 	"github.com/verless/verless/core/watch"
+	"log"
+	"net"
 )
 
 // ServeOptions represents options for running a verless serve command.
@@ -111,7 +109,7 @@ func RunServe(path string, options ServeOptions) error {
 	}
 
 	// If the target folder doesn't exist, return an error.
-	if _, err := os.Stat(targetFiles); err != nil {
+	if _, err := memMapFs.Stat(targetFiles); err != nil {
 		return err
 	}
 
