@@ -13,18 +13,17 @@ import (
 
 // ServeOptions represents options for running a verless serve command.
 type ServeOptions struct {
+
+	// BuildOptions stores all options for re-builds when watching the site.
 	BuildOptions
+
 	// Port specifies the port to run the server at.
 	Port uint16
 
 	// IP specifies the IP to listen on in combination with the port.
 	IP net.IP
 
-	// Build enables automatic building of the verless project before serving.
-	// Build is ignored when Watch is true.
-	Build bool
-
-	// Build enables automatic building of the verless project before and while serving.
+	// Watch enables automatic re-builds when a file changes.
 	Watch bool
 }
 
@@ -46,7 +45,7 @@ func RunServe(path string, options ServeOptions) error {
 	memMapFs := afero.NewMemMapFs()
 
 	done := make(chan bool)
-	if options.Build || options.Watch {
+	if options.Watch {
 		rebuildCh := make(chan string)
 
 		// Only watch if needed.
