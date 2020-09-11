@@ -7,6 +7,7 @@ import (
 	"github.com/verless/verless/core/watch"
 	"log"
 	"net"
+	"sync"
 )
 
 // ServeOptions represents options for running a verless serve command.
@@ -58,12 +59,14 @@ func RunServe(path string, options ServeOptions) error {
 			}()
 		}
 
-		firstBuildFinished := make(chan bool)
+		var initialBuild sync.WaitGroup
 
 		// Start rebuild goroutine.
 		// If watch is not enabled, it's still used for the initial build.
 		go func() {
 			first := true
+			initialBuild.Add(1)
+
 			for {
 				select {
 				case _, ok := <-rebuildCh:
@@ -83,8 +86,7 @@ func RunServe(path string, options ServeOptions) error {
 					}
 
 					if first {
-						firstBuildFinished <- true
-						close(firstBuildFinished)
+						initialBuild.Done()
 						first = false
 					}
 				case _, ok := <-done:
@@ -99,7 +101,7 @@ func RunServe(path string, options ServeOptions) error {
 
 		// Trigger and wait for the initial rebuild.
 		rebuildCh <- path
-		<-firstBuildFinished
+		initialBuild.Wait()
 
 		// Stop rebuilding goroutine if not watching.
 		if !options.Watch {
