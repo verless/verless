@@ -1,13 +1,14 @@
 package core
 
 import (
+	"log"
+	"net"
+	"sync"
+
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/serve"
 	"github.com/verless/verless/core/watch"
-	"log"
-	"net"
-	"sync"
 )
 
 // ServeOptions represents options for running a verless serve command.
