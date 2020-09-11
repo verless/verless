@@ -8,7 +8,7 @@ This is an overview for the verless CLI and its commands.
 * [`verless`](#verless)
 * [`verless build`](#verless-build)
 * [`verless create`](#verless-create)
-* [`verless create project`](#verless-create-project)
+    * [`verless create project`](#verless-create-project)
 * [`verless serve`](#verless-serve)
 * [`verless version`](#verless-version)
 
@@ -69,6 +69,9 @@ on all network interfaces, so your project is available under `localhost:8080` f
 
 The `--watch` flag is useful for local development because verless re-builds your website when a file has changed, so
 you're able to view your changes immediately.
+
+Because `verless serve` re-builds your static site when the `--watch` flag is used, it additionally accepts all options
+that [`verless build`](#verless-build) does.
 
 | Option    | Short | Type   | Example          | Description                                                        |
 |-----------|-------|--------|------------------|--------------------------------------------------------------------|
