@@ -36,7 +36,7 @@ func newServeCmd() *cobra.Command {
 	serveCmd.Flags().IPVarP(&options.IP, "ip", "i",
 		net.IP{0, 0, 0, 0}, `specify the IP to listen on, it has to be a valid IPv4 or IPv6`)
 
-	addBuildOptions(&serveCmd, &options.BuildOptions)
+	addBuildOptions(&serveCmd, &options.BuildOptions, false)
 
 	return &serveCmd
 }
