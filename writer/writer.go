@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -134,9 +135,40 @@ func (w *writer) copyAssetDir() error {
 		dest = filepath.Join(w.outputDir, config.AssetDir)
 	)
 
-	if _, err := w.fs.Stat(src); os.IsNotExist(err) {
-		return nil
-	}
+	// If the writer's target filesystem is the OS filesystem, directly
+	// copy the asset directory using the copy package.
+	if _, ok := w.fs.(*afero.OsFs); ok {
+		if _, err := w.fs.Stat(src); os.IsNotExist(err) {
+			return nil
+		}
+		return copy.Copy(src, dest)
+	} else {
+		var (
+			files = make(chan string)
+			err   error
+		)
 
-	return copy.Copy(src, dest)
+		go func() {
+			err = fs.StreamFiles(src, files)
+		}()
+
+		for file := range files {
+			bytes, err := ioutil.ReadFile(file)
+			if err != nil {
+				return err
+			}
+
+			path := file[len(w.path):]
+			path = filepath.Join(w.outputDir, path)
+
+			memFile, err := w.fs.Create(path)
+			if err != nil {
+				return err
+			}
+			if _, err := memFile.Write(bytes); err != nil {
+				return err
+			}
+		}
+		return err
+	}
 }
