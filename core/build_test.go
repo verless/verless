@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
 	"github.com/verless/verless/test"
@@ -26,7 +27,7 @@ func TestRunFullBuild(t *testing.T) {
 	cfg, err := config.FromFile(projectFolderPath, config.Filename)
 	test.Ok(t, err)
 
-	err = core.RunBuild("../example", o, cfg)
+	err = core.RunBuild(afero.NewOsFs(), "../example", o, cfg)
 	test.Ok(t, err)
 
 	if err := os.RemoveAll(outTestPath); err != nil {

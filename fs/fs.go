@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/spf13/afero"
 )
 
 var (
@@ -68,13 +70,13 @@ func MkdirAll(path string, dirs ...string) error {
 
 // Rmdir removes an entire directory along with its contents. If the
 // directory does not exist, nothing happens.
-func Rmdir(path string) error {
-	_, err := os.Stat(path)
+func Rmdir(fs afero.Fs, path string) error {
+	_, err := fs.Stat(path)
 	if err != nil {
 		if !os.IsNotExist(err) {
 			return err
 		}
 	}
 
-	return os.RemoveAll(path)
+	return fs.RemoveAll(path)
 }

@@ -7,6 +7,7 @@ import (
 	"path"
 	"testing"
 
+	"github.com/spf13/afero"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/test"
 )
@@ -54,14 +55,16 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 		},
 	}
 
+	memMapFs := afero.NewMemMapFs()
+
 	for caseName, testCase := range tests {
 		t.Logf("Testing '%s'", caseName)
 
-		w := setupNewWriter(t)
+		w := setupNewWriter(memMapFs, t)
 
 		testCase.beforeTest()
 
-		err := fs.Rmdir(w.outputDir)
+		err := fs.Rmdir(memMapFs, w.outputDir)
 
 		if testCase.expectedError == "" {
 			test.Ok(t, err)
@@ -73,6 +76,6 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 	}
 }
 
-func setupNewWriter(t testing.TB) *writer {
-	return New(testPath, testOutPath, false)
+func setupNewWriter(fs afero.Fs, t testing.TB) *writer {
+	return New(fs, testPath, testOutPath, false)
 }

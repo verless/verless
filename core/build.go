@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/pkg/errors"
+	"github.com/spf13/afero"
 	"github.com/verless/verless/builder"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/build"
@@ -37,19 +38,19 @@ type BuildOptions struct {
 // configuration.
 //
 // See doc.go for more information on the core architecture.
-func RunBuild(path string, options BuildOptions, cfg config.Config) error {
+func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config) error {
 	var (
 		outputDir = finalOutputDir(path, &options)
 		p         = parser.NewMarkdown()
 		b         = builder.New(&cfg)
-		w         = writer.New(path, outputDir, options.RecompileTemplates)
+		w         = writer.New(fs, path, outputDir, options.RecompileTemplates)
 	)
 
 	if cfg.Version == "" {
 		return errors.New("the configuration has to include the version key")
 	}
 
-	if !canOverwrite(outputDir, &options, &cfg) {
+	if !canOverwrite(fs, outputDir, &options, &cfg) {
 		return ErrCannotOverwrite
 	}
 
@@ -97,11 +98,11 @@ func finalOutputDir(path string, options *BuildOptions) string {
 //	- the user specified the --overwrite flag,
 //	- the user opted in to overwriting in verless.yml,
 //	- or the output directory doesn't exist yet.
-func canOverwrite(outputDir string, options *BuildOptions, cfg *config.Config) bool {
+func canOverwrite(fs afero.Fs, outputDir string, options *BuildOptions, cfg *config.Config) bool {
 	if options.Overwrite || cfg.Build.Overwrite {
 		return true
 	}
-	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+	if _, err := fs.Stat(outputDir); os.IsNotExist(err) {
 		return true
 	}
 	return false
