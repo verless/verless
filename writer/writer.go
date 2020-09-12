@@ -12,6 +12,7 @@ import (
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tpl"
+	"github.com/verless/verless/tree"
 )
 
 func New(fs afero.Fs, path, outputDir string, recompileTemplates bool) *writer {
@@ -40,8 +41,8 @@ func (w *writer) Write(site model.Site) error {
 
 	w.site = site
 
-	err := w.site.WalkTree(func(node *model.Node) error {
-		for _, p := range node.Pages {
+	err := tree.Walk(w.site.Root, func(node tree.Node) error {
+		for _, p := range node.(*model.Node).Pages {
 			if err := w.writePage(p.Route, page{
 				Meta:   &w.site.Meta,
 				Nav:    &w.site.Nav,
@@ -51,11 +52,14 @@ func (w *writer) Write(site model.Site) error {
 				return err
 			}
 		}
-		return w.writeListPage(node.ListPage.Route, listPage{
-			Meta:     &w.site.Meta,
-			Nav:      &w.site.Nav,
-			ListPage: &node.ListPage,
-			Footer:   &w.site.Footer,
+
+		ip := node.(*model.Node).ListPage
+
+		return w.writeListPage(ip.Route, listPage{
+			Meta:      &w.site.Meta,
+			Nav:       &w.site.Nav,
+			ListPage: &ip,
+			Footer:    &w.site.Footer,
 		})
 	}, -1)
 

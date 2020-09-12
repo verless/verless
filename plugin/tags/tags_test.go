@@ -73,22 +73,22 @@ func TestTags_PreWrite(t *testing.T) {
 
 		tagger := New()
 		tagger.m = testCase.tagsListPages
-		s := model.Site{}
+		s := model.NewSite()
 		err := tagger.PreWrite(&s)
 		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
 			continue
 		}
 
-		tags, ok := s.Root.Children["tags"]
+		tags, ok := s.Root.Children()["tags"]
 		test.Equals(t, true, ok)
 		test.NotEquals(t, nil, tags)
 
 		for tag := range tagger.m {
-			child, ok := tags.Children[tag]
+			child, ok := tags.Children()[tag]
 			test.Equals(t, true, ok)
 			test.NotEquals(t, nil, child)
-			test.NotEquals(t, nil, child.ListPage)
-			test.NotEquals(t, nil, child.ListPage.Page)
+			test.NotEquals(t, nil, child.(*model.Node).ListPage)
+			test.NotEquals(t, nil, child.(*model.Node).ListPage.Page)
 		}
 	}
 }
