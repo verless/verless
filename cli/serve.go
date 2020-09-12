@@ -30,16 +30,13 @@ func newServeCmd() *cobra.Command {
 	serveCmd.Flags().Uint16VarP(&options.Port, "port", "p",
 		8080, `specify the port for the web server`)
 
-	serveCmd.Flags().BoolVarP(&options.Build, "build", "b",
-		false, `build the project before serving, allows using all flags which are valid for verless build, ignored when --watch is passed`)
-
 	serveCmd.Flags().BoolVarP(&options.Watch, "watch", "w",
 		false, `build the project whenever something in the project changes, allows using all flags which are valid for verless build`)
 
 	serveCmd.Flags().IPVarP(&options.IP, "ip", "i",
 		net.IP{0, 0, 0, 0}, `specify the IP to listen on, it has to be a valid IPv4 or IPv6`)
 
-	addBuildOptions(&serveCmd, &options.BuildOptions)
+	addBuildOptions(&serveCmd, &options.BuildOptions, false)
 
 	return &serveCmd
 }

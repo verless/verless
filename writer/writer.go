@@ -72,11 +72,11 @@ func (w *writer) Write(site model.Site) error {
 func (w *writer) writePage(route string, page page) error {
 	path := filepath.Join(w.outputDir, route, page.Page.ID)
 
-	if err := os.MkdirAll(path, 0700); err != nil {
+	if err := w.fs.MkdirAll(path, 0700); err != nil {
 		return err
 	}
 
-	file, err := os.Create(filepath.Join(path, config.IndexFile))
+	file, err := w.fs.Create(filepath.Join(path, config.IndexFile))
 	if err != nil {
 		return err
 	}
@@ -92,11 +92,11 @@ func (w *writer) writePage(route string, page page) error {
 func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 	path := filepath.Join(w.outputDir, route)
 
-	if err := os.MkdirAll(path, 0700); err != nil {
+	if err := w.fs.MkdirAll(path, 0700); err != nil {
 		return err
 	}
 
-	file, err := os.Create(filepath.Join(path, config.IndexFile))
+	file, err := w.fs.Create(filepath.Join(path, config.IndexFile))
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (w *writer) copyAssetDir() error {
 		dest = filepath.Join(w.outputDir, config.AssetDir)
 	)
 
-	if _, err := os.Stat(src); os.IsNotExist(err) {
+	if _, err := w.fs.Stat(src); os.IsNotExist(err) {
 		return nil
 	}
 

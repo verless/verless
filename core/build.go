@@ -64,7 +64,7 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 		RecompileTemplates: options.RecompileTemplates,
 	}
 
-	plugins := loadPlugins(&cfg, outputDir)
+	plugins := loadPlugins(&cfg, fs, outputDir)
 
 	for _, key := range cfg.Plugins {
 		if _, exists := plugins[key]; !exists {
@@ -110,10 +110,10 @@ func canOverwrite(fs afero.Fs, outputDir string, options *BuildOptions, cfg *con
 
 // loadPlugins returns a map of all available plugins. Each entry
 // is a function that returns a fully initialized plugin instance.
-func loadPlugins(cfg *config.Config, outputDir string) map[string]func() build.Plugin {
+func loadPlugins(cfg *config.Config, fs afero.Fs, outputDir string) map[string]func() build.Plugin {
 
 	plugins := map[string]func() build.Plugin{
-		"atom": func() build.Plugin { return atom.New(&cfg.Site.Meta, outputDir) },
+		"atom": func() build.Plugin { return atom.New(&cfg.Site.Meta, fs, outputDir) },
 		"tags": func() build.Plugin { return tags.New() },
 	}
 

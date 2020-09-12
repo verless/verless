@@ -3,11 +3,11 @@ package atom
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/gorilla/feeds"
+	"github.com/spf13/afero"
 	"github.com/verless/verless/model"
 )
 
@@ -20,7 +20,7 @@ const (
 
 // New creates a new atom plugin that generated a RSS feed with the
 // provided metadata and stores the XML file in outputDir.
-func New(meta *model.Meta, outputDir string) *atom {
+func New(meta *model.Meta, fs afero.Fs, outputDir string) *atom {
 	a := atom{
 		meta: meta,
 		feed: &feeds.Feed{
@@ -32,6 +32,7 @@ func New(meta *model.Meta, outputDir string) *atom {
 			Created:     time.Now(),
 			Subtitle:    meta.Subtitle,
 		},
+		fs:        fs,
 		outputDir: outputDir,
 	}
 
@@ -43,6 +44,7 @@ func New(meta *model.Meta, outputDir string) *atom {
 type atom struct {
 	meta      *model.Meta
 	feed      *feeds.Feed
+	fs        afero.Fs
 	outputDir string
 }
 
@@ -76,7 +78,7 @@ func (a *atom) PreWrite(_ *model.Site) error {
 // directly in the output directory.
 func (a *atom) PostWrite() error {
 	path := filepath.Join(a.outputDir, filename)
-	atomFile, err := os.Create(path)
+	atomFile, err := a.fs.Create(path)
 	if err != nil {
 		return err
 	}

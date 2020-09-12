@@ -3,7 +3,7 @@ package core
 import (
 	"log"
 	"net"
-	"os"
+	"sync"
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
@@ -13,18 +13,16 @@ import (
 
 // ServeOptions represents options for running a verless serve command.
 type ServeOptions struct {
+	// BuildOptions stores all options for re-builds when watching the site.
 	BuildOptions
+
 	// Port specifies the port to run the server at.
 	Port uint16
 
 	// IP specifies the IP to listen on in combination with the port.
 	IP net.IP
 
-	// Build enables automatic building of the verless project before serving.
-	// Build is ignored when Watch is true.
-	Build bool
-
-	// Build enables automatic building of the verless project before and while serving.
+	// Watch enables automatic re-builds when a file changes.
 	Watch bool
 }
 
@@ -42,11 +40,12 @@ func RunServe(path string, options ServeOptions) error {
 
 	// If yes, build it if requested to do so.
 	options.BuildOptions.RecompileTemplates = options.Watch
+	options.Overwrite = true
 
 	memMapFs := afero.NewMemMapFs()
 
 	done := make(chan bool)
-	if options.Build || options.Watch {
+	if options.Watch {
 		rebuildCh := make(chan string)
 
 		// Only watch if needed.
@@ -61,12 +60,14 @@ func RunServe(path string, options ServeOptions) error {
 			}
 		}
 
-		firstBuildFinished := make(chan bool)
+		var initialBuild sync.WaitGroup
 
 		// Start rebuild goroutine.
 		// If watch is not enabled, it's still used for the initial build.
 		go func() {
 			first := true
+			initialBuild.Add(1)
+
 			for {
 				select {
 				case _, ok := <-rebuildCh:
@@ -86,8 +87,7 @@ func RunServe(path string, options ServeOptions) error {
 					}
 
 					if first {
-						firstBuildFinished <- true
-						close(firstBuildFinished)
+						initialBuild.Done()
 						first = false
 					}
 				case _, ok := <-done:
@@ -102,7 +102,7 @@ func RunServe(path string, options ServeOptions) error {
 
 		// Trigger and wait for the initial rebuild.
 		rebuildCh <- path
-		<-firstBuildFinished
+		initialBuild.Wait()
 
 		// Stop rebuilding goroutine if not watching.
 		if !options.Watch {
@@ -112,7 +112,7 @@ func RunServe(path string, options ServeOptions) error {
 	}
 
 	// If the target folder doesn't exist, return an error.
-	if _, err := os.Stat(targetFiles); err != nil {
+	if _, err := memMapFs.Stat(targetFiles); err != nil {
 		return err
 	}
 
