@@ -50,14 +50,14 @@ func RunServe(path string, options ServeOptions) error {
 
 		// Only watch if needed.
 		if options.Watch {
-			go func() {
-				watch.Run(watch.Context{
-					IgnorePath: targetFiles,
-					Path:       path,
-					ChangedCh:  rebuildCh,
-					StopCh:     done,
-				})
-			}()
+			if err := watch.Run(watch.Context{
+				IgnorePath: targetFiles,
+				Path:       path,
+				ChangedCh:  rebuildCh,
+				StopCh:     done,
+			}); err != nil {
+				return err
+			}
 		}
 
 		var initialBuild sync.WaitGroup
