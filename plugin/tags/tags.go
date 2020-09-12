@@ -43,7 +43,7 @@ func (t *tags) ProcessPage(page *model.Page) error {
 	return nil
 }
 
-// PreWrite registers each list page in the site model. Those index
+// PreWrite registers each list page in the site model. Those list
 // pages will be rendered by the writer.
 func (t *tags) PreWrite(site *model.Site) error {
 	_, err := site.CreateNode(tagsDir)
