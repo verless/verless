@@ -40,6 +40,7 @@ func RunServe(path string, options ServeOptions) error {
 
 	// If yes, build it if requested to do so.
 	options.BuildOptions.RecompileTemplates = options.Watch
+	options.Overwrite = true
 
 	memMapFs := afero.NewMemMapFs()
 
