@@ -8,6 +8,7 @@ look at the [example project](https://github.com/verless/verless/tree/master/exa
 
 * [Configuration reference](https://github.com/verless/verless/blob/master/docs/configuration-reference.md)
 * [Template reference](https://github.com/verless/verless/blob/master/docs/template-reference.md)
+* [Markdown reference](https://github.com/verless/verless/blob/master/docs/markdown-reference.md)
 * [Plugin reference](https://github.com/verless/verless/blob/master/docs/plugin-reference.md)
 * [Command reference](https://github.com/verless/verless/blob/master/docs/command-reference.md)
 
