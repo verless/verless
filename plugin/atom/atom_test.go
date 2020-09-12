@@ -2,9 +2,9 @@ package atom
 
 import (
 	"fmt"
-	"github.com/spf13/afero"
 	"testing"
 
+	"github.com/spf13/afero"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/test"
 )
