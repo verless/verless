@@ -1,7 +1,6 @@
 package core
 
 import (
-	"log"
 	"net"
 	"sync"
 
@@ -9,6 +8,7 @@ import (
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/serve"
 	"github.com/verless/verless/core/watch"
+	"go.uber.org/zap"
 )
 
 // ServeOptions represents options for running a verless serve command.
@@ -43,8 +43,14 @@ func RunServe(path string, options ServeOptions) error {
 	options.Overwrite = true
 
 	memMapFs := afero.NewMemMapFs()
-
 	done := make(chan bool)
+	logger, _ := zap.NewDevelopment()
+	sugar := logger.Sugar()
+
+	defer func() {
+		_ = logger.Sync()
+	}()
+
 	if options.Watch {
 		rebuildCh := make(chan string)
 
@@ -74,16 +80,16 @@ func RunServe(path string, options ServeOptions) error {
 					if !ok {
 						return
 					}
-					log.Println("rebuild")
+					sugar.Info("rebuilding project")
 					// Re-read config as it may have changed also.
 					cfg, err := config.FromFile(path, config.Filename)
 					if err != nil {
-						log.Println("rebuild error:", err)
+						sugar.Errorf("rebuild error %w:", err)
 						continue
 					}
 					err = RunBuild(memMapFs, path, options.BuildOptions, cfg)
 					if err != nil {
-						log.Println("rebuild error:", err)
+						sugar.Errorf("rebuild error %w:", err)
 					}
 
 					if first {
@@ -116,12 +122,16 @@ func RunServe(path string, options ServeOptions) error {
 		return err
 	}
 
+	sugar.Infof("serving project on %s:%v", options.IP, options.Port)
+
 	// Then serve it.
 	err = serve.Run(memMapFs, serve.Context{Path: targetFiles, Port: options.Port, IP: options.IP})
 
 	// Stop building goroutine just to be sure.
 	done <- true
 	close(done)
+
+	sugar.Info("stop serving project")
 
 	return err
 }

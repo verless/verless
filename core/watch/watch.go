@@ -3,12 +3,12 @@
 package watch
 
 import (
-	"log"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/radovskyb/watcher"
+	"go.uber.org/zap"
 )
 
 // Context provides all components required for serving an already built project.
@@ -26,6 +26,13 @@ type Context struct {
 func Run(ctx Context) error {
 	w := watcher.New()
 	w.FilterOps(watcher.Write)
+
+	logger, _ := zap.NewDevelopment()
+	sugar := logger.Sugar()
+
+	defer func() {
+		_ = logger.Sync()
+	}()
 
 	go func() {
 		for {
@@ -47,7 +54,7 @@ func Run(ctx Context) error {
 				if !ok {
 					return
 				}
-				log.Println("watcher error:", err)
+				sugar.Errorf("watching error: %w", err)
 
 			case _, ok := <-ctx.StopCh:
 				if !ok {
