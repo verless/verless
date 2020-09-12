@@ -2,6 +2,7 @@ package atom
 
 import (
 	"fmt"
+	"github.com/spf13/afero"
 	"testing"
 
 	"github.com/verless/verless/model"
@@ -35,7 +36,7 @@ func TestAtom_ProcessPage(t *testing.T) {
 
 		a := New(&model.Meta{
 			Base: "https://example.com",
-		}, "")
+		}, afero.NewOsFs(), "")
 
 		for i, page := range testCase.pages {
 			t.Logf("process page number %v, route '%v'", i, page.Route)

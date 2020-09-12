@@ -13,7 +13,6 @@ import (
 
 // ServeOptions represents options for running a verless serve command.
 type ServeOptions struct {
-
 	// BuildOptions stores all options for re-builds when watching the site.
 	BuildOptions
 
