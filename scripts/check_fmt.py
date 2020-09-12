@@ -8,6 +8,9 @@ def check_fmt():
 
     If all files are formatted appropriately, exit with status 0,
     otherwise exit with status 1 by printing all invalid files.
+
+    Note that gofmt is not responsible for checking if the imports
+    are grouped - this is done by check_imports() instead.
     """
     output = subprocess.check_output(["gofmt", "-l", "."])
     output = output.decode("utf-8")

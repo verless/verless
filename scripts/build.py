@@ -10,6 +10,8 @@ def main():
     If the current architecture is listed for an operating system
     in the exclusions dictionary, skip the permutation.
     """
+    log_info("building verless binaries")
+
     operating_systems = ["linux", "darwin", "windows"]
     architectures = ["386", "amd64", "arm"]
     exclusions = {
@@ -36,6 +38,8 @@ def build(go_os, go_arch, git_data):
     name will be verless for Linux and macOS and verless.exe for
     Windows platforms.
     """
+    log_info("building binary for {0}/{1}".format(go_os, go_arch))
+
     binary = "verless.exe" if go_os == "windows" else "verless"
     target = "target/{0}-{1}/{2}".format(go_os, go_arch, binary)
 
@@ -62,6 +66,8 @@ def package(go_os, go_arch):
     dest = "target/verless-{0}-{1}".format(go_os, go_arch)
     src = "target/{0}-{1}/".format(go_os, go_arch)
 
+    log_info("packaging binary for {0}/{1} as {2}".format(go_os, go_arch, src))
+
     shutil.make_archive(dest, ext, src)
 
 
@@ -78,10 +84,19 @@ def get_git_data():
     git_commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
     git_commit = git_commit.decode("utf-8")
 
+    log_info("reading git data: tag {0}, commit {1}".format(git_tag, git_commit))
+
     return {
         "tag": git_tag,
         "commit": git_commit,
     }
+
+
+def log_info(message):
+    """
+    Log a simple text message.
+    """
+    print("[INFO] {0}", message)
 
 
 main()
