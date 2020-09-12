@@ -53,13 +53,13 @@ func (w *writer) Write(site model.Site) error {
 			}
 		}
 
-		ip := node.(*model.Node).ListPage
+		lp := node.(*model.Node).ListPage
 
-		return w.writeListPage(ip.Route, listPage{
-			Meta:      &w.site.Meta,
-			Nav:       &w.site.Nav,
-			ListPage: &ip,
-			Footer:    &w.site.Footer,
+		return w.writeListPage(lp.Route, listPage{
+			Meta:     &w.site.Meta,
+			Nav:      &w.site.Nav,
+			ListPage: &lp,
+			Footer:   &w.site.Footer,
 		})
 	}, -1)
 
