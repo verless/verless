@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/tree"
 )
 
 const (
@@ -46,19 +47,19 @@ func (t *tags) ProcessPage(page *model.Page) error {
 // PreWrite registers each index page in the site model. Those index
 // pages will be rendered by the writer.
 func (t *tags) PreWrite(site *model.Site) error {
-	_, err := site.CreateNode(tagsDir)
-	if err != nil {
+	if err := tree.CreateNode(tagsDir, site.Root, model.NewNode()); err != nil {
 		return err
 	}
 
 	for tag, indexPage := range t.m {
 		path := filepath.ToSlash(filepath.Join(tagsDir, tag))
 
-		node, err := site.CreateNode(path)
-		if err != nil {
+		node := model.NewNode()
+		node.IndexPage = *indexPage
+
+		if err := tree.CreateNode(path, site.Root, node); err != nil {
 			return err
 		}
-		node.IndexPage = *indexPage
 	}
 
 	return nil

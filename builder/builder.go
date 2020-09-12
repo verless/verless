@@ -6,12 +6,13 @@ import (
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/tree"
 )
 
 // New creates a new builder instance.
 func New(cfg *config.Config) *builder {
 	b := builder{
-		site:  model.Site{},
+		site:  model.NewSite(),
 		cfg:   cfg,
 		mutex: &sync.Mutex{},
 	}
@@ -31,13 +32,13 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	node, err := b.site.CreateNode(page.Route)
-	if err != nil {
-		return err
-	}
-
+	node := model.NewNode()
 	node.Pages = append(node.Pages, page)
 	node.IndexPage.Pages = append(node.IndexPage.Pages, &node.Pages[len(node.Pages)-1])
+
+	if err := tree.CreateNode(page.Route, b.site.Root, node); err != nil {
+		return err
+	}
 
 	return nil
 }
