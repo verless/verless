@@ -3,11 +3,11 @@ package atom
 
 import (
 	"fmt"
-	"github.com/spf13/afero"
 	"path/filepath"
 	"time"
 
 	"github.com/gorilla/feeds"
+	"github.com/spf13/afero"
 	"github.com/verless/verless/model"
 )
 
