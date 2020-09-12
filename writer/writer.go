@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -129,14 +130,48 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 }
 
 func (w *writer) copyAssetDir() error {
+	// If the writer's target filesystem is the OS filesystem, directly
+	// copy the asset directory using the copy package.
+	if _, ok := w.fs.(*afero.OsFs); ok {
+		var (
+			src  = filepath.Join(w.path, config.AssetDir)
+			dest = filepath.Join(w.outputDir, config.AssetDir)
+		)
+		if _, err := w.fs.Stat(src); os.IsNotExist(err) {
+			return nil
+		}
+		return copy.Copy(src, dest)
+	} else {
+		return copyFromOsFs(w.fs, w.path, w.outputDir)
+	}
+}
+
+func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
 	var (
-		src  = filepath.Join(w.path, config.AssetDir)
-		dest = filepath.Join(w.outputDir, config.AssetDir)
+		files = make(chan string)
+		err   error
 	)
 
-	if _, err := w.fs.Stat(src); os.IsNotExist(err) {
-		return nil
-	}
+	go func() {
+		err = fs.StreamFiles(src, files)
+	}()
 
-	return copy.Copy(src, dest)
+	for file := range files {
+		bytes, err := ioutil.ReadFile(file)
+		if err != nil {
+			return err
+		}
+
+		path := file[len(src):]
+		path = filepath.Join(dest, path)
+
+		memFile, err := targetFs.Create(path)
+		if err != nil {
+			return err
+		}
+		if _, err := memFile.Write(bytes); err != nil {
+			return err
+		}
+	}
+	return err
 }
