@@ -18,7 +18,7 @@ const (
 // build path and outputs the tag directories to outputDir.
 func New() *tags {
 	t := tags{
-		m: make(map[string]*model.IndexPage),
+		m: make(map[string]*model.ListPage),
 	}
 
 	return &t
@@ -27,7 +27,7 @@ func New() *tags {
 // tags is the actual tags plugin that maintains a map with all
 // tags from all processed pages.
 type tags struct {
-	m map[string]*model.IndexPage
+	m map[string]*model.ListPage
 }
 
 // ProcessPage creates a new map entry for each tag in the processed
@@ -35,7 +35,7 @@ type tags struct {
 func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
 		if _, exists := t.m[tag]; !exists {
-			t.createIndexPage(tag)
+			t.createListPage(tag)
 		}
 		t.m[tag].Pages = append(t.m[tag].Pages, page)
 	}
@@ -51,14 +51,14 @@ func (t *tags) PreWrite(site *model.Site) error {
 		return err
 	}
 
-	for tag, indexPage := range t.m {
+	for tag, listPage := range t.m {
 		path := filepath.ToSlash(filepath.Join(tagsDir, tag))
 
 		node, err := site.CreateNode(path)
 		if err != nil {
 			return err
 		}
-		node.IndexPage = *indexPage
+		node.ListPage = *listPage
 	}
 
 	return nil
@@ -69,9 +69,9 @@ func (t *tags) PostWrite() error {
 	return nil
 }
 
-// createIndexPage initializes a new index page for a given key.
-func (t *tags) createIndexPage(key string) {
-	t.m[key] = &model.IndexPage{
+// createListPage initializes a new index page for a given key.
+func (t *tags) createListPage(key string) {
+	t.m[key] = &model.ListPage{
 		Pages: make([]*model.Page, 0),
 	}
 }

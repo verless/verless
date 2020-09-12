@@ -100,7 +100,7 @@ func TestSite_CreateNode(t *testing.T) {
 
 		for i := 0; i <= len(routes); i++ {
 			test.NotEquals(t, nil, parent)
-			test.NotEquals(t, nil, parent.IndexPage)
+			test.NotEquals(t, nil, parent.ListPage)
 
 			// check also special case "" -> no child with "" should be created
 			if i == len(routes) || routes[i] == "" {

@@ -17,7 +17,7 @@ func Project(path string) error {
 
 	files := map[string][]byte{
 		filepath.Join(path, "verless.yml"):                []byte(defaultConfig),
-		filepath.Join(path, TemplateDir, IndexPageTpl):    []byte(defaultTpl),
+		filepath.Join(path, TemplateDir, ListPageTpl):     []byte(defaultTpl),
 		filepath.Join(path, TemplateDir, PageTpl):         {},
 		filepath.Join(path, AssetDir, "css", "style.css"): []byte(defaultCss),
 	}

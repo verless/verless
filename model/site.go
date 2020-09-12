@@ -82,7 +82,7 @@ func (s *Site) CreateNode(route string) (*Node, error) {
 			node.Children[s] = &Node{
 				Children: make(map[string]*Node),
 				Pages:    make([]Page, 0),
-				IndexPage: IndexPage{
+				ListPage: ListPage{
 					Page: Page{Route: route},
 				},
 			}
