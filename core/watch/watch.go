@@ -48,6 +48,11 @@ func Run(ctx Context) error {
 					return
 				}
 				log.Println("watcher error:", err)
+
+			case _, ok := <-ctx.StopCh:
+				if !ok {
+					w.Close()
+				}
 			}
 		}
 	}()
@@ -60,11 +65,11 @@ func Run(ctx Context) error {
 		return err
 	}
 
+	var err error
+
 	go func() {
-		log.Fatal(w.Start(time.Millisecond * 100))
+		err = w.Start(time.Millisecond * 100)
 	}()
 
-	<-ctx.StopCh
-
-	return nil
+	return err
 }
