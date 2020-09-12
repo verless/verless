@@ -59,7 +59,7 @@ func TestTags_PreWrite(t *testing.T) {
 		tagsListPages map[string]*model.ListPage
 		expectedError error
 	}{
-		"normal index pages": {
+		"normal list pages": {
 			tagsListPages: map[string]*model.ListPage{
 				"test1": {},
 				"test2": {},

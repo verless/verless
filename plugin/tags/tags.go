@@ -31,7 +31,7 @@ type tags struct {
 }
 
 // ProcessPage creates a new map entry for each tag in the processed
-// page and adds the page to the entry's index page.
+// page and adds the page to the entry's list page.
 func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
 		if _, exists := t.m[tag]; !exists {
@@ -43,7 +43,7 @@ func (t *tags) ProcessPage(page *model.Page) error {
 	return nil
 }
 
-// PreWrite registers each index page in the site model. Those index
+// PreWrite registers each list page in the site model. Those index
 // pages will be rendered by the writer.
 func (t *tags) PreWrite(site *model.Site) error {
 	_, err := site.CreateNode(tagsDir)
@@ -69,7 +69,7 @@ func (t *tags) PostWrite() error {
 	return nil
 }
 
-// createListPage initializes a new index page for a given key.
+// createListPage initializes a new list page for a given key.
 func (t *tags) createListPage(key string) {
 	t.m[key] = &model.ListPage{
 		Pages: make([]*model.Page, 0),

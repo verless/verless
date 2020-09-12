@@ -50,7 +50,7 @@ RSS feed will be available in your project root.
 
 * **Plugin key:** `tags`
 * **What it does:** Creates a top-level `tags` directory containing a directory for each tag, and those directories
-contain an index page rendered with your
+contain a list page rendered with your
 [`list-page.html`](https://github.com/verless/verless/blob/docs/docs/template-reference.md#required-templates)
 template. This is where all pages are available as
 [`Pages`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages). From there, you can link to

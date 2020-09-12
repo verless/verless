@@ -21,8 +21,8 @@ to initialize a new verless project, which will create the directory automatical
 There are two types of templates, and each is represented with its own file:
 
 * `page.html`: This template is used to render your Markdown content.
-* `list-page.html`: This template is used to render generated index pages. Verless creates an index page for each
-directory in your content path, and all pages inside that directory are available to the index page.
+* `list-page.html`: This template is used to render generated list pages. Verless creates a list page for each
+directory in your content path, and all pages inside that directory are available to the list page.
 
 Both templates are required to build a static website.
 
@@ -55,7 +55,7 @@ Fields can be accessed by a dot followed by the capitalized field name:
 
 ### Looping
 
-You can loop over an array like an index page's `Pages` and access its items as follows:
+You can loop over an array like a list page's `Pages` and access its items as follows:
 
 ```html
 <li>
