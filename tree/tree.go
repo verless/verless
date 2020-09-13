@@ -75,6 +75,35 @@ func CreateNode(path string, root Node, node Node) error {
 	return nil
 }
 
+// ResolveOrInitNode resolves the node under the given tree path or, if
+// it doesn't exist yet, initializes a new node and returns that new node.
+//
+// This is convenient in situations where you would create a new node if
+// it does not exist yet or load it from the tree if it does exist - but
+// without the need to try ResolveNode first and call CreateNode if the
+// node cannot be resolved.
+//
+// ResolveOrInitNode creates the entire path including all edges.
+func ResolveOrInitNode(path string, root Node) (Node, error) {
+	if !IsValidPath(path) {
+		return nil, fmt.Errorf("create node %s: %w", path, ErrInvalidPath)
+	}
+	if IsRootPath(path) {
+		return root, nil
+	}
+
+	n := root
+
+	for _, edge := range Edges(path) {
+		if _, exists := n.Children()[edge]; !exists {
+			n.InitChild(edge)
+		}
+		n = n.Children()[edge]
+	}
+
+	return n, nil
+}
+
 // ResolveNode follows the given path starting from the root node and
 // traverses all child nodes until the last edge is reached.
 //
