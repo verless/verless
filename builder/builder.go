@@ -39,11 +39,10 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 	node := n.(*model.Node)
 
-	// Register the page as list page if it was created as index.md.
+	// If the page has been created as a file called index.md,
+	// register the page as list page.
 	if page.ID == config.ListPageID {
-		node.ListPage = model.ListPage{
-			Page: page,
-		}
+		node.ListPage.Page = page
 	} else {
 		// Otherwise, register the page as normal page.
 		node.Pages = append(node.Pages, page)
