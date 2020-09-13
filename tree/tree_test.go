@@ -74,9 +74,8 @@ func TestCreateNode(t *testing.T) {
 		test.Ok(t, err)
 
 		var n Node = root
-		edges := Edges(testCase.path)
 
-		for _, edge := range edges {
+		for _, edge := range Edges(testCase.path) {
 			_, exists := n.Children()[edge]
 			test.Equals(t, true, exists)
 			n = n.Children()[edge]
@@ -113,9 +112,8 @@ func TestResolveOrInitNode(t *testing.T) {
 		test.NotEquals(t, nil, node)
 
 		var n Node = root
-		edges := Edges(testCase.path)
 
-		for _, edge := range edges {
+		for _, edge := range Edges(testCase.path) {
 			_, exists := n.Children()[edge]
 			test.Equals(t, true, exists)
 			n = n.Children()[edge]
