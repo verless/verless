@@ -38,8 +38,17 @@ func (b *builder) RegisterPage(page model.Page) error {
 	}
 
 	node := n.(*model.Node)
-	node.Pages = append(node.Pages, page)
-	node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+
+	// Register the page as list page if it was created as index.md.
+	if page.ID == config.ListPageID {
+		node.ListPage = model.ListPage{
+			Page: page,
+		}
+	} else {
+		// Otherwise, register the page as normal page.
+		node.Pages = append(node.Pages, page)
+		node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+	}
 
 	if err := tree.CreateNode(page.Route, b.site.Root, node); err != nil {
 		return err

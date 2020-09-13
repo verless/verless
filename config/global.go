@@ -31,4 +31,8 @@ const (
 
 	// ListPageTpl is the template file used for model.ListPage.
 	ListPageTpl string = "list-page.html"
+
+	// ListPageID is the ID for custom list pages that overwrite
+	// a auto-generated list page.
+	ListPageID string = "index"
 )
