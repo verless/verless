@@ -32,7 +32,12 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	node := model.NewNode()
+	n, err := tree.ResolveOrInitNode(page.Route, b.site.Root)
+	if err != nil {
+		return err
+	}
+
+	node := n.(*model.Node)
 	node.Pages = append(node.Pages, page)
 	node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
 
