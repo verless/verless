@@ -34,7 +34,7 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 	node := model.NewNode()
 	node.Pages = append(node.Pages, page)
-	node.IndexPage.Pages = append(node.IndexPage.Pages, &node.Pages[len(node.Pages)-1])
+	node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
 
 	if err := tree.CreateNode(page.Route, b.site.Root, node); err != nil {
 		return err

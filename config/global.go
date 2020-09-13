@@ -29,6 +29,6 @@ const (
 	// PageTpl is the template file used for model.Page.
 	PageTpl string = "page.html"
 
-	// IndexPageTpl is the template file used for model.IndexPage.
-	IndexPageTpl string = "index-page.html"
+	// ListPageTpl is the template file used for model.ListPage.
+	ListPageTpl string = "list-page.html"
 )
