@@ -53,9 +53,9 @@ func (p *Page) SetHidden(hidden bool) {
 	p.hidden = hidden
 }
 
-// IndexPage represents an overview page that is generated for
+// ListPage represents an overview page that is generated for
 // each content sub-directory.
-type IndexPage struct {
+type ListPage struct {
 	Page
 	Pages []*Page
 }

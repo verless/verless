@@ -5,11 +5,11 @@ import (
 )
 
 // Node represents an URL like /blog that contains multiple pages,
-// an overview page (IndexPage) and child routes.
+// an overview page (ListPage) and child routes.
 type Node struct {
-	children  map[string]tree.Node
-	Pages     []Page
-	IndexPage IndexPage
+	children map[string]tree.Node
+	Pages    []Page
+	ListPage ListPage
 }
 
 // Children returns all children of a node.

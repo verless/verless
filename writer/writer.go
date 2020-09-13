@@ -53,13 +53,13 @@ func (w *writer) Write(site model.Site) error {
 			}
 		}
 
-		ip := node.(*model.Node).IndexPage
+		lp := node.(*model.Node).ListPage
 
-		return w.writeIndexPage(ip.Route, indexPage{
-			Meta:      &w.site.Meta,
-			Nav:       &w.site.Nav,
-			IndexPage: &ip,
-			Footer:    &w.site.Footer,
+		return w.writeListPage(lp.Route, listPage{
+			Meta:     &w.site.Meta,
+			Nav:      &w.site.Nav,
+			ListPage: &lp,
+			Footer:   &w.site.Footer,
 		})
 	}, -1)
 
@@ -94,7 +94,7 @@ func (w *writer) writePage(route string, page page) error {
 	return pageTpl.Execute(file, &page)
 }
 
-func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
+func (w *writer) writeListPage(route string, listPage listPage) error {
 	path := filepath.Join(w.outputDir, route)
 
 	if err := w.fs.MkdirAll(path, 0700); err != nil {
@@ -106,12 +106,12 @@ func (w *writer) writeIndexPage(route string, indexPage indexPage) error {
 		return err
 	}
 
-	indexPageTpl, err := w.loadTemplate(indexPage.Type, config.IndexPageTpl)
+	listPageTpl, err := w.loadTemplate(listPage.Type, config.ListPageTpl)
 	if err != nil {
 		return err
 	}
 
-	return indexPageTpl.Execute(file, &indexPage)
+	return listPageTpl.Execute(file, &listPage)
 }
 
 func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Template, error) {

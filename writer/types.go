@@ -9,9 +9,9 @@ type page struct {
 	Footer *model.Footer
 }
 
-type indexPage struct {
+type listPage struct {
 	Meta *model.Meta
 	Nav  *model.Nav
-	*model.IndexPage
+	*model.ListPage
 	Footer *model.Footer
 }

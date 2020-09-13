@@ -56,11 +56,11 @@ func TestTags_ProcessPage(t *testing.T) {
 // dedicated routes in the site model.
 func TestTags_PreWrite(t *testing.T) {
 	tests := map[string]struct {
-		tagsIndexPages map[string]*model.IndexPage
-		expectedError  error
+		tagsListPages map[string]*model.ListPage
+		expectedError error
 	}{
-		"normal index pages": {
-			tagsIndexPages: map[string]*model.IndexPage{
+		"normal list pages": {
+			tagsListPages: map[string]*model.ListPage{
 				"test1": {},
 				"test2": {},
 				"test3": {},
@@ -72,7 +72,7 @@ func TestTags_PreWrite(t *testing.T) {
 		t.Log(name)
 
 		tagger := New()
-		tagger.m = testCase.tagsIndexPages
+		tagger.m = testCase.tagsListPages
 		s := model.NewSite()
 		err := tagger.PreWrite(&s)
 		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
@@ -87,8 +87,8 @@ func TestTags_PreWrite(t *testing.T) {
 			child, ok := tags.Children()[tag]
 			test.Equals(t, true, ok)
 			test.NotEquals(t, nil, child)
-			test.NotEquals(t, nil, child.(*model.Node).IndexPage)
-			test.NotEquals(t, nil, child.(*model.Node).IndexPage.Page)
+			test.NotEquals(t, nil, child.(*model.Node).ListPage)
+			test.NotEquals(t, nil, child.(*model.Node).ListPage.Page)
 		}
 	}
 }

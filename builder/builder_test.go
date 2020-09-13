@@ -68,7 +68,7 @@ func TestBuilder_RegisterPage(t *testing.T) {
 				parent = parent.Children()[segments[i]]
 				if i == len(segments)-1 {
 					test.Equals(t, page.ID, parent.(*model.Node).Pages[0].ID)
-					test.Assert(t, parent.(*model.Node).IndexPage.Pages[0] == &parent.(*model.Node).Pages[0],
+					test.Assert(t, parent.(*model.Node).ListPage.Pages[0] == &parent.(*model.Node).Pages[0],
 						"the index page has to point to the actual page")
 				}
 			}
