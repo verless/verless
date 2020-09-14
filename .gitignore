@@ -22,4 +22,4 @@ example/target/
 *.test
 
 # The output path for example builds.
-test-output-dir
+output-dir
