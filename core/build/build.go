@@ -161,7 +161,7 @@ func Run(ctx Context) []error {
 }
 
 func processFile(ctx *Context, contentDir, file string) error {
-	src, err := ioutil.ReadFile(file)
+	src, err := ioutil.ReadFile(filepath.Join(contentDir, file))
 	if err != nil {
 		return err
 	}
@@ -173,7 +173,7 @@ func processFile(ctx *Context, contentDir, file string) error {
 
 	// For a file path like example/content/blog/coffee/making-espresso.md,
 	// the resulting path will be /blog/coffee.
-	path := filepath.Dir(file)[len(contentDir):]
+	path := filepath.Dir(file)
 	if path == "" {
 		path = "/"
 	}

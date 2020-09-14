@@ -48,7 +48,9 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 			}
 		}
 
-		files <- file
+		// Send the relative filepath inside the given path by cutting
+		// away the given path.
+		files <- file[len(path):]
 
 		return nil
 	})
