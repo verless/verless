@@ -37,7 +37,7 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
 
-* Example project structure: [example/](https://github.com/verless/verless/tree/master/example)
+* Example project structure: [example/](example)
 * Real-world example website: [dominikbraun.io](https://dominikbraun.io)
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Installation
@@ -83,17 +83,15 @@ website corresponding works similarly:
 $ verless build my-blog
 ```
 
-By default, verless generates the website into `my-blog/target`. You're now good to
-[create your first content](https://github.com/verless/verless/tree/master/docs)!
+By default, verless generates the website into `my-blog/target`. You're now good to [create your first content](docs)!
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
 
-For a detailed reference, check out the [documentation](https://github.com/verless/verless/tree/master/docs).
+For a detailed reference, check out the [documentation](docs).
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Contributing
 
-Anyone is welcome to contribute to verless. Please refer to our
-[contribution guidelines](https://github.com/verless/verless/blob/master/.github/CONTRIBUTING.md).
+Anyone is welcome to contribute to verless. Please refer to our [contribution guidelines](.github/CONTRIBUTING.md).
 
 <p align="center">
 <br>

@@ -15,7 +15,7 @@ This is an overview for the verless CLI and its commands.
 ## Installation
 
 To install the verless CLI tool, check out the
-[installation instructions](https://github.com/verless/verless/tree/docs#-installation).
+[installation instructions](../README.md#img-srchttpsverlessdominikbraunioassetsimgdotpng-installation).
 
 ## verless
 
