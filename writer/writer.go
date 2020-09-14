@@ -166,7 +166,6 @@ func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
 			return err
 		}
 
-		//path := file[len(src):]
 		path := filepath.Join(dest, file)
 
 		memFile, err := targetFs.Create(path)
