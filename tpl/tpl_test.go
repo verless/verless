@@ -15,8 +15,10 @@ const (
 	invalidKey        = "invalid key"
 )
 
+// TestRegister checks if the Register function register all templates
+// correctly and if it doesn't allow overwriting a template by default.
 func TestRegister(t *testing.T) {
-	// Don't use a map here as the execution order is important here.
+	// Don't use a map as the execution order is important here.
 	tests := []struct {
 		testName      string
 		force         bool
@@ -52,6 +54,8 @@ func TestRegister(t *testing.T) {
 	}
 }
 
+// TestGet checks if the Get function correctly returns a registered
+// template.
 func TestGet(t *testing.T) {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
