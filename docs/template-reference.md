@@ -89,19 +89,19 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field            | Source      | Description                                                                                    |
-|------------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Nav.Items}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field            | Source      | Description                                        |
+|------------------|-------------|----------------------------------------------------|
+| `{{.Nav.Items}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### NavItem
 
 Available in:
 * `{{.Nav.Items}}`
 
-| Field         | Source      | Description                                                                                    |
-|---------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Label}}`  | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Target}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field         | Source      | Description                                        |
+|---------------|-------------|----------------------------------------------------|
+| `{{.Label}}`  | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Target}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### Page
 
@@ -109,20 +109,20 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field                   | Source   | Description                                                                                      |
-|-------------------------|----------|--------------------------------------------------------------------------------------------------|
-| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.               |
-| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages.                                                        |
-| `{{.Page.Title}}`       | Markdown |                                                                                                  |
-| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                             |
-| `{{.Page.Date}}`        | Markdown |                                                                                                  |
-| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.       |
-| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                                  |
-| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                               |
-| `{{.Page.Description}}` | Markdown |                                                                                                  |
-| `{{.Page.Content}}`     | Markdown |                                                                                                  |
-| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.     |
-| `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.              |
+| Field                   | Source   | Description                                                                                  |
+|-------------------------|----------|----------------------------------------------------------------------------------------------|
+| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.           |
+| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages.                                                    |
+| `{{.Page.Title}}`       | Markdown |                                                                                              |
+| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                         |
+| `{{.Page.Date}}`        | Markdown |                                                                                              |
+| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.   |
+| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                              |
+| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                           |
+| `{{.Page.Description}}` | Markdown |                                                                                              |
+| `{{.Page.Content}}`     | Markdown |                                                                                              |
+| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`. |
+| `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.          |
 
 ### Pages
 
@@ -139,19 +139,19 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field               | Source      | Description                                                                                    |
-|---------------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Footer.Items}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field               | Source      | Description                                        |
+|---------------------|-------------|----------------------------------------------------|
+| `{{.Footer.Items}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### Footer
 
 Available in:
 * `{{.Footer.Items}}`
 
-| Field         | Source      | Description                                                                                    |
-|---------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Label}}`  | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Target}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field         | Source      | Description                                        |
+|---------------|-------------|----------------------------------------------------|
+| `{{.Label}}`  | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Target}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 <p align="center">
 <br>
