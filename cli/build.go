@@ -14,7 +14,8 @@ func newBuildCmd() *cobra.Command {
 	)
 
 	buildCmd := cobra.Command{
-		Use: "build PROJECT",
+		Use:   "build PROJECT",
+		Short: `Build your verless project`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := config.FromFile(args[0], config.Filename)
 			if err != nil {

@@ -10,7 +10,8 @@ func newVersionCmd() *cobra.Command {
 	var options core.VersionOptions
 
 	versionCmd := cobra.Command{
-		Use: "version",
+		Use:   "version",
+		Short: `Print version information`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return core.RunVersion(options)
 		},

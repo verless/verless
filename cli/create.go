@@ -8,7 +8,8 @@ import (
 // newCreateCmd creates the `verless create` command.
 func newCreateCmd() *cobra.Command {
 	createCmd := cobra.Command{
-		Use: "create",
+		Use:   "create",
+		Short: `Create a new verless object`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Help()
 		},
@@ -26,8 +27,9 @@ func newCreateProjectCmd() *cobra.Command {
 	)
 
 	createProjectCmd := cobra.Command{
-		Use:  "project NAME",
-		Args: cobra.ExactArgs(1),
+		Use:   "project NAME",
+		Short: `Create a new verless project`,
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
 			return core.RunCreateProject(path, options)
