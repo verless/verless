@@ -2,6 +2,7 @@
 package builder
 
 import (
+	"sort"
 	"sync"
 
 	"github.com/verless/verless/config"
@@ -61,6 +62,15 @@ func (b *builder) Dispatch() (model.Site, error) {
 	b.site.Meta = b.cfg.Site.Meta
 	b.site.Nav = b.cfg.Site.Nav
 	b.site.Footer = b.cfg.Site.Footer
+
+	// Sort the pages of each node's list page by date.
+	_ = tree.Walk(b.site.Root, func(node tree.Node) error {
+		n := node.(*model.Node)
+		sort.Slice(n.Pages, func(i, j int) bool {
+			return n.Pages[i].Date.After(n.Pages[j].Date)
+		})
+		return nil
+	}, -1)
 
 	return b.site, nil
 }
