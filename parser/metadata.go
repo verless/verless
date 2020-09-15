@@ -73,12 +73,8 @@ func readMetadata(metadata metadata, page *model.Page) {
 		page.SetProvidedType(val.(string))
 	})
 
-	readPrimitive(metadata["Template"], func(val interface{}) {
-		page.Template = val.(string)
-	})
-
 	readPrimitive(metadata["Hidden"], func(val interface{}) {
-		page.SetHidden(val.(bool))
+		page.Hidden = val.(bool)
 	})
 }
 
