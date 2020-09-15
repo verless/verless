@@ -178,12 +178,13 @@ func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
 	}()
 
 	for file := range files {
-		bytes, err := ioutil.ReadFile(file)
+		// ToDo: Check if joining the filepath is okay in terms of performance.
+		bytes, err := ioutil.ReadFile(filepath.Join(src, file))
 		if err != nil {
 			return err
 		}
 
-		path := filepath.Join(dest, file)
+		path := filepath.ToSlash(filepath.Join(dest, file))
 
 		memFile, err := targetFs.Create(path)
 		if err != nil {
