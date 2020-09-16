@@ -3,6 +3,7 @@ package atom
 
 import (
 	"fmt"
+	"github.com/verless/verless/config"
 	"path/filepath"
 	"time"
 
@@ -51,7 +52,7 @@ type atom struct {
 // ProcessPage takes a page to be processed by the plugin, reads
 // metadata for that page and creates a new feed item from it.
 func (a *atom) ProcessPage(page *model.Page) error {
-	if page.Hidden {
+	if page.Hidden || page.ID == config.ListPageID {
 		return nil
 	}
 
