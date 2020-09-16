@@ -15,7 +15,7 @@ look at the [example project](https://github.com/verless/verless/tree/master/exa
 ## Improvements
 
 You have an idea for improving the documentation? Check our
-[contribution guidelines](https://github.com/verless/verless/blob/master/.github/CONTRIBUTING.md#improving-documentation).
+[contribution guidelines](https://github.com/verless/verless/blob/master/CONTRIBUTING.md#improving-documentation).
 
 <p align="center">
 <br>

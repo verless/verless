@@ -93,7 +93,7 @@ For a detailed reference, check out the [documentation](https://github.com/verle
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Contributing
 
 Anyone is welcome to contribute to verless. Please refer to our
-[contribution guidelines](https://github.com/verless/verless/blob/master/.github/CONTRIBUTING.md).
+[contribution guidelines](https://github.com/verless/verless/blob/master/CONTRIBUTING.md).
 
 <p align="center">
 <br>
