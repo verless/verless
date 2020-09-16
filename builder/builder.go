@@ -49,8 +49,9 @@ func (b *builder) RegisterPage(page model.Page) error {
 		node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
 	}
 
-	if err := tree.CreateNode(page.Route, b.site.Root, node); err != nil {
-		return err
+	// Assign the list page route if it hasn't a route yet.
+	if node.ListPage.Route == "" {
+		node.ListPage.Route = page.Route
 	}
 
 	return nil
