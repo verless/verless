@@ -119,7 +119,7 @@ func TestBuilder_Dispatch(t *testing.T) {
 			n := node.(*model.Node)
 
 			isSorted := sort.SliceIsSorted(n.ListPage.Pages, func(i, j int) bool {
-				return n.ListPage.Pages[i].Date.Before(n.ListPage.Pages[j].Date)
+				return n.ListPage.Pages[i].Date.After(n.ListPage.Pages[j].Date)
 			})
 
 			test.Assert(t, isSorted, "page references should be sorted")

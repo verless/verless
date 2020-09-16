@@ -68,7 +68,7 @@ func (b *builder) Dispatch() (model.Site, error) {
 		n := node.(*model.Node)
 
 		sort.Slice(n.ListPage.Pages, func(i, j int) bool {
-			return n.ListPage.Pages[i].Date.Before(n.ListPage.Pages[j].Date)
+			return n.ListPage.Pages[i].Date.After(n.ListPage.Pages[j].Date)
 		})
 
 		return nil
