@@ -66,9 +66,11 @@ func (b *builder) Dispatch() (model.Site, error) {
 	// Sort the pages of each node's list page by date.
 	_ = tree.Walk(b.site.Root, func(node tree.Node) error {
 		n := node.(*model.Node)
-		sort.Slice(n.Pages, func(i, j int) bool {
-			return n.Pages[i].Date.After(n.Pages[j].Date)
+
+		sort.Slice(n.ListPage.Pages, func(i, j int) bool {
+			return n.ListPage.Pages[i].Date.After(n.ListPage.Pages[j].Date)
 		})
+
 		return nil
 	}, -1)
 
