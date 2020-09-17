@@ -84,7 +84,8 @@ build the project or serve the static site directly:
 $ verless serve -w my-blog
 ```
 
-Building the website corresponding works similarly:
+After running the command, you can view your new project under [localhost:8080](http://localhost:8080). Building the
+website corresponding works similarly:
 
 ```shell script
 $ verless build my-blog
