@@ -92,9 +92,9 @@ jobs:
       - run:
           name: Install Python
           command: apk add --no-cache python2
-      - run:
-          name: Get the release changelog
-          command: echo "export CHANGELOG=$(python ./scripts/print_changelog.py)" >> $BASH_ENV
+      #- run:
+      #    name: Get the release changelog
+      #    command: echo "export CHANGELOG=$(python ./scripts/print_changelog.py)" >> $BASH_ENV
       - run:
           name: Publish GitHub release
           command: |
@@ -102,7 +102,7 @@ jobs:
                 -u "${CIRCLE_PROJECT_USERNAME}" \
                 -r "${CIRCLE_PROJECT_REPONAME}" \
                 -c "${CIRCLE_SHA1}" \
-                -b "${CHANGELOG}" \
+                -b $(python ./scripts/print_changelog.py) \
                 -delete "${CIRCLE_TAG}" \
                 /tmp/artifacts
 
