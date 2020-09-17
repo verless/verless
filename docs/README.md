@@ -2,20 +2,20 @@
 
 Welcome to the verless documentation, where you can find references for configuring your project, creating templates,
 using plugins and using the verless CLI. However, while references are helpful for certain cases, we recommend taking a
-look at the [example project](https://github.com/verless/verless/tree/master/example).
+look at the [example project](../example).
 
 ## Contents
 
-* [Configuration reference](https://github.com/verless/verless/blob/master/docs/configuration-reference.md)
-* [Template reference](https://github.com/verless/verless/blob/master/docs/template-reference.md)
-* [Markdown reference](https://github.com/verless/verless/blob/master/docs/markdown-reference.md)
-* [Plugin reference](https://github.com/verless/verless/blob/master/docs/plugin-reference.md)
-* [Command reference](https://github.com/verless/verless/blob/master/docs/command-reference.md)
+* [Configuration reference](configuration-reference.md)
+* [Template reference](template-reference.md)
+* [Markdown reference](markdown-reference.md)
+* [Plugin reference](plugin-reference.md)
+* [Command reference](command-reference.md)
 
 ## Improvements
 
 You have an idea for improving the documentation? Check our
-[contribution guidelines](https://github.com/verless/verless/blob/master/CONTRIBUTING.md#improving-documentation).
+[contribution guidelines](CONTRIBUTING.md#improving-documentation).
 
 <p align="center">
 <br>

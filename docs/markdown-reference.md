@@ -15,8 +15,7 @@ A content file has to meet the following requirements:
 * It is stored inside the `content` directory of your project.
 * It is a Markdown file with the `.md` extension.
 
-Each file in the `content` directory will be converted to a
-[Page](https://github.com/verless/verless/blob/master/docs/template-reference.md#page).
+Each file in the `content` directory will be converted to a [Page](template-reference.md#page).
 
 The path of the Markdown file inside `content` defines the route for the corresponding page. A Markdown file stored as
 `content/blog/making-barista-quality-espresso.md` will be converted to a page whose URL is
@@ -42,8 +41,7 @@ Tags:
 Do you enjoy a high-quality italian Espresso as much as I do?
 ```
 
-For broader examples, check out the
-[example project](https://github.com/verless/verless/tree/master/example/content/blog).
+For broader examples, check out the [example project](../example/content/blog).
 
 ## Front Matter reference
 
@@ -52,15 +50,15 @@ This reference shows all available YAML keys for providing metadata. **All keys 
 * **`Title`** _(String)_: The page's title.
 * **`Author`** _(String)_: The page's author.
 * **`Date`** _(String)_: The creation date in the form `YYYY-MM-DD`.
-* **`Tags`** _(Array)_: A list of page tags. Enable the [tags plugin](https://github.com/verless/verless/blob/master/docs/plugin-reference.md#tags) for tag support.
+* **`Tags`** _(Array)_: A list of page tags. Enable the [tags plugin](plugin-reference.md#tags) for tag support.
     - **`<tag>`** _(String)_: A page tag.
 * **`Img`** _(String)_: An image URL like `assets/img/image.jpg`.
 * **`Credit`** _(String)_: Copyright credit for `Img` or other contents.
 * **`Description`** _(String)_: The page's description.
-* **`Related`** _(Array)_: A list of related pages. Has to contain verless paths like `/blog/making-barista-quality-espresso`. This list will be available as `{{.Related}}` in the `page.html` template and contains [Page](https://github.com/verless/verless/blob/master/docs/template-reference.md#page) instances.
+* **`Related`** _(Array)_: A list of related pages. Has to contain verless paths like `/blog/making-barista-quality-espresso`. This list will be available as `{{.Related}}` in the `page.html` template and contains [Page](template-reference.md#page) instances.
     - **`<verless path>`** _(String)_: The path to a related page.
-* **`Type`** _(String)_: The page type. Has to be declared in the [`types` section](https://github.com/verless/verless/blob/master/docs/configuration-reference.md#configuration-key-reference) of your configuration.
-* **`Hidden`** _(Bool)_: Don't include the page in lists like [`{{.Pages}}`](https://github.com/verless/verless/blob/master/docs/template-reference.md#pages).
+* **`Type`** _(String)_: The page type. Has to be declared in the [`types` section](configuration-reference.md#configuration-key-reference) of your configuration.
+* **`Hidden`** _(Bool)_: Don't include the page in lists like [`{{.Pages}}`](template-reference.md#pages).
 
 <p align="center">
 <br>

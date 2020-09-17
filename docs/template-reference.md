@@ -65,7 +65,7 @@ You can loop over an array like a list page's `Pages` and access its items as fo
 </li>
 ```
 
-Make sure to check out the [example templates](https://github.com/verless/verless/tree/master/example/templates).
+Make sure to check out the [example templates](../example/templates).
 
 ## Field reference
 
@@ -75,13 +75,13 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field                   | Source      | Description                                                                                    |
-|-------------------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Meta.Title}}`       | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Meta.Subtitle}}`    | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Meta.Description}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Meta.Author}}`      | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Meta.Base}}`        | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field                   | Source      | Description                                        |
+|-------------------------|-------------|----------------------------------------------------|
+| `{{.Meta.Title}}`       | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Meta.Subtitle}}`    | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Meta.Description}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Meta.Author}}`      | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Meta.Base}}`        | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### Nav
 
@@ -89,19 +89,19 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field            | Source      | Description                                                                                    |
-|------------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Nav.Items}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field            | Source      | Description                                        |
+|------------------|-------------|----------------------------------------------------|
+| `{{.Nav.Items}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### NavItem
 
 Available in:
 * `{{.Nav.Items}}`
 
-| Field         | Source      | Description                                                                                    |
-|---------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Label}}`  | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Target}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field         | Source      | Description                                        |
+|---------------|-------------|----------------------------------------------------|
+| `{{.Label}}`  | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Target}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### Page
 
@@ -140,19 +140,19 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field               | Source      | Description                                                                                    |
-|---------------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Footer.Items}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field               | Source      | Description                                        |
+|---------------------|-------------|----------------------------------------------------|
+| `{{.Footer.Items}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 ### Footer
 
 Available in:
 * `{{.Footer.Items}}`
 
-| Field         | Source      | Description                                                                                    |
-|---------------|-------------|------------------------------------------------------------------------------------------------|
-| `{{.Label}}`  | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
-| `{{.Target}}` | verless.yml | See [example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml). |
+| Field         | Source      | Description                                        |
+|---------------|-------------|----------------------------------------------------|
+| `{{.Label}}`  | verless.yml | See [example/verless.yml](../example/verless.yml). |
+| `{{.Target}}` | verless.yml | See [example/verless.yml](../example/verless.yml). |
 
 <p align="center">
 <br>

@@ -2,8 +2,7 @@
 
 This small example project demonstrates how a verless website could look like. It contains the basic templates, some
 content files, some images and a stylesheet. Feel free to check out how Markdown files are structured or how certain
-page fields are accessed in templates. For more in-depth explanations, check out the
-[documentation](https://github.com/verless/verless/tree/master/docs).
+page fields are accessed in templates. For more in-depth explanations, check out the [documentation](../docs).
 
 ## Building the example project
 

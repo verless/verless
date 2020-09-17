@@ -16,8 +16,7 @@ the file extension is `.yml`, `.toml` or `.json`, depending on the configuration
 
 ## Full configuration example
 
-There is a full YAML configuration available in the example project:
-[example/verless.yml](https://github.com/verless/verless/blob/master/example/verless.yml)
+There is a full YAML configuration available in the example project: [example/verless.yml](../example/verless.yml)
 
 Note that all configuration keys except `version` are optional.
 
