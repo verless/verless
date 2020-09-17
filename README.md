@@ -85,7 +85,7 @@ $ verless serve -w my-blog
 ```
 
 After running the command, you can view your new project under [localhost:8080](http://localhost:8080). Building the
-website corresponding works similarly:
+website works similarly:
 
 ```shell script
 $ verless build my-blog
