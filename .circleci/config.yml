@@ -86,6 +86,7 @@ jobs:
     docker:
       - image: cibuilds/github:0.10
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/artifacts
       - run:
