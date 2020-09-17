@@ -90,7 +90,7 @@ jobs:
           at: /tmp/artifacts
       - run:
           name: Get the release changelog
-          command: CHANGELOG=${python ./scripts/print_changelog.py}
+          command: CHANGELOG=$(python ./scripts/print_changelog.py)
       - run:
           name: Publish GitHub release
           command: |
