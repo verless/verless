@@ -102,7 +102,7 @@ jobs:
                 -u "${CIRCLE_PROJECT_USERNAME}" \
                 -r "${CIRCLE_PROJECT_REPONAME}" \
                 -c "${CIRCLE_SHA1}" \
-                -b $(python ./scripts/print_changelog.py) \
+                -b "$(python ./scripts/print_changelog.py)" \
                 -delete "${CIRCLE_TAG}" \
                 /tmp/artifacts
 
