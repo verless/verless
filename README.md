@@ -34,7 +34,7 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 * **No webserver required:** verless serves your static site and re-builds it if something changes
 * **Build performance:** Generating your static site is a matter of milliseconds
 * **Choose what you need:** Only generate RSS feeds or overview pages for tags if you want to
-* **Focus on simplicity:** If your project isn't simple, verless isn't a good fit
+* **Focus on simplicity:** If your project isn't simple, verless probably isn't a good fit
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
 
