@@ -1,8 +1,10 @@
 package builder
 
 import (
+	"sort"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
@@ -76,15 +78,52 @@ func TestBuilder_RegisterPage(t *testing.T) {
 	}
 }
 
-// TestBuilder_Dispatch checks if the dispatched site model is
-// valid and contains all registered testPages.
+// TestBuilder_Dispatch checks if the Dispatch method returns the
+// site model as expected.
 func TestBuilder_Dispatch(t *testing.T) {
 	tests := map[string]struct {
+		site model.Site
 	}{
-		// No tests as there is no logic yet.
+		"site with multiple page references": {
+			site: model.Site{
+				Root: &model.Node{
+					ListPage: model.ListPage{
+						Pages: []*model.Page{
+							{
+								Date: time.Date(2020, 03, 16, 0, 0, 0, 0, time.UTC),
+							},
+							{
+								Date: time.Date(2020, 01, 28, 0, 0, 0, 0, time.UTC),
+							},
+							{
+								Date: time.Date(2020, 11, 3, 0, 0, 0, 0, time.UTC),
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 
-	for name, _ := range tests {
+	for name, testCase := range tests {
 		t.Log(name)
+
+		builder := New(&config.Config{})
+		builder.site = testCase.site
+
+		site, err := builder.Dispatch()
+		test.Ok(t, err)
+
+		// Test if all page references in list pages are sorted correctly.
+		_ = tree.Walk(site.Root, func(node tree.Node) error {
+			n := node.(*model.Node)
+
+			isSorted := sort.SliceIsSorted(n.ListPage.Pages, func(i, j int) bool {
+				return n.ListPage.Pages[i].Date.After(n.ListPage.Pages[j].Date)
+			})
+
+			test.Assert(t, isSorted, "page references should be sorted")
+			return nil
+		}, -1)
 	}
 }
