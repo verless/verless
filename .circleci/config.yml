@@ -94,7 +94,7 @@ jobs:
           command: apk add --no-cache python2
       - run:
           name: Get the release changelog
-          command: CHANGELOG=$(python ./scripts/print_changelog.py)
+          command: echo "export CHANGELOG=$(python ./scripts/print_changelog.py)" >> $BASH_ENV
       - run:
           name: Publish GitHub release
           command: |
