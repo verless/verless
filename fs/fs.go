@@ -53,6 +53,18 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 		if path == "." {
 			files <- file
 		} else {
+			// Convert both paths to absolute paths so that it does not make a difference if the are in different formats.
+			// eg. one "example/" and the other one "./example"
+			file, err = filepath.Abs(file)
+			if err != nil {
+				return err
+			}
+
+			path, err = filepath.Abs(path)
+			if err != nil {
+				return err
+			}
+
 			// For paths other than `.`, slice the filepath to a relative path.
 			files <- file[len(path):]
 		}
