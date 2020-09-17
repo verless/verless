@@ -36,7 +36,7 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 	}
 
 	// Convert to absolute path so that it does not make a difference if the paths are in different formats.
-	// eg. one "example/" and the other one "./example"
+	// e.g. one "example/" and the other one "./example"
 	path, err := filepath.Abs(path)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 		}
 
 		// Convert to absolute path so that it does not make a difference if the paths are in different formats.
-		// eg. one "example/" and the other one "./example"
+		// e.g. one "example/" and the other one "./example"
 		file, err = filepath.Abs(file)
 		if err != nil {
 			return err
