@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.3.5] - 2020-09-17
+
+### Changed
+- Use relative links in the documentation.
+- Don't create physical files when testing.
+- Order pages in `ListPage.Pages` by date.
+
 ## [0.3.4] - 2020-09-16
 
 ### Changed
