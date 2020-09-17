@@ -45,6 +45,15 @@ jobs:
           name: Run all tests
           command: go test -v ./...
 
+  # Verify that the requirements for creating a new release are met.
+  pre-release-check:
+    executor: go-container
+    steps:
+      - checkout
+      - run:
+          name: Check release in CHANGELOG.md
+          command: python ./scripts/check_changelog.py
+
   # Build verless binaries for multiple platforms.
   build:
     executor: go-container
@@ -101,12 +110,18 @@ workflows:
   # The workflow for delivering the verless application.
   verless-cd:
     jobs:
-      - build:
+      - pre-release-check:
           filters:
             tags:
               only: /.*/
             branches:
               ignore: /.*/
+      - build:
+          requires:
+            - pre-release-check
+          filters:
+            tags:
+              only: /.*/
       - release-github:
           requires:
             - build
