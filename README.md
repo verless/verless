@@ -91,7 +91,7 @@ For a detailed reference, check out the [documentation](docs).
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Contributing
 
-Anyone is welcome to contribute to verless. Please refer to our [contribution guidelines](.github/CONTRIBUTING.md).
+Anyone is welcome to contribute to verless. Please refer to our [contribution guidelines](CONTRIBUTING.md).
 
 <p align="center">
 <br>

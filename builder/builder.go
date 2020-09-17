@@ -32,12 +32,26 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	node := model.NewNode()
-	node.Pages = append(node.Pages, page)
-	node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
-
-	if err := tree.CreateNode(page.Route, b.site.Root, node); err != nil {
+	n, err := tree.ResolveOrInitNode(page.Route, b.site.Root)
+	if err != nil {
 		return err
+	}
+
+	node := n.(*model.Node)
+
+	// If the page has been created as a file called index.md,
+	// register the page as list page.
+	if page.ID == config.ListPageID {
+		node.ListPage.Page = page
+	} else {
+		// Otherwise, register the page as normal page.
+		node.Pages = append(node.Pages, page)
+		node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+	}
+
+	// Assign the list page route if it hasn't a route yet.
+	if node.ListPage.Route == "" {
+		node.ListPage.Route = page.Route
 	}
 
 	return nil

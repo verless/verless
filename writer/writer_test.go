@@ -1,5 +1,3 @@
-// File writer_test.go tests the writer.
-
 package writer
 
 import (
@@ -17,13 +15,11 @@ const (
 	testOutPath = "../test-out-path"
 )
 
+// TestWriter_removeOutDirIfExists check if the removeOutDirIfExists
+// correctly removes a directory.
 func TestWriter_removeOutDirIfExists(t *testing.T) {
 	tests := map[string]struct {
-		// beforeTest is a callback which creates the folders/files
-		// to test a specific testcase.
-		beforeTest func()
-		// cleanupTest is a callback which the folders/files created
-		// by beforeTest and the test itself.
+		beforeTest    func()
 		cleanupTest   func()
 		expectedError string
 	}{
@@ -60,7 +56,7 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 	for caseName, testCase := range tests {
 		t.Logf("Testing '%s'", caseName)
 
-		w := setupNewWriter(memMapFs, t)
+		w := setupNewWriter(memMapFs)
 
 		testCase.beforeTest()
 
@@ -76,6 +72,7 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 	}
 }
 
-func setupNewWriter(fs afero.Fs, t testing.TB) *writer {
+// setupNewWriter initializes a new writer instance.
+func setupNewWriter(fs afero.Fs) *writer {
 	return New(fs, testPath, testOutPath, false)
 }

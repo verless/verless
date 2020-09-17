@@ -22,6 +22,10 @@ site:
 # Enable plugins for your project.
 plugins:
   - atom
+# Declare custom page types.
+types:
+  startpage:
+    template: startpage.html
 build:
   # Uncomment the following line to automatically overwrite
   # the output directory without having to use --overwrite.

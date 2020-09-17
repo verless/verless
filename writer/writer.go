@@ -1,3 +1,5 @@
+// Package writer provides the default build.Writer implementation
+// capable of writing the site model to a filesystem.
 package writer
 
 import (
@@ -15,6 +17,8 @@ import (
 	"github.com/verless/verless/tree"
 )
 
+// New creates a new writer that renders the site model in the given
+// filesystem instance to outputDir.
 func New(fs afero.Fs, path, outputDir string, recompileTemplates bool) *writer {
 	w := writer{
 		fs:                 fs,
@@ -34,6 +38,10 @@ type writer struct {
 	recompileTemplates bool
 }
 
+// Write renders the entire site model to the writer's filesystem.
+//
+// Basically, it creates a directory for each page and renders the
+// page using its respective template. It also copies all assets.
 func (w *writer) Write(site model.Site) error {
 	if err := fs.Rmdir(w.fs, w.outputDir); err != nil {
 		return err
@@ -74,6 +82,8 @@ func (w *writer) Write(site model.Site) error {
 	return nil
 }
 
+// writePage renders a single page by applying the associated template
+// and writing the file inside the output directory.
 func (w *writer) writePage(route string, page page) error {
 	path := filepath.Join(w.outputDir, route, page.Page.ID)
 
@@ -94,6 +104,7 @@ func (w *writer) writePage(route string, page page) error {
 	return pageTpl.Execute(file, &page)
 }
 
+// writeListPage does the same thing as writePage but for list pages.
 func (w *writer) writeListPage(route string, listPage listPage) error {
 	path := filepath.Join(w.outputDir, route)
 
@@ -114,6 +125,8 @@ func (w *writer) writeListPage(route string, listPage listPage) error {
 	return listPageTpl.Execute(file, &listPage)
 }
 
+// loadTemplate considers a page type and a default template, decides
+// which template to use and loads that template from the registry.
 func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Template, error) {
 	var pageTpl string
 
@@ -146,10 +159,14 @@ func (w *writer) copyAssetDir() error {
 		}
 		return copy.Copy(src, dest)
 	} else {
+		// Otherwise, copy the assets directory from the physical filesystem
+		// into the memory filesystem.
 		return copyFromOsFs(w.fs, w.path, w.outputDir)
 	}
 }
 
+// copyFromOsFs copies a given directory from the OS filesystem into
+// another filesystem instance to the desired destination.
 func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
 	var (
 		files = make(chan string)
@@ -161,13 +178,13 @@ func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
 	}()
 
 	for file := range files {
-		bytes, err := ioutil.ReadFile(file)
+		// ToDo: Check if joining the filepath is okay in terms of performance.
+		bytes, err := ioutil.ReadFile(filepath.Join(src, file))
 		if err != nil {
 			return err
 		}
 
-		path := file[len(src):]
-		path = filepath.Join(dest, path)
+		path := filepath.ToSlash(filepath.Join(dest, file))
 
 		memFile, err := targetFs.Create(path)
 		if err != nil {

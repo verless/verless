@@ -15,7 +15,7 @@ look at the [example project](../example).
 ## Improvements
 
 You have an idea for improving the documentation? Check our
-[contribution guidelines](.github/CONTRIBUTING.md#improving-documentation).
+[contribution guidelines](CONTRIBUTING.md#improving-documentation).
 
 <p align="center">
 <br>

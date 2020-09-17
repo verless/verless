@@ -14,7 +14,8 @@ func newServeCmd() *cobra.Command {
 	)
 
 	serveCmd := cobra.Command{
-		Use: "serve PROJECT",
+		Use:   "serve PROJECT",
+		Short: `Serve your verless project`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := core.RunServe(args[0], options)
 

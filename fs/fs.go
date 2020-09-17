@@ -26,8 +26,8 @@ var (
 	ErrStreaming error = nil
 )
 
-// StreamFiles sends files in a given path that match the given
-// filters through the files channel.
+// StreamFiles sends all relative file paths inside a given path that
+// match the given filters through the files channel.
 func StreamFiles(path string, files chan<- string, filters ...func(file string) bool) error {
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -48,7 +48,14 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 			}
 		}
 
-		files <- file
+		// A filepath like `./about-me.md` will be shortened to `about-me.md`.
+		// In that case, the filepath already is a relative path.
+		if path == "." {
+			files <- file
+		} else {
+			// For paths other than `.`, slice the filepath to a relative path.
+			files <- file[len(path):]
+		}
 
 		return nil
 	})

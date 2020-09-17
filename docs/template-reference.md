@@ -123,6 +123,7 @@ Available in:
 | `{{.Page.Content}}`     | Markdown |                                                                                              |
 | `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`. |
 | `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.          |
+| `{{.Page.Hidden}}`      | Markdown |                                                                                              |
 
 ### Pages
 

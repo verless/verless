@@ -16,11 +16,10 @@ type Page struct {
 	Content     string
 	Related     []*Page
 	Type        *Type
-	Template    string
+	Hidden      bool
 
 	providedRelated []string
 	providedType    string
-	hidden          bool
 }
 
 // ProvidedRelated returns all Fully Qualified Name URIs related to the page.
@@ -41,16 +40,6 @@ func (p *Page) ProvidedType() string {
 // SetProvidedType sets the user-provided page type.
 func (p *Page) SetProvidedType(providedType string) {
 	p.providedType = providedType
-}
-
-// Hidden describes if the page should be shown (false) or hidden (true).
-func (p *Page) Hidden() bool {
-	return p.hidden
-}
-
-// SetHidden shows (false) or hides (true) the page.
-func (p *Page) SetHidden(hidden bool) {
-	p.hidden = hidden
 }
 
 // ListPage represents an overview page that is generated for

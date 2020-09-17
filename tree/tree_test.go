@@ -74,9 +74,46 @@ func TestCreateNode(t *testing.T) {
 		test.Ok(t, err)
 
 		var n Node = root
-		edges := Edges(testCase.path)
 
-		for _, edge := range edges {
+		for _, edge := range Edges(testCase.path) {
+			_, exists := n.Children()[edge]
+			test.Equals(t, true, exists)
+			n = n.Children()[edge]
+		}
+	}
+}
+
+// TestResolveOrInitNode tests if the ResolveOrInitNode function
+// correctly initializes all nodes in a given path.
+func TestResolveOrInitNode(t *testing.T) {
+	tests := map[string]struct {
+		path string
+	}{
+		"existing path with depth 1": {
+			path: "/blog",
+		},
+		"existing path with depth 2": {
+			path: "/blog/coffee",
+		},
+		"not existing path": {
+			path: "/blog/espresso",
+		},
+	}
+
+	for name, testCase := range tests {
+		t.Log(name)
+
+		root := &testNode{
+			children: make(map[string]Node),
+		}
+
+		node, err := ResolveOrInitNode(testCase.path, root)
+		test.Ok(t, err)
+		test.NotEquals(t, nil, node)
+
+		var n Node = root
+
+		for _, edge := range Edges(testCase.path) {
 			_, exists := n.Children()[edge]
 			test.Equals(t, true, exists)
 			n = n.Children()[edge]
