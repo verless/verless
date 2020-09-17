@@ -113,7 +113,7 @@ workflows:
       - pre-release-check:
           filters:
             tags:
-              only: /.*/
+              only: /v.*/
             branches:
               ignore: /.*/
       - build:
@@ -121,10 +121,10 @@ workflows:
             - pre-release-check
           filters:
             tags:
-              only: /.*/
+              only: /v.*/
       - release-github:
           requires:
             - build
           filters:
             tags:
-              only: /.*/
+              only: /v.*/
