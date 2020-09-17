@@ -35,6 +35,13 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 		return nil
 	}
 
+	// Convert to absolute path so that it does not make a difference if the paths are in different formats.
+	// e.g. one "example/" and the other one "./example"
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
 	ErrStreaming = filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -48,14 +55,14 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 			}
 		}
 
-		// A filepath like `./about-me.md` will be shortened to `about-me.md`.
-		// In that case, the filepath already is a relative path.
-		if path == "." {
-			files <- file
-		} else {
-			// For paths other than `.`, slice the filepath to a relative path.
-			files <- file[len(path):]
+		// Convert to absolute path so that it does not make a difference if the paths are in different formats.
+		// e.g. one "example/" and the other one "./example"
+		file, err = filepath.Abs(file)
+		if err != nil {
+			return err
 		}
+
+		files <- file[len(path):]
 
 		return nil
 	})
