@@ -96,7 +96,7 @@ def log_info(message):
     """
     Log a simple text message.
     """
-    print("[INFO] {0}", message)
+    print("[INFO] {0}".format(message))
 
 
 main()
