@@ -18,6 +18,8 @@ const (
 // TestWriter_removeOutDirIfExists check if the removeOutDirIfExists
 // correctly removes a directory.
 func TestWriter_removeOutDirIfExists(t *testing.T) {
+	memMapFs := afero.NewMemMapFs()
+
 	tests := map[string]struct {
 		beforeTest    func()
 		cleanupTest   func()
@@ -29,29 +31,27 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 		},
 		"already exists": {
 			beforeTest: func() {
-				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
+				test.Ok(t, memMapFs.Mkdir(testOutPath, os.ModePerm))
 
-				file, err := os.Create(path.Join(testOutPath, "anyFile.txt"))
+				file, err := memMapFs.Create(path.Join(testOutPath, "anyFile.txt"))
 				test.Ok(t, err)
 				_ = file.Close()
 			},
 			cleanupTest: func() {
-				err := os.RemoveAll(testOutPath)
+				err := memMapFs.RemoveAll(testOutPath)
 				test.Ok(t, err)
 			},
 		},
 		"already exists but without file": {
 			beforeTest: func() {
-				test.Ok(t, os.Mkdir(testOutPath, os.ModePerm))
+				test.Ok(t, memMapFs.Mkdir(testOutPath, os.ModePerm))
 			},
 			cleanupTest: func() {
-				err := os.RemoveAll(testOutPath)
+				err := memMapFs.RemoveAll(testOutPath)
 				test.Ok(t, err)
 			},
 		},
 	}
-
-	memMapFs := afero.NewMemMapFs()
 
 	for caseName, testCase := range tests {
 		t.Logf("Testing '%s'", caseName)

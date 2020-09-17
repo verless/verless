@@ -2,7 +2,6 @@ package core_test
 
 import (
 	"log"
-	"os"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -12,7 +11,7 @@ import (
 )
 
 const (
-	outTestPath       = "../test-output-dir"
+	outTestPath       = "../output-dir"
 	projectFolderPath = "../example"
 )
 
@@ -24,13 +23,15 @@ func TestRunFullBuild(t *testing.T) {
 		Overwrite: true,
 	}
 
+	memMapFs := afero.NewMemMapFs()
+
 	cfg, err := config.FromFile(projectFolderPath, config.Filename)
 	test.Ok(t, err)
 
-	err = core.RunBuild(afero.NewOsFs(), "../example", o, cfg)
+	err = core.RunBuild(memMapFs, "../example", o, cfg)
 	test.Ok(t, err)
 
-	if err := os.RemoveAll(outTestPath); err != nil {
+	if err := memMapFs.RemoveAll(outTestPath); err != nil {
 		log.Println(err)
 	}
 }
