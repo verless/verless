@@ -45,70 +45,68 @@ func RunServe(path string, options ServeOptions) error {
 	memMapFs := afero.NewMemMapFs()
 
 	done := make(chan bool)
+	rebuildCh := make(chan string)
+
+	// Only watch if needed.
 	if options.Watch {
-		rebuildCh := make(chan string)
-
-		// Only watch if needed.
-		if options.Watch {
-			if err := watch.Run(watch.Context{
-				IgnorePath: targetFiles,
-				Path:       path,
-				ChangedCh:  rebuildCh,
-				StopCh:     done,
-			}); err != nil {
-				return err
-			}
+		if err := watch.Run(watch.Context{
+			IgnorePath: targetFiles,
+			Path:       path,
+			ChangedCh:  rebuildCh,
+			StopCh:     done,
+		}); err != nil {
+			return err
 		}
+	}
 
-		var initialBuild sync.WaitGroup
+	var initialBuild sync.WaitGroup
 
-		// Start rebuild goroutine.
-		// If watch is not enabled, it's still used for the initial build.
-		go func() {
-			first := true
-			initialBuild.Add(1)
+	// Start rebuild goroutine.
+	// If watch is not enabled, it's still used for the initial build.
+	go func() {
+		first := true
+		initialBuild.Add(1)
 
-			for {
-				select {
-				case _, ok := <-rebuildCh:
-					if !ok {
-						return
-					}
-					log.Println("rebuild")
-					// Re-read config as it may have changed also.
-					cfg, err := config.FromFile(path, config.Filename)
-					if err != nil {
-						log.Println("rebuild error:", err)
-						continue
-					}
-					err = RunBuild(memMapFs, path, options.BuildOptions, cfg)
-					if err != nil {
-						log.Println("rebuild error:", err)
-					}
+		for {
+			select {
+			case _, ok := <-rebuildCh:
+				if !ok {
+					return
+				}
+				log.Println("rebuild")
+				// Re-read config as it may have changed also.
+				cfg, err := config.FromFile(path, config.Filename)
+				if err != nil {
+					log.Println("rebuild error:", err)
+					continue
+				}
+				err = RunBuild(memMapFs, path, options.BuildOptions, cfg)
+				if err != nil {
+					log.Println("rebuild error:", err)
+				}
 
-					if first {
-						initialBuild.Done()
-						first = false
-					}
-				case _, ok := <-done:
-					// Stops the goroutine if requested to.
-					// Triggers on closing of the done channel.
-					if !ok {
-						return
-					}
+				if first {
+					initialBuild.Done()
+					first = false
+				}
+			case _, ok := <-done:
+				// Stops the goroutine if requested to.
+				// Triggers on closing of the done channel.
+				if !ok {
+					return
 				}
 			}
-		}()
-
-		// Trigger and wait for the initial rebuild.
-		rebuildCh <- path
-		initialBuild.Wait()
-
-		// Stop rebuilding goroutine if not watching.
-		if !options.Watch {
-			done <- true
-			close(done)
 		}
+	}()
+
+	// Trigger and wait for the initial rebuild.
+	rebuildCh <- path
+	initialBuild.Wait()
+
+	// Stop rebuilding goroutine if not watching.
+	if !options.Watch {
+		done <- true
+		close(done)
 	}
 
 	// If the target folder doesn't exist, return an error.
