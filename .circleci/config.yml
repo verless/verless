@@ -80,12 +80,16 @@ jobs:
       - attach_workspace:
           at: /tmp/artifacts
       - run:
+          name: Get the release changelog
+          command: $CHANGELOG=${python ./scripts/print_changelog.py}
+      - run:
           name: Publish GitHub release
           command: |
             ghr -t "${GITHUB_TOKEN}" \
                 -u "${CIRCLE_PROJECT_USERNAME}" \
                 -r "${CIRCLE_PROJECT_REPONAME}" \
                 -c "${CIRCLE_SHA1}" \
+                -b "${CHANGELOG}" \
                 -delete "${CIRCLE_TAG}" \
                 /tmp/artifacts
 
