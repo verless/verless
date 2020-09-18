@@ -171,19 +171,15 @@ func processFile(ctx *Context, contentDir, file string) error {
 		return err
 	}
 
-	// For a file path like example/content/blog/coffee/making-espresso.md,
-	// the resulting path will be /blog/coffee.
-	path := filepath.Dir(file)
-	if path == "" {
-		path = "/"
-	}
-	page.Route = filepath.ToSlash(path)
+	// For a file path like /blog/coffee/making-espresso.md, the
+	// resulting page route will be /blog/coffee.
+	page.Route = filepath.ToSlash(filepath.Dir(file))
 
 	// For a file name like making-espresso.md, the resulting page
 	// ID will be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
 
-	if err := setType(&page, ctx.Types); err != nil {
+	if err := setTypeForPage(&page, ctx.Types); err != nil {
 		return err
 	}
 
@@ -200,10 +196,10 @@ func processFile(ctx *Context, contentDir, file string) error {
 	return nil
 }
 
-// setType sets the Type field of a page if a page type has been
-// provided by the user. Returns an error if the provided page type
-// has not been configured in the given types map.
-func setType(page *model.Page, types map[string]*model.Type) error {
+// setTypeForPage sets the Type field of a page if a page type has been
+// provided by the user. Returns an error if the provided page type has
+// not been configured in the given types map.
+func setTypeForPage(page *model.Page, types map[string]*model.Type) error {
 	providedType := page.ProvidedType()
 
 	if providedType == "" {
