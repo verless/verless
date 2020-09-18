@@ -25,6 +25,7 @@ type builder struct {
 	site  model.Site
 	cfg   *config.Config
 	mutex *sync.Mutex
+	cache map[string]*model.Node
 }
 
 // RegisterPage registers a given page under a given route. It
@@ -33,12 +34,10 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	n, err := tree.ResolveOrInitNode(page.Route, b.site.Root)
+	node, err := b.nodeFromCache(page.Route)
 	if err != nil {
 		return err
 	}
-
-	node := n.(*model.Node)
 
 	// If the page has been created as a file called index.md,
 	// register the page as list page.
@@ -76,4 +75,24 @@ func (b *builder) Dispatch() (model.Site, error) {
 	}, -1)
 
 	return b.site, nil
+}
+
+// nodeFromCache loads a node from the cache. If the node isn't
+// registered in the cache yet, nodeFromCache will load it from
+// the route tree first.
+//
+// Normally, each page that gets registered would cause a node
+// lookup in the tree. Caching the looked up nodes avoids this.
+func (b *builder) nodeFromCache(path string) (*model.Node, error) {
+	if _, exists := b.cache[path]; !exists {
+		// If the node isn't in the cache yet, load it from the
+		// tree, where it either gets resolved or initialized.
+		n, err := tree.ResolveOrInitNode(path, b.site.Root)
+		if err != nil {
+			return nil, err
+		}
+		b.cache[path] = n.(*model.Node)
+	}
+
+	return b.cache[path], nil
 }
