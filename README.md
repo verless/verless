@@ -28,12 +28,13 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Features
 
-* Flexibility: Provide and use your default template for all pages, or use a different template for a specific page
-* Simplicity: Build your entire website within a single CLI command
-* Performance: Generating your website only takes a few seconds, even for thousands of pages
-* Rapid Development: Get started quickly with verless' small and reduced feature set
-* Configurability: Provide additional information or override defaults in `verless.yml`
-* Portability: verless is packaged as a single binary without any dependencies for multiple platforms
+* **Flexible templating:** Create default templates for all pages or use Page Types to use custom templates
+* **Central configuration:** Global information, enabled plugins and other settings are in `verless.yml`
+* **Rapid development:** Create a fresh project within a single command
+* **No webserver required:** verless serves your static site and re-builds it if something changes
+* **Build performance:** Generating your static site is a matter of milliseconds
+* **Choose what you need:** Only generate RSS feeds or overview pages for tags if you want to
+* **Focus on simplicity:** If your project isn't simple, verless probably isn't a good fit
 
 ## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
 
@@ -76,8 +77,15 @@ The easiest way to create a new project is to use the verless CLI:
 $ verless create project my-blog
 ```
 
-This initializes a project called `my-blog` inside a new directory, containing a small default site. Building the
-website corresponding works similarly:
+This initializes a project called `my-blog` inside a new directory, containing a small default site. You can either
+build the project or serve the static site directly:
+
+```shell script
+$ verless serve -w my-blog
+```
+
+After running the command, you can view your new project under [localhost:8080](http://localhost:8080). Building the
+website works similarly:
 
 ```shell script
 $ verless build my-blog
