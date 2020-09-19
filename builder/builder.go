@@ -16,6 +16,7 @@ func New(cfg *config.Config) *builder {
 		site:  model.NewSite(),
 		cfg:   cfg,
 		mutex: &sync.Mutex{},
+		cache: make(map[string]*model.Node),
 	}
 	return &b
 }
@@ -46,7 +47,6 @@ func (b *builder) RegisterPage(page model.Page) error {
 	} else {
 		// Otherwise, register the page as normal page.
 		node.Pages = append(node.Pages, page)
-		node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
 	}
 
 	// Assign the list page route if it hasn't a route yet.
@@ -54,7 +54,14 @@ func (b *builder) RegisterPage(page model.Page) error {
 		node.ListPage.Route = page.Route
 	}
 
-	return nil
+	// Reference the new page in all parent nodes as well.
+	err = tree.WalkPath(page.Route, b.site.Root, func(currentNode tree.Node) error {
+		n := currentNode.(*model.Node)
+		n.ListPage.Pages = append(n.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+		return nil
+	})
+
+	return err
 }
 
 // Dispatch finishes the model build and returns the model.
