@@ -174,21 +174,22 @@ func WalkPath(path string, root Node, walkFn func(node Node) error) error {
 	if !IsValidPath(path) {
 		return fmt.Errorf("create node %s: %w", path, ErrInvalidPath)
 	}
-	if IsRootPath(path) {
-		return walkFn(root)
-	}
 
 	n := root
 
+	if err := walkFn(n); err != nil {
+		return err
+	}
+
 	for _, edge := range Edges(path) {
-		if err := walkFn(n); err != nil {
-			return err
-		}
 		if _, exists := n.Children()[edge]; !exists {
 			return fmt.
 				Errorf("resolve node %s: edge %s: %w", path, edge, ErrEdgeNotFound)
 		}
 		n = n.Children()[edge]
+		if err := walkFn(n); err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -44,10 +44,11 @@ func (b *builder) RegisterPage(page model.Page) error {
 	// register the page as list page.
 	if page.ID == config.ListPageID {
 		node.ListPage.Page = page
-	} else {
-		// Otherwise, register the page as normal page.
-		node.Pages = append(node.Pages, page)
+		return nil
 	}
+
+	// Otherwise, register the page as normal page.
+	node.Pages = append(node.Pages, page)
 
 	// Assign the list page route if it hasn't a route yet.
 	if node.ListPage.Route == "" {
