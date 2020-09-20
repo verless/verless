@@ -31,5 +31,5 @@ Copy and insert your output here.
 
 ### System information
 
-* OS: [e.g. iOS]
-* Version [e.g. 22]
+* OS: [e.g. Linux Mint]
+* Version [e.g. 20]
