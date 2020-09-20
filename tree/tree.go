@@ -162,3 +162,35 @@ func walkNode(node Node, walkFn func(node Node) error, maxDepth, curDepth int) e
 
 	return nil
 }
+
+// WalkPath walks all nodes within a tree path and invokes the given
+// walkFn on each node.
+//
+// In contrast to Walk, WalkPath does not invoke the walkFn for
+// sibling nodes with the same depth because they're not within the
+// tree path. If you desire to take sibling nodes into account, use
+// Walk with the depth of your path instead.
+func WalkPath(path string, root Node, walkFn func(node Node) error) error {
+	if !IsValidPath(path) {
+		return fmt.Errorf("create node %s: %w", path, ErrInvalidPath)
+	}
+
+	n := root
+
+	if err := walkFn(n); err != nil {
+		return err
+	}
+
+	for _, edge := range Edges(path) {
+		if _, exists := n.Children()[edge]; !exists {
+			return fmt.
+				Errorf("resolve node %s: edge %s: %w", path, edge, ErrEdgeNotFound)
+		}
+		n = n.Children()[edge]
+		if err := walkFn(n); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

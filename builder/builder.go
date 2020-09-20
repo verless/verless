@@ -16,6 +16,7 @@ func New(cfg *config.Config) *builder {
 		site:  model.NewSite(),
 		cfg:   cfg,
 		mutex: &sync.Mutex{},
+		cache: make(map[string]*model.Node),
 	}
 	return &b
 }
@@ -25,6 +26,7 @@ type builder struct {
 	site  model.Site
 	cfg   *config.Config
 	mutex *sync.Mutex
+	cache map[string]*model.Node
 }
 
 // RegisterPage registers a given page under a given route. It
@@ -33,29 +35,34 @@ func (b *builder) RegisterPage(page model.Page) error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 
-	n, err := tree.ResolveOrInitNode(page.Route, b.site.Root)
+	node, err := b.nodeFromCache(page.Route)
 	if err != nil {
 		return err
 	}
-
-	node := n.(*model.Node)
 
 	// If the page has been created as a file called index.md,
 	// register the page as list page.
 	if page.ID == config.ListPageID {
 		node.ListPage.Page = page
-	} else {
-		// Otherwise, register the page as normal page.
-		node.Pages = append(node.Pages, page)
-		node.ListPage.Pages = append(node.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+		return nil
 	}
+
+	// Otherwise, register the page as normal page.
+	node.Pages = append(node.Pages, page)
 
 	// Assign the list page route if it hasn't a route yet.
 	if node.ListPage.Route == "" {
 		node.ListPage.Route = page.Route
 	}
 
-	return nil
+	// Reference the new page in all parent nodes as well.
+	err = tree.WalkPath(page.Route, b.site.Root, func(currentNode tree.Node) error {
+		n := currentNode.(*model.Node)
+		n.ListPage.Pages = append(n.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+		return nil
+	})
+
+	return err
 }
 
 // Dispatch finishes the model build and returns the model.
@@ -76,4 +83,24 @@ func (b *builder) Dispatch() (model.Site, error) {
 	}, -1)
 
 	return b.site, nil
+}
+
+// nodeFromCache loads a node from the cache. If the node isn't
+// registered in the cache yet, nodeFromCache will load it from
+// the route tree first.
+//
+// Normally, each page that gets registered would cause a node
+// lookup in the tree. Caching the looked up nodes avoids this.
+func (b *builder) nodeFromCache(path string) (*model.Node, error) {
+	if _, exists := b.cache[path]; !exists {
+		// If the node isn't in the cache yet, load it from the
+		// tree, where it either gets resolved or initialized.
+		n, err := tree.ResolveOrInitNode(path, b.site.Root)
+		if err != nil {
+			return nil, err
+		}
+		b.cache[path] = n.(*model.Node)
+	}
+
+	return b.cache[path], nil
 }

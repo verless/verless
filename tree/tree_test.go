@@ -200,3 +200,49 @@ func TestWalk(t *testing.T) {
 		test.Equals(t, testCase.count, count)
 	}
 }
+
+// TestWalkPath tests if the WalkPath correctly invokes the
+// walkFn for each node in a given path.
+func TestWalkPath(t *testing.T) {
+	testErr := errors.New("this is a test error")
+
+	tests := map[string]struct {
+		path          string
+		count         int
+		expectedError error
+	}{
+		"root path": {
+			path:  RootPath,
+			count: 1,
+		},
+		"path with depth 1": {
+			path:  "/blog",
+			count: 2,
+		},
+		"path with depth 2": {
+			path:  "/blog/coffee",
+			count: 3,
+		},
+		"not existing path": {
+			path:          "/blog/espresso",
+			expectedError: testErr,
+		},
+	}
+
+	for name, testCase := range tests {
+		t.Log(name)
+
+		count := 0
+
+		err := WalkPath(testCase.path, &root, func(node Node) error {
+			count++
+			return testCase.expectedError
+		})
+
+		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
+			continue
+		}
+
+		test.Equals(t, testCase.count, count)
+	}
+}
