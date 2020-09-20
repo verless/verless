@@ -201,6 +201,8 @@ func TestWalk(t *testing.T) {
 	}
 }
 
+// TestWalkPath tests if the WalkPath correctly invokes the
+// walkFn for each node in a given path.
 func TestWalkPath(t *testing.T) {
 	testErr := errors.New("this is a test error")
 
