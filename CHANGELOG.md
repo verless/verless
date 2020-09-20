@@ -7,11 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.3.7] - 2020-09-20
+
+### Changed
+- `list-page.html`: Make pages from sub-directories available.
+
 ## [0.3.6] - 2020-09-17
 
 ### Fixed
-- Fix relative build paths like `./example`
-- Fix error when serving the site without `-w`
+- Fix relative build paths like `./example`.
+- Fix error when serving the site without `-w`.
 
 ## [0.3.5] - 2020-09-17
 
