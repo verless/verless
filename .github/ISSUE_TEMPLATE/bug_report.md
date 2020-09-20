@@ -32,4 +32,4 @@ Copy and insert your output here.
 ### System information
 
 * OS: [e.g. Linux Mint]
-* Version [e.g. 20]
+* Version: [e.g. 20]
