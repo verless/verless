@@ -50,11 +50,6 @@ func (b *builder) RegisterPage(page model.Page) error {
 	// Otherwise, register the page as normal page.
 	node.Pages = append(node.Pages, page)
 
-	// Assign the list page route if it hasn't a route yet.
-	if node.ListPage.Route == "" {
-		node.ListPage.Route = page.Route
-	}
-
 	// Reference the new page in all parent nodes as well.
 	err = tree.WalkPath(page.Route, b.site.Root, func(currentNode tree.Node) error {
 		n := currentNode.(*model.Node)
