@@ -71,9 +71,13 @@ func (b *builder) Dispatch() (model.Site, error) {
 	b.site.Nav = b.cfg.Site.Nav
 	b.site.Footer = b.cfg.Site.Footer
 
-	// Sort the pages of each node's list page by date.
-	_ = tree.Walk(b.site.Root, func(node tree.Node) error {
+	// The final tree traversal does some final tasks:
+	//	1. Assign a route to all list pages
+	//	2. Sort the pages in all list pages by date
+	_ = tree.Walk(b.site.Root, func(path string, node tree.Node) error {
 		n := node.(*model.Node)
+
+		n.ListPage.Route = path
 
 		sort.Slice(n.ListPage.Pages, func(i, j int) bool {
 			return n.ListPage.Pages[i].Date.After(n.ListPage.Pages[j].Date)

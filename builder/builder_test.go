@@ -115,7 +115,7 @@ func TestBuilder_Dispatch(t *testing.T) {
 		test.Ok(t, err)
 
 		// Test if all page references in list pages are sorted correctly.
-		_ = tree.Walk(site.Root, func(node tree.Node) error {
+		_ = tree.Walk(site.Root, func(_ string, node tree.Node) error {
 			n := node.(*model.Node)
 
 			isSorted := sort.SliceIsSorted(n.ListPage.Pages, func(i, j int) bool {

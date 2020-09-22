@@ -188,7 +188,7 @@ func TestWalk(t *testing.T) {
 
 		count := 0
 
-		err := Walk(&root, func(node Node) error {
+		err := Walk(&root, func(_ string, node Node) error {
 			count++
 			return testCase.expectedError
 		}, testCase.depth)
