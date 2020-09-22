@@ -109,21 +109,29 @@ Available in:
 * `page.html`
 * `list-page.html`
 
-| Field                   | Source   | Description                                                                                  |
-|-------------------------|----------|----------------------------------------------------------------------------------------------|
-| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.           |
-| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages.                                                    |
-| `{{.Page.Title}}`       | Markdown |                                                                                              |
-| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                         |
-| `{{.Page.Date}}`        | Markdown |                                                                                              |
-| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.   |
-| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                              |
-| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                           |
-| `{{.Page.Description}}` | Markdown |                                                                                              |
-| `{{.Page.Content}}`     | Markdown |                                                                                              |
-| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`. |
-| `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.          |
-| `{{.Page.Hidden}}`      | Markdown |                                                                                              |
+| Field                   | Source   | Description                                                                                                              |
+|-------------------------|----------|--------------------------------------------------------------------------------------------------------------------------|
+| `{{.Page.Href}}`        | Filepath | Ready to use path to the page for links.                                                                                 |
+| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages. If possible, prefer `{{.Page.Href}}`. |
+| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages. If possible, prefer `{{.Page.Href}}`.                                          |
+| `{{.Page.Title}}`       | Markdown |                                                                                                                          |
+| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                                                     |
+| `{{.Page.Date}}`        | Markdown |                                                                                                                          |
+| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.                               |
+| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                                                          |
+| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                                                       |
+| `{{.Page.Description}}` | Markdown |                                                                                                                          |
+| `{{.Page.Content}}`     | Markdown |                                                                                                                          |
+| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.                             |
+| `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.                                      |
+| `{{.Page.Hidden}}`      | Markdown |                                                                                                                          |
+
+### Links to pages
+
+Normally you should use `{{.Page.Href}}` as it already provides a ready to use file path.  
+Concatenating `{{.Page.Route}}` with `{{.Page.ID}}` manually can lead to undesired effects and therefore this should be avoided.  
+Example:  
+`<p><a href="{{$page.Href}}">read post</a></p>`
 
 ### Pages
 

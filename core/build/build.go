@@ -179,6 +179,8 @@ func processFile(ctx *Context, contentDir, file string) error {
 	// ID will be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
 
+	page.Href = filepath.Join(page.Route, page.ID)
+
 	if err := setTypeForPage(&page, ctx.Types); err != nil {
 		return err
 	}
