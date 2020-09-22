@@ -7,10 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.3.9] - 2020-09-22
+
+### Changed
+- Make entire page URL available as `Page.Href`.
+
+### Fixed
+- Fix wrong URLs for pages in the root directory.
+
 ## [0.3.8] - 2020-09-22
 
 ### Changed
-- Generate `list-page.html` even for empty routes
+- Generate `list-page.html` even for empty routes.
 
 ## [0.3.7] - 2020-09-20
 
