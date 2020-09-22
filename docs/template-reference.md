@@ -111,9 +111,9 @@ Available in:
 
 | Field                   | Source   | Description                                                                                                              |
 |-------------------------|----------|--------------------------------------------------------------------------------------------------------------------------|
-| `{{.Page.HREF}}`        | Filepath | Ready to use path to the page for links.                                                                                 |
-| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages. If possible, prefer `{{.Page.HREF}}`. |
-| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages. If possible, prefer `{{.Page.HREF}}`.                                          |
+| `{{.Page.Href}}`        | Filepath | Ready to use path to the page for links.                                                                                 |
+| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages. If possible, prefer `{{.Page.Href}}`. |
+| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages. If possible, prefer `{{.Page.Href}}`.                                          |
 | `{{.Page.Title}}`       | Markdown |                                                                                                                          |
 | `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                                                     |
 | `{{.Page.Date}}`        | Markdown |                                                                                                                          |
@@ -128,10 +128,10 @@ Available in:
 
 ### Links to pages
 
-Normally you should use `{{.Page.HREF}}` as it already provides a ready to use file path.  
+Normally you should use `{{.Page.Href}}` as it already provides a ready to use file path.  
 Concatenating `{{.Page.Route}}` with `{{.Page.ID}}` manually can lead to undesired effects and therefore this should be avoided.  
 Example:  
-`<p><a href="{{$page.HREF}}">read post</a></p>`
+`<p><a href="{{$page.Href}}">read post</a></p>`
 
 ### Pages
 

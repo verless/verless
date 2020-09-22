@@ -56,8 +56,8 @@ func (b *builder) RegisterPage(page model.Page) error {
 		node.ListPage.Route = page.Route
 	}
 
-	if node.ListPage.HREF == "" {
-		node.ListPage.HREF = filepath.Join(page.Route, page.ID)
+	if node.ListPage.Href == "" {
+		node.ListPage.Href = filepath.Join(page.Route, page.ID)
 	}
 
 	// Reference the new page in all parent nodes as well.
