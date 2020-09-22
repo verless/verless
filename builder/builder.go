@@ -2,6 +2,7 @@
 package builder
 
 import (
+	"path/filepath"
 	"sort"
 	"sync"
 
@@ -53,6 +54,10 @@ func (b *builder) RegisterPage(page model.Page) error {
 	// Assign the list page route if it hasn't a route yet.
 	if node.ListPage.Route == "" {
 		node.ListPage.Route = page.Route
+	}
+
+	if node.ListPage.HREF == "" {
+		node.ListPage.HREF = filepath.Join(page.Route, page.ID)
 	}
 
 	// Reference the new page in all parent nodes as well.

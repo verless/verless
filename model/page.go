@@ -6,6 +6,7 @@ import "time"
 type Page struct {
 	Route       string
 	ID          string
+	HREF        string
 	Title       string
 	Author      string
 	Date        time.Time
