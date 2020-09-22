@@ -134,33 +134,43 @@ func ResolveNode(path string, root Node) (Node, error) {
 }
 
 // Walk traverses all nodes in a tree, starting from the root route.
-// For each node, walkFn will be invoked. As soon as an error arises
-// in one of the walkFns, the error is handed up to the caller.
+// For each node, walkFn will be invoked with the current node and the
+// tree path for that node.
 //
 // maxDepth is counted starting from 0, which represents the root
 // node. Set maxDepth to -1 to walk down the entire tree.
-func Walk(root Node, walkFn func(node Node) error, maxDepth int) error {
-	return walkNode(root, walkFn, maxDepth, 0)
+//
+// As soon as an error arises in one of the walkFns, the error is handed
+// up to the caller.
+func Walk(root Node, walkFn func(path string, node Node) error, maxDepth int) error {
+	return walkNode(root, walkFn, maxDepth, 0, RootPath)
 }
 
-func walkNode(node Node, walkFn func(node Node) error, maxDepth, curDepth int) error {
+func walkNode(node Node, walkFn func(path string, node Node) error, maxDepth, curDepth int, curPath string) error {
 	if maxDepth != -1 && curDepth-1 == maxDepth {
 		return nil
 	}
 
 	curDepth++
 
-	if err := walkFn(node); err != nil {
+	if err := walkFn(curPath, node); err != nil {
 		return err
 	}
 
-	for _, child := range node.Children() {
-		if err := walkNode(child, walkFn, maxDepth, curDepth); err != nil {
+	for edge, child := range node.Children() {
+		if err := walkNode(child, walkFn, maxDepth, curDepth, concat(curPath, edge)); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func concat(path, edge string) string {
+	if path == RootPath {
+		return path + edge
+	}
+	return path + delimiter + edge
 }
 
 // WalkPath walks all nodes within a tree path and invokes the given
