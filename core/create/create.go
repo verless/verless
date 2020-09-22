@@ -10,16 +10,17 @@ import (
 
 // Project creates a new verless default project.
 func Project(path string) error {
-	err := fs.MkdirAll(path, ContentDir, TemplateDir, AssetDir, filepath.Join(AssetDir, "css"))
+	err := fs.MkdirAll(path, ContentDir, filepath.Join(ThemesDir, DefaultTheme, TemplateDir),
+		filepath.Join(ThemesDir, DefaultTheme, "css"))
 	if err != nil {
 		return err
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                []byte(defaultConfig),
-		filepath.Join(path, TemplateDir, ListPageTpl):     []byte(defaultTpl),
-		filepath.Join(path, TemplateDir, PageTpl):         {},
-		filepath.Join(path, AssetDir, "css", "style.css"): []byte(defaultCss),
+		filepath.Join(path, "verless.yml"):                                     []byte(defaultConfig),
+		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, ListPageTpl): []byte(defaultTpl),
+		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, PageTpl):     {},
+		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, CSSFile):          []byte(defaultCss),
 	}
 
 	if err := createFiles(files); err != nil {

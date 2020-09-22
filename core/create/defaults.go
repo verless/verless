@@ -5,6 +5,7 @@ const (
 site:
   meta:
     title: Your verless Project
+theme: default
 build:
   # overwrite: true
 `
@@ -13,7 +14,7 @@ build:
 <html lang="en">
     <head>
         <title>{{.Meta.Title}}</title>
-        <link rel="stylesheet" href="../assets/css/style.css" />
+        <link rel="stylesheet" href="../css/style.css" />
     </head>
     <body>
         <main>

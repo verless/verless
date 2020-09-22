@@ -19,10 +19,15 @@ import (
 
 // New creates a new writer that renders the site model in the given
 // filesystem instance to outputDir.
-func New(fs afero.Fs, path, outputDir string, recompileTemplates bool) *writer {
+func New(fs afero.Fs, path, theme, outputDir string, recompileTemplates bool) *writer {
+	if theme == "" {
+		theme = config.DefaultTheme
+	}
+
 	w := writer{
 		fs:                 fs,
 		path:               path,
+		theme:              theme,
 		outputDir:          outputDir,
 		recompileTemplates: recompileTemplates,
 	}
@@ -33,6 +38,7 @@ func New(fs afero.Fs, path, outputDir string, recompileTemplates bool) *writer {
 type writer struct {
 	fs                 afero.Fs
 	path               string
+	theme              string
 	outputDir          string
 	site               model.Site
 	recompileTemplates bool
@@ -75,7 +81,11 @@ func (w *writer) Write(site model.Site) error {
 		return err
 	}
 
-	if err := w.copyAssetDir(); err != nil {
+	if err := w.copyStaticDir(); err != nil {
+		return err
+	}
+
+	if err := w.copyThemeDirs(); err != nil {
 		return err
 	}
 
@@ -141,18 +151,18 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		return tpl.Get(pageTpl)
 	}
 
-	tplPath := filepath.Join(w.path, config.TemplateDir, pageTpl)
+	tplPath := filepath.Join(w.path, config.ThemesDir, w.theme, config.TemplateDir, pageTpl)
 
 	return tpl.Register(pageTpl, tplPath, w.recompileTemplates)
 }
 
-func (w *writer) copyAssetDir() error {
+func (w *writer) copyStaticDir() error {
 	// If the writer's target filesystem is the OS filesystem, directly
 	// copy the asset directory using the copy package.
 	if _, ok := w.fs.(*afero.OsFs); ok {
 		var (
-			src  = filepath.Join(w.path, config.AssetDir)
-			dest = filepath.Join(w.outputDir, config.AssetDir)
+			src  = filepath.Join(w.path, config.StaticDir)
+			dest = filepath.Join(w.outputDir, config.StaticDir)
 		)
 		if _, err := w.fs.Stat(src); os.IsNotExist(err) {
 			return nil
@@ -161,13 +171,45 @@ func (w *writer) copyAssetDir() error {
 	} else {
 		// Otherwise, copy the assets directory from the physical filesystem
 		// into the memory filesystem.
-		return copyFromOsFs(w.fs, w.path, w.outputDir)
+		return copyFromOsFs(w.fs, w.path, w.outputDir, false)
 	}
+}
+
+func (w *writer) copyThemeDirs() error {
+	dirs := []struct {
+		src  string
+		dest string
+	}{
+		{
+			src:  filepath.Join(w.path, config.ThemesDir, w.theme, config.CSSDir),
+			dest: filepath.Join(w.outputDir, config.CSSDir),
+		},
+		{
+			src:  filepath.Join(w.path, config.ThemesDir, w.theme, config.JSDir),
+			dest: filepath.Join(w.outputDir, config.JSDir),
+		},
+	}
+
+	for _, dir := range dirs {
+		if _, err := os.Stat(dir.src); os.IsNotExist(err) {
+			continue
+		}
+		if err := copyFromOsFs(w.fs, dir.src, dir.dest, true); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // copyFromOsFs copies a given directory from the OS filesystem into
 // another filesystem instance to the desired destination.
-func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
+//
+// If fileOnly is set to true, files will be copied directly into the
+// destination directory, without their directory structure inside src.
+//
+// ToDo: Move this function into the fs package.
+func copyFromOsFs(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 	var (
 		files = make(chan string)
 		err   error
@@ -184,7 +226,18 @@ func copyFromOsFs(targetFs afero.Fs, src, dest string) error {
 			return err
 		}
 
-		path := filepath.ToSlash(filepath.Join(dest, file))
+		var path string
+
+		if fileOnly {
+			filename := filepath.Base(file)
+			path = filepath.ToSlash(filepath.Join(dest, filename))
+		} else {
+			path = filepath.ToSlash(filepath.Join(dest, file))
+		}
+
+		if err := targetFs.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			return err
+		}
 
 		memFile, err := targetFs.Create(path)
 		if err != nil {
