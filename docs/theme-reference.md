@@ -9,6 +9,7 @@ you therefore need to customize the default theme, create your own theme or use 
 * [Required templates](#required-templates)
 * [Custom templates](#custom-templates)
 * [Customize the default theme](#customize-the-default-theme)
+* [Create your own theme](#create-your-own-theme)
 
 ## Theme structure
 
@@ -102,3 +103,8 @@ Or, if you already are _inside_ the `my-blog` directory:
 ```shell script
 $ verless create theme . dark-theme
 ```
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+</p>
