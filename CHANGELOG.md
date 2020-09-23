@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.0] - 2020-09-23
+
+### Added
+- Introduce the verless theming system.
+- Add the `verless create theme` command.
+
+### Changed
+- Create a default theme when creating a new project.
+- Update the example project to use the default theme.
+- Rename the `assets` directory to `static`.
+
+### Removed
+- Remove the `templates` directory.
+
 ## [0.3.9] - 2020-09-22
 
 ### Changed
