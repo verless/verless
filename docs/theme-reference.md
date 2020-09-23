@@ -19,14 +19,14 @@ Let's take a theme called `dark-theme` as an example. The directory structure ha
 
 ```shell script
 my-blog/
-    themes/
-        dark-theme/
-            css/
-                style.css
-            js/
-            templates/
-                list-page.html
-                page.html
+└── themes/
+    └── dark-theme/
+        ├── css/
+        │   └── style.css
+        ├── js/
+        └── templates/
+            ├── list-page.html
+            └── page.html
 ```
 
 The `css` and `js` directories will be copied into the root of your website, so your stylesheet will be directly
