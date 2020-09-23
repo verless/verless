@@ -74,6 +74,7 @@ Make sure to check out the [example templates](../example/templates).
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field                   | Source      | Description                                        |
 |-------------------------|-------------|----------------------------------------------------|
@@ -88,6 +89,7 @@ Available in:
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field            | Source      | Description                                        |
 |------------------|-------------|----------------------------------------------------|
@@ -108,6 +110,7 @@ Available in:
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field                   | Source   | Description                                                                                                              |
 |-------------------------|----------|--------------------------------------------------------------------------------------------------------------------------|
@@ -137,6 +140,7 @@ Example:
 
 Available in:
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field        | Source   | Description                                                                                  |
 |--------------|----------|----------------------------------------------------------------------------------------------|
@@ -147,6 +151,7 @@ Available in:
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field               | Source      | Description                                        |
 |---------------------|-------------|----------------------------------------------------|
