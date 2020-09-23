@@ -2,10 +2,10 @@ package core
 
 import (
 	"fmt"
-	"github.com/verless/verless/config"
 	"os"
 	"path/filepath"
 
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/create"
 )
 
