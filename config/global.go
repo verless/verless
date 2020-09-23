@@ -29,9 +29,6 @@ const (
 	// DefaultTheme is the name of the default theme.
 	DefaultTheme string = "default"
 
-	// CSSFile is the default CSS file expected in CSSDir.
-	CSSFile string = "style.css"
-
 	// StaticDir is the directory for static files.
 	StaticDir string = "static"
 

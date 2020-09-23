@@ -21,7 +21,7 @@ func Project(path string) error {
 		filepath.Join(path, "verless.yml"):                                     []byte(defaultConfig),
 		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, ListPageTpl): []byte(defaultTpl),
 		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, PageTpl):     {},
-		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, CSSFile):          []byte(defaultCss),
+		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, "style.css"):      []byte(defaultCss),
 	}
 
 	return createFiles(files)

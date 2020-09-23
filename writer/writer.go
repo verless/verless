@@ -3,7 +3,6 @@
 package writer
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -171,7 +170,7 @@ func (w *writer) copyStaticDir() error {
 	} else {
 		// Otherwise, copy the assets directory from the physical filesystem
 		// into the memory filesystem.
-		return copyFromOsFs(w.fs, w.path, w.outputDir, false)
+		return fs.CopyFromOS(w.fs, w.path, w.outputDir, false)
 	}
 }
 
@@ -194,58 +193,10 @@ func (w *writer) copyThemeDirs() error {
 		if _, err := os.Stat(dir.src); os.IsNotExist(err) {
 			continue
 		}
-		if err := copyFromOsFs(w.fs, dir.src, dir.dest, true); err != nil {
+		if err := fs.CopyFromOS(w.fs, dir.src, dir.dest, true); err != nil {
 			return err
 		}
 	}
 
 	return nil
-}
-
-// copyFromOsFs copies a given directory from the OS filesystem into
-// another filesystem instance to the desired destination.
-//
-// If fileOnly is set to true, files will be copied directly into the
-// destination directory, without their directory structure inside src.
-//
-// ToDo: Move this function into the fs package.
-func copyFromOsFs(targetFs afero.Fs, src, dest string, fileOnly bool) error {
-	var (
-		files = make(chan string)
-		err   error
-	)
-
-	go func() {
-		err = fs.StreamFiles(src, files)
-	}()
-
-	for file := range files {
-		// ToDo: Check if joining the filepath is okay in terms of performance.
-		bytes, err := ioutil.ReadFile(filepath.Join(src, file))
-		if err != nil {
-			return err
-		}
-
-		var path string
-
-		if fileOnly {
-			filename := filepath.Base(file)
-			path = filepath.ToSlash(filepath.Join(dest, filename))
-		} else {
-			path = filepath.ToSlash(filepath.Join(dest, file))
-		}
-
-		if err := targetFs.MkdirAll(filepath.Dir(path), 0755); err != nil {
-			return err
-		}
-
-		memFile, err := targetFs.Create(path)
-		if err != nil {
-			return err
-		}
-		if _, err := memFile.Write(bytes); err != nil {
-			return err
-		}
-	}
-	return err
 }
