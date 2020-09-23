@@ -42,7 +42,7 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 	// If the page has been created as a file called index.md,
 	// register the page as list page.
-	if page.ID == config.ListPageID {
+	if page.ID == config.ListPageID && !page.Hidden {
 		node.ListPage.Page = page
 		return nil
 	}
@@ -53,7 +53,13 @@ func (b *builder) RegisterPage(page model.Page) error {
 	// Reference the new page in all parent nodes as well.
 	err = tree.WalkPath(page.Route, b.site.Root, func(currentNode tree.Node) error {
 		n := currentNode.(*model.Node)
-		n.ListPage.Pages = append(n.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+		p := &node.Pages[len(node.Pages)-1]
+
+		if p.Hidden {
+			return nil
+		}
+
+		n.ListPage.Pages = append(n.ListPage.Pages, p)
 		return nil
 	})
 
