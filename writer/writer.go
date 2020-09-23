@@ -55,7 +55,7 @@ func (w *writer) Write(site model.Site) error {
 
 	w.site = site
 
-	err := tree.Walk(w.site.Root, func(node tree.Node) error {
+	err := tree.Walk(w.site.Root, func(_ string, node tree.Node) error {
 		for _, p := range node.(*model.Node).Pages {
 			if err := w.writePage(p.Route, page{
 				Meta:   &w.site.Meta,
