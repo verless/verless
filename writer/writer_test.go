@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"github.com/verless/verless/config"
 	"os"
 	"path"
 	"testing"
@@ -74,5 +75,5 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 
 // setupNewWriter initializes a new writer instance.
 func setupNewWriter(fs afero.Fs) *writer {
-	return New(fs, testPath, testOutPath, false)
+	return New(fs, testPath, config.DefaultTheme, testOutPath, false)
 }
