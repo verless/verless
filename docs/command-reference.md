@@ -19,7 +19,7 @@ To install the verless CLI tool, check out the
 
 ## verless
 
-The top-level verless command does not provide any functionality and only prints usage information instead.
+The top-level verless command does not provide any functionality.
 
 ## verless build
 
@@ -48,7 +48,7 @@ build:
 
 ## verless create
 
-The `verless create` command does not provide any functionality and only prints usage information instead.
+The `verless create` command does not provide any functionality.
 
 ## verless create project
 
@@ -61,6 +61,23 @@ directory with the new project.
 | Option        | Short | Type   | Example       | Description                                             |
 |---------------|-------|--------|---------------|---------------------------------------------------------|
 | `--overwrite` | -     | Bool   | `--overwrite` | Overwrite the specified directory if it already exists. |
+
+## verless create theme
+
+`verless create theme PROJECT NAME` initializes a new verless theme called `NAME` within an existing project called
+`PROJECT`. For example, if there's a project `my-blog` and you want to create a theme called `dark-theme`, use the
+following command:
+
+```shell script
+$ verless create theme my-blog dark-theme
+```
+
+Just as with other commands, `PROJECT` is the path to your project. If you already are _inside_ `my-blog` directory, the
+command is:
+
+```shell script
+$ verless create theme . dark-theme
+```
 
 ## verless serve
 
