@@ -3,4 +3,4 @@ Title: Espresso blog
 Type: startpage
 ---
 
-Welcome to my espresso blog!
+Welcome to my Espresso blog!

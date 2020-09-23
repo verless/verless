@@ -59,7 +59,7 @@ func (b *builder) RegisterPage(page model.Page) error {
 			return nil
 		}
 
-		n.ListPage.Pages = append(n.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+		n.ListPage.Pages = append(n.ListPage.Pages, p)
 		return nil
 	})
 
