@@ -7,6 +7,7 @@ look at the [example project](../example).
 ## Contents
 
 * [Configuration reference](configuration-reference.md)
+* [Theme reference](theme-reference.md)
 * [Template reference](template-reference.md)
 * [Markdown reference](markdown-reference.md)
 * [Plugin reference](plugin-reference.md)

@@ -5,41 +5,8 @@ these templates.
 
 ## Contents
 
-* [Template path](#template-path)
-* [Required template](#required-templates)
-* [Optional templates](#optional-templates)
 * [Template syntax](#template-syntax)
 * [Field reference](#field-reference)
-
-## Template path
-
-All templates have to live in your project's `templates` directory. You can use the `verless create project` command
-to initialize a new verless project, which will create the directory automatically for you.
-
-## Required templates
-
-There are two types of templates, and each is represented with its own file:
-
-* `page.html`: This template is used to render your Markdown content.
-* `list-page.html`: This template is used to render generated list pages. Verless creates a list page for each
-directory in your content path, and all pages inside that directory are available to the list page.
-
-Both templates are required to build a static website.
-
-## Optional templates
-
-If you've got a special page like an 'About' page, you may provide a distinct template in the Markdown file:
-
-```markdown
-# File: content/about.md
----
-Title: About
-Template: about.html
----
-```
-
-You can then provide a template called `about.html` in your `templates` directory. verless will use the custom template
-instead of `page.html`.
 
 ## Template syntax
 
