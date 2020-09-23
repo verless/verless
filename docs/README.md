@@ -1,8 +1,10 @@
 # Documentation
 
 Welcome to the verless documentation, where you can find references for configuring your project, creating templates,
-using plugins and using the verless CLI. However, while references are helpful for certain cases, we recommend taking a
-look at the [example project](../example).
+using plugins and using the verless CLI.
+
+While references are helpful for certain cases, we recommend taking a look at the [example project](../example) and
+heading over to the references if you need more specific information.
 
 ## Contents
 
