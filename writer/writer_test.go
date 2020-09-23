@@ -1,12 +1,12 @@
 package writer
 
 import (
-	"github.com/verless/verless/config"
 	"os"
 	"path"
 	"testing"
 
 	"github.com/spf13/afero"
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/test"
 )
