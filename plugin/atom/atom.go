@@ -13,8 +13,6 @@ import (
 )
 
 const (
-	// Key is the public plugin key.
-	Key string = "atom"
 	// filename is the filename for the RSS feed.
 	filename string = "atom.xml"
 )

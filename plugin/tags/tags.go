@@ -9,8 +9,6 @@ import (
 )
 
 const (
-	// Key is the public plugin key.
-	Key string = "tags"
 	// tagsDir is the target directory for all tag directories.
 	tagsDir string = "/tags"
 )
