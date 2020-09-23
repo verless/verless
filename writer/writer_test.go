@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/spf13/afero"
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/test"
 )
@@ -74,5 +75,5 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 
 // setupNewWriter initializes a new writer instance.
 func setupNewWriter(fs afero.Fs) *writer {
-	return New(fs, testPath, testOutPath, false)
+	return New(fs, testPath, config.DefaultTheme, testOutPath, false)
 }

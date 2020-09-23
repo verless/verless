@@ -14,11 +14,26 @@ const (
 	// ContentDir is the directory for Markdown content.
 	ContentDir string = "content"
 
-	// TemplateDir is the directory for templates.
+	// ThemesDir is the directory for verless themes.
+	ThemesDir string = "themes"
+
+	// TemplateDir is the directory for templates inside ThemesDir.
 	TemplateDir string = "templates"
 
-	// AssetDir is the directory for assets.
-	AssetDir string = "assets"
+	// CSSDir is the directory for CSS files.
+	CSSDir string = "css"
+
+	// JSDir is the directory for JavaScript files.
+	JSDir string = "js"
+
+	// DefaultTheme is the name of the default theme.
+	DefaultTheme string = "default"
+
+	// CSSFile is the default CSS file expected in CSSDir.
+	CSSFile string = "style.css"
+
+	// StaticDir is the directory for static files.
+	StaticDir string = "static"
 
 	// OutputDir is the default output directory.
 	OutputDir string = "target"

@@ -1,19 +1,25 @@
+<!--
+  -- This startpage template is not mandatory by default, but we've
+  -- declared a `startpage` type in the `types` section of our configuration
+  -- which uses this template.
+  -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>{{.Meta.Title}}</title>
         <meta name="author" content="{{.Meta.Author}}" />
         <meta name="description" content="{{.Meta.Description}}" />
-        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="/css/style.css" />
     </head>
     <body>
+        <h1>Welcome to {{.Meta.Title}}!</h1>
         <main>
             {{range $page := .Pages}}
                 <div>
                     <h3>{{$page.Title}}</h3>
                     <p><small>Posted on {{$page.Date.Format "Jan 2 2006"}}</small></p>
                     <p>{{$page.Description}}</p>
-                    <p><a href="{{$page.Href}}">read post</a></p>
+                    <p><a href="{{$page.ID}}">read post</a></p>
                 </div>
             {{end}}
         </main>

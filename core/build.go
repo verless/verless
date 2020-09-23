@@ -43,7 +43,7 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 		outputDir = finalOutputDir(path, &options)
 		p         = parser.NewMarkdown()
 		b         = builder.New(&cfg)
-		w         = writer.New(fs, path, outputDir, options.RecompileTemplates)
+		w         = writer.New(fs, path, cfg.Theme, outputDir, options.RecompileTemplates)
 	)
 
 	if cfg.Version == "" {

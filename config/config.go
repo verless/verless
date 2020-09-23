@@ -15,6 +15,7 @@ type Config struct {
 		Footer model.Footer
 	}
 	Plugins []string
+	Theme   string
 	Types   map[string]*model.Type
 	Build   struct {
 		Overwrite bool
