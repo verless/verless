@@ -36,6 +36,14 @@ changes yourself and open a pull request. When you do so, please take note of ou
 We highly appreciate the time and effort that go into code contributions. There are just some requirements the code
 needs to meet in order to get merged.
 
+### Philosophy
+
+verless isn't a company governed by customer expectations that have to be met for generating revenue. We won't accept
+quick-and-dirty solutions, workarounds or hotfixes, as these terms merely are excuses for justifying inadequate code.
+
+Instead, we strive for perfection, thoughtful design considerations, maintainability and optimizations. When somebody
+is working on the verless codebase, their time shall not be wasted with questionable code.
+
 ### Git conventions
 
 * Branch names are up to you.
@@ -63,3 +71,8 @@ There also are some 'soft' recommendations that apply to most cases:
 * Prefer short and concise variable names.
 
 **Thanks for contributing!**
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+</p>
