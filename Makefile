@@ -1,7 +1,7 @@
 VERSION := $(shell git describe --tags --abbrev=0)
 BUILD := $(shell git rev-parse --short HEAD)
 PROJECTNAME := verless
-TARGET := .target
+TARGET := target
 GOFILES := ./cmd/verless
 
 # Use linker flags to provide version/build settings
