@@ -8,7 +8,7 @@
 # For hacking on verless, mount the source code against /src:
 #   $ docker container run -v $(pwd):/src verless
 #
-# This will run `go run cmd/main.go`, meaning your code changes
+# This will run `go run cmd/verless/main.go`, meaning your code changes
 # become visible immediately.
 #
 # Example: Change config.Version in to "my-version" and run the
@@ -30,7 +30,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -v -o ./target/verless cmd/main.go && \
+RUN go build -v -o ./target/verless cmd/verless/main.go && \
     cp ./target/verless /bin/verless
 
-ENTRYPOINT ["go", "run", "cmd/main.go"]
+ENTRYPOINT ["go", "run", "cmd/verless/main.go"]
