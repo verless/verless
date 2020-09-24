@@ -1,0 +1,14 @@
+# Each line is a file pattern followed by one or more owners.
+# More on CODEOWNERS files:
+# https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+
+# Component             # Code Owner
+/builder/               @dominikbraun
+/core/build/            @dominikbraun @aligator
+/core/serve/            @aligator
+/core/watch/            @aligator
+/docs/                  @dominikbraun
+/example/               @aligator
+/test/                  @aligator
+/tree/                  @dominikbraun
+/writer/                @dominikbraun
