@@ -26,7 +26,7 @@
 **verless** (pronounced like _serverless_) is a Static Site Generator designed for Markdown-based content with focus on
 simplicity and performance. It reads your Markdown files, applies your HTML templates and renders them as a website.
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Features
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Features
 
 * **Flexible templating:** Create default templates for all pages or use Page Types to use custom templates
 * **Central configuration:** Global information, enabled plugins and other settings are in `verless.yml`
@@ -36,12 +36,12 @@ simplicity and performance. It reads your Markdown files, applies your HTML temp
 * **Choose what you need:** Only generate RSS feeds or overview pages for tags if you want to
 * **Focus on simplicity:** If your project isn't simple, verless probably isn't a good fit
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Examples
 
 * Example project structure: [example/](example)
 * Real-world example website: [dominikbraun.io](https://dominikbraun.io)
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Installation
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Installation
 
 ### Linux and macOS
 
@@ -69,7 +69,7 @@ another command, just append it to the image name:
 $ docker container run verless/verless version
 ```
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Getting started
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Getting started
 
 The easiest way to create a new project is to use the verless CLI:
 
@@ -93,11 +93,11 @@ $ verless build my-blog
 
 By default, verless generates the website into `my-blog/target`. You're now good to [create your first content](docs)!
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Documentation
 
 For a detailed reference, check out the [documentation](docs).
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Contributing
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Contributing
 
 Anyone is welcome to contribute to verless. Please refer to our [contribution guidelines](CONTRIBUTING.md).
 
