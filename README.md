@@ -103,5 +103,7 @@ Anyone is welcome to contribute to verless. Please refer to our [contribution gu
 
 <p align="center">
 <br>
-<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+<a href="https://github.com/verless/verless">
+<img src="https://verless.dominikbraun.io/static/img/logo-footer-v1.0.0.png">
+</a>
 </p>
