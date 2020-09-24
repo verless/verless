@@ -15,11 +15,11 @@ import (
 )
 
 type Context struct {
-	Fs            afero.Fs
-	Path          string
-	OutputDir     string
-	Theme         string
-	RecompileTpls bool
+	Fs                 afero.Fs
+	Path               string
+	OutputDir          string
+	Theme              string
+	OverwriteTemplates bool
 }
 
 // New creates a new writer that renders the site model in the given
@@ -138,13 +138,13 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		pageTpl = defaultTpl
 	}
 
-	if !w.ctx.RecompileTpls && tpl.IsRegistered(pageTpl) {
+	if !w.ctx.OverwriteTemplates && tpl.IsRegistered(pageTpl) {
 		return tpl.Get(pageTpl)
 	}
 
 	tplPath := filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.TemplateDir, pageTpl)
 
-	return tpl.Register(pageTpl, tplPath, w.ctx.RecompileTpls)
+	return tpl.Register(pageTpl, tplPath, w.ctx.OverwriteTemplates)
 }
 
 func (w *writer) copyDirs() error {

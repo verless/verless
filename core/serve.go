@@ -39,7 +39,7 @@ func RunServe(path string, options ServeOptions) error {
 	targetFiles := getOutputDir(path, &options.BuildOptions)
 
 	// If yes, build it if requested to do so.
-	options.BuildOptions.RecompileTpls = options.Watch
+	options.BuildOptions.OverwriteTemplates = options.Watch
 	options.Overwrite = true
 
 	memMapFs := afero.NewMemMapFs()

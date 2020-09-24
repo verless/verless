@@ -76,10 +76,10 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 // setupNewWriter initializes a new writer instance.
 func setupNewWriter(fs afero.Fs) *writer {
 	return New(Context{
-		Fs:            fs,
-		Path:          testPath,
-		OutputDir:     testOutPath,
-		Theme:         config.DefaultTheme,
-		RecompileTpls: false,
+		Fs:                 fs,
+		Path:               testPath,
+		OutputDir:          testOutPath,
+		Theme:              config.DefaultTheme,
+		OverwriteTemplates: false,
 	})
 }
