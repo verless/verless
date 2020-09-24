@@ -2,7 +2,7 @@
 <br>
 <br>
 <br>
-<img src="https://verless.dominikbraun.io/static/img/logo-readme-v1.0.0.png">
+<img src="https://verless.dominikbraun.io/static/img/logo-github-v1.0.0.png">
 <br>
 <br>
 <br>
