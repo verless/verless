@@ -61,7 +61,7 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 
 		testCase.beforeTest()
 
-		err := fs.Rmdir(memMapFs, w.outputDir)
+		err := fs.Rmdir(memMapFs, w.ctx.OutputDir)
 
 		if testCase.expectedError == "" {
 			test.Ok(t, err)
@@ -75,5 +75,11 @@ func TestWriter_removeOutDirIfExists(t *testing.T) {
 
 // setupNewWriter initializes a new writer instance.
 func setupNewWriter(fs afero.Fs) *writer {
-	return New(fs, testPath, config.DefaultTheme, testOutPath, false)
+	return New(Context{
+		Fs:            fs,
+		Path:          testPath,
+		OutputDir:     testOutPath,
+		Theme:         config.DefaultTheme,
+		RecompileTpls: false,
+	})
 }
