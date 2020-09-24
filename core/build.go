@@ -30,8 +30,8 @@ type BuildOptions struct {
 	OutputDir string
 	// Overwrite specifies that the output folder can be overwritten.
 	Overwrite bool
-	// RecompileTemplates forces a recompilation of all templates.
-	RecompileTemplates bool
+	// RecompileTpls forces a recompilation of all templates.
+	RecompileTpls bool
 }
 
 // RunBuild triggers a build using the provided options and user
@@ -39,11 +39,20 @@ type BuildOptions struct {
 //
 // See doc.go for more information on the core architecture.
 func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config) error {
+	outputDir := getOutputDir(path, &options)
+
+	writerCtx := writer.Context{
+		Fs:            fs,
+		Path:          path,
+		OutputDir:     outputDir,
+		Theme:         cfg.Theme,
+		RecompileTpls: options.RecompileTpls,
+	}
+
 	var (
-		outputDir = finalOutputDir(path, &options)
-		p         = parser.NewMarkdown()
-		b         = builder.New(&cfg)
-		w         = writer.New(fs, path, cfg.Theme, outputDir, options.RecompileTemplates)
+		p = parser.NewMarkdown()
+		b = builder.New(&cfg)
+		w = writer.New(writerCtx)
 	)
 
 	if cfg.Version == "" {
@@ -61,7 +70,7 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 		Writer:             w,
 		Plugins:            make([]build.Plugin, 0),
 		Types:              cfg.Types,
-		RecompileTemplates: options.RecompileTemplates,
+		RecompileTemplates: options.RecompileTpls,
 	}
 
 	plugins := loadPlugins(&cfg, fs, outputDir)
@@ -84,8 +93,8 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 	return nil
 }
 
-// finalOutputDir determines the final output path.
-func finalOutputDir(path string, options *BuildOptions) string {
+// getOutputDir determines the final output path.
+func getOutputDir(path string, options *BuildOptions) string {
 	if options.OutputDir != "" {
 		return options.OutputDir
 	}

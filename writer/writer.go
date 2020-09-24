@@ -16,31 +16,29 @@ import (
 	"github.com/verless/verless/tree"
 )
 
+type Context struct {
+	Fs            afero.Fs
+	Path          string
+	OutputDir     string
+	Theme         string
+	RecompileTpls bool
+}
+
 // New creates a new writer that renders the site model in the given
 // filesystem instance to outputDir.
-func New(fs afero.Fs, path, theme, outputDir string, recompileTemplates bool) *writer {
-	if theme == "" {
-		theme = config.DefaultTheme
+func New(ctx Context) *writer {
+	if ctx.Theme == "" {
+		ctx.Theme = config.DefaultTheme
 	}
 
-	w := writer{
-		fs:                 fs,
-		path:               path,
-		theme:              theme,
-		outputDir:          outputDir,
-		recompileTemplates: recompileTemplates,
-	}
+	w := writer{ctx: ctx}
 
 	return &w
 }
 
 type writer struct {
-	fs                 afero.Fs
-	path               string
-	theme              string
-	outputDir          string
-	site               model.Site
-	recompileTemplates bool
+	site model.Site
+	ctx  Context
 }
 
 // Write renders the entire site model to the writer's filesystem.
@@ -48,7 +46,7 @@ type writer struct {
 // Basically, it creates a directory for each page and renders the
 // page using its respective template. It also copies all assets.
 func (w *writer) Write(site model.Site) error {
-	if err := fs.Rmdir(w.fs, w.outputDir); err != nil {
+	if err := fs.Rmdir(w.ctx.Fs, w.ctx.OutputDir); err != nil {
 		return err
 	}
 
@@ -94,13 +92,13 @@ func (w *writer) Write(site model.Site) error {
 // writePage renders a single page by applying the associated template
 // and writing the file inside the output directory.
 func (w *writer) writePage(route string, page page) error {
-	path := filepath.Join(w.outputDir, route, page.Page.ID)
+	path := filepath.Join(w.ctx.OutputDir, route, page.Page.ID)
 
-	if err := w.fs.MkdirAll(path, 0700); err != nil {
+	if err := w.ctx.Fs.MkdirAll(path, 0700); err != nil {
 		return err
 	}
 
-	file, err := w.fs.Create(filepath.Join(path, config.IndexFile))
+	file, err := w.ctx.Fs.Create(filepath.Join(path, config.IndexFile))
 	if err != nil {
 		return err
 	}
@@ -115,13 +113,13 @@ func (w *writer) writePage(route string, page page) error {
 
 // writeListPage does the same thing as writePage but for list pages.
 func (w *writer) writeListPage(route string, listPage listPage) error {
-	path := filepath.Join(w.outputDir, route)
+	path := filepath.Join(w.ctx.OutputDir, route)
 
-	if err := w.fs.MkdirAll(path, 0700); err != nil {
+	if err := w.ctx.Fs.MkdirAll(path, 0700); err != nil {
 		return err
 	}
 
-	file, err := w.fs.Create(filepath.Join(path, config.IndexFile))
+	file, err := w.ctx.Fs.Create(filepath.Join(path, config.IndexFile))
 	if err != nil {
 		return err
 	}
@@ -146,31 +144,31 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		pageTpl = defaultTpl
 	}
 
-	if !w.recompileTemplates && tpl.IsRegistered(pageTpl) {
+	if !w.ctx.RecompileTpls && tpl.IsRegistered(pageTpl) {
 		return tpl.Get(pageTpl)
 	}
 
-	tplPath := filepath.Join(w.path, config.ThemesDir, w.theme, config.TemplateDir, pageTpl)
+	tplPath := filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.TemplateDir, pageTpl)
 
-	return tpl.Register(pageTpl, tplPath, w.recompileTemplates)
+	return tpl.Register(pageTpl, tplPath, w.ctx.RecompileTpls)
 }
 
 func (w *writer) copyStaticDir() error {
 	// If the writer's target filesystem is the OS filesystem, directly
 	// copy the asset directory using the copy package.
-	if _, ok := w.fs.(*afero.OsFs); ok {
+	if _, ok := w.ctx.Fs.(*afero.OsFs); ok {
 		var (
-			src  = filepath.Join(w.path, config.StaticDir)
-			dest = filepath.Join(w.outputDir, config.StaticDir)
+			src  = filepath.Join(w.ctx.Path, config.StaticDir)
+			dest = filepath.Join(w.ctx.OutputDir, config.StaticDir)
 		)
-		if _, err := w.fs.Stat(src); os.IsNotExist(err) {
+		if _, err := w.ctx.Fs.Stat(src); os.IsNotExist(err) {
 			return nil
 		}
 		return copy.Copy(src, dest)
 	} else {
 		// Otherwise, copy the assets directory from the physical filesystem
 		// into the memory filesystem.
-		return fs.CopyFromOS(w.fs, w.path, w.outputDir, false)
+		return fs.CopyFromOS(w.ctx.Fs, w.ctx.Path, w.ctx.OutputDir, false)
 	}
 }
 
@@ -180,12 +178,12 @@ func (w *writer) copyThemeDirs() error {
 		dest string
 	}{
 		{
-			src:  filepath.Join(w.path, config.ThemesDir, w.theme, config.CSSDir),
-			dest: filepath.Join(w.outputDir, config.CSSDir),
+			src:  filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.CSSDir),
+			dest: filepath.Join(w.ctx.OutputDir, config.CSSDir),
 		},
 		{
-			src:  filepath.Join(w.path, config.ThemesDir, w.theme, config.JSDir),
-			dest: filepath.Join(w.outputDir, config.JSDir),
+			src:  filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.JSDir),
+			dest: filepath.Join(w.ctx.OutputDir, config.JSDir),
 		},
 	}
 
@@ -193,7 +191,7 @@ func (w *writer) copyThemeDirs() error {
 		if _, err := os.Stat(dir.src); os.IsNotExist(err) {
 			continue
 		}
-		if err := fs.CopyFromOS(w.fs, dir.src, dir.dest, true); err != nil {
+		if err := fs.CopyFromOS(w.ctx.Fs, dir.src, dir.dest, true); err != nil {
 			return err
 		}
 	}
