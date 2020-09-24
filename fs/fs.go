@@ -31,9 +31,12 @@ var (
 // match the given filters through the files channel.
 func StreamFiles(path string, files chan<- string, filters ...func(file string) bool) error {
 
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		close(files)
-		return nil
+	if _, err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			close(files)
+			return nil
+		}
+		return err
 	}
 
 	// Convert to absolute path so that it does not make a difference if the paths are in different formats.

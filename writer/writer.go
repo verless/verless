@@ -3,11 +3,9 @@
 package writer
 
 import (
-	"os"
 	"path/filepath"
 	"text/template"
 
-	"github.com/otiai10/copy"
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
@@ -78,11 +76,7 @@ func (w *writer) Write(site model.Site) error {
 		return err
 	}
 
-	if err := w.copyStaticDir(); err != nil {
-		return err
-	}
-
-	if err := w.copyThemeDirs(); err != nil {
+	if err := w.copyDirs(); err != nil {
 		return err
 	}
 
@@ -153,45 +147,31 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 	return tpl.Register(pageTpl, tplPath, w.ctx.RecompileTpls)
 }
 
-func (w *writer) copyStaticDir() error {
-	// If the writer's target filesystem is the OS filesystem, directly
-	// copy the asset directory using the copy package.
-	if _, ok := w.ctx.Fs.(*afero.OsFs); ok {
-		var (
-			src  = filepath.Join(w.ctx.Path, config.StaticDir)
-			dest = filepath.Join(w.ctx.OutputDir, config.StaticDir)
-		)
-		if _, err := w.ctx.Fs.Stat(src); os.IsNotExist(err) {
-			return nil
-		}
-		return copy.Copy(src, dest)
-	} else {
-		// Otherwise, copy the assets directory from the physical filesystem
-		// into the memory filesystem.
-		return fs.CopyFromOS(w.ctx.Fs, w.ctx.Path, w.ctx.OutputDir, false)
-	}
-}
-
-func (w *writer) copyThemeDirs() error {
+func (w *writer) copyDirs() error {
 	dirs := []struct {
-		src  string
-		dest string
+		src      string
+		dest     string
+		fileOnly bool
 	}{
 		{
-			src:  filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.CSSDir),
-			dest: filepath.Join(w.ctx.OutputDir, config.CSSDir),
+			src:      filepath.Join(w.ctx.Path, config.StaticDir),
+			dest:     filepath.Join(w.ctx.OutputDir, config.StaticDir),
+			fileOnly: false,
 		},
 		{
-			src:  filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.JSDir),
-			dest: filepath.Join(w.ctx.OutputDir, config.JSDir),
+			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.CSSDir),
+			dest:     filepath.Join(w.ctx.OutputDir, config.CSSDir),
+			fileOnly: true,
+		},
+		{
+			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.JSDir),
+			dest:     filepath.Join(w.ctx.OutputDir, config.JSDir),
+			fileOnly: true,
 		},
 	}
 
 	for _, dir := range dirs {
-		if _, err := os.Stat(dir.src); os.IsNotExist(err) {
-			continue
-		}
-		if err := fs.CopyFromOS(w.ctx.Fs, dir.src, dir.dest, true); err != nil {
+		if err := fs.CopyFromOS(w.ctx.Fs, dir.src, dir.dest, dir.fileOnly); err != nil {
 			return err
 		}
 	}

@@ -7,7 +7,6 @@ require (
 	github.com/google/go-cmp v0.5.2
 	github.com/gorilla/feeds v1.1.1
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
-	github.com/otiai10/copy v1.2.0
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/radovskyb/watcher v1.0.7
