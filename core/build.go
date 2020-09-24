@@ -30,8 +30,8 @@ type BuildOptions struct {
 	OutputDir string
 	// Overwrite specifies that the output folder can be overwritten.
 	Overwrite bool
-	// OverwriteTemplates forces a recompilation of all templates.
-	OverwriteTemplates bool
+	// RecompileTemplates forces a recompilation of all templates.
+	RecompileTemplates bool
 }
 
 // RunBuild triggers a build using the provided options and user
@@ -46,7 +46,7 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 		Path:               path,
 		OutputDir:          outputDir,
 		Theme:              cfg.Theme,
-		OverwriteTemplates: options.OverwriteTemplates,
+		RecompileTemplates: options.RecompileTemplates,
 	}
 
 	var (
@@ -70,7 +70,7 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 		Writer:             w,
 		Plugins:            make([]build.Plugin, 0),
 		Types:              cfg.Types,
-		RecompileTemplates: options.OverwriteTemplates,
+		RecompileTemplates: options.RecompileTemplates,
 	}
 
 	plugins := loadPlugins(&cfg, fs, outputDir)

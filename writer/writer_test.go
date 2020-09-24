@@ -80,6 +80,6 @@ func setupNewWriter(fs afero.Fs) *writer {
 		Path:               testPath,
 		OutputDir:          testOutPath,
 		Theme:              config.DefaultTheme,
-		OverwriteTemplates: false,
+		RecompileTemplates: false,
 	})
 }
