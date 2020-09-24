@@ -1,11 +1,11 @@
-VERSION := $(shell git describe --tags --abbrev=0)
-BUILD := $(shell git rev-parse --short HEAD)
+TAG := $(shell git describe --tags --abbrev=0)
+COMMIT := $(shell git rev-parse --short HEAD)
 PROJECTNAME := verless
 TARGET := target
 GOFILES := ./cmd/verless
 
 # Use linker flags to provide version/build settings
-LDFLAGS=-ldflags "-X=main.Version=$(VERSION) -X=main.Build=$(BUILD)"
+LDFLAGS=-ldflags "-X github.com/verless/verless/config.GitTag=$(TAG) -X github.com/verless/verless/config.GitCommit=$(COMMIT)"
 
 ## build: Compile the binary.
 build:
