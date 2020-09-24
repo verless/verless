@@ -36,7 +36,7 @@ func RunServe(path string, options ServeOptions) error {
 		return err
 	}
 
-	targetFiles := finalOutputDir(path, &options.BuildOptions)
+	targetFiles := getOutputDir(path, &options.BuildOptions)
 
 	// If yes, build it if requested to do so.
 	options.BuildOptions.RecompileTemplates = options.Watch

@@ -2,6 +2,7 @@
 package fs
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -30,9 +31,12 @@ var (
 // match the given filters through the files channel.
 func StreamFiles(path string, files chan<- string, filters ...func(file string) bool) error {
 
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		close(files)
-		return nil
+	if _, err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			close(files)
+			return nil
+		}
+		return err
 	}
 
 	// Convert to absolute path so that it does not make a difference if the paths are in different formats.
@@ -85,12 +89,55 @@ func MkdirAll(path string, dirs ...string) error {
 // Rmdir removes an entire directory along with its contents. If the
 // directory does not exist, nothing happens.
 func Rmdir(fs afero.Fs, path string) error {
-	_, err := fs.Stat(path)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			return err
-		}
+	if _, err := fs.Stat(path); !os.IsNotExist(err) {
+		return err
 	}
 
 	return fs.RemoveAll(path)
+}
+
+// CopyFromOS copies a given directory from the OS filesystem into
+// another filesystem instance to the desired destination.
+//
+// If fileOnly is set to true, files will be copied directly into the
+// destination directory without their directory structure inside src.
+func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
+	var (
+		files = make(chan string)
+		err   error
+	)
+
+	go func() {
+		err = StreamFiles(src, files)
+	}()
+
+	for file := range files {
+		// ToDo: Check if joining the filepath is okay in terms of performance.
+		bytes, err := ioutil.ReadFile(filepath.Join(src, file))
+		if err != nil {
+			return err
+		}
+
+		var path string
+
+		if fileOnly {
+			filename := filepath.Base(file)
+			path = filepath.ToSlash(filepath.Join(dest, filename))
+		} else {
+			path = filepath.ToSlash(filepath.Join(dest, file))
+		}
+
+		if err := targetFs.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			return err
+		}
+
+		memFile, err := targetFs.Create(path)
+		if err != nil {
+			return err
+		}
+		if _, err := memFile.Write(bytes); err != nil {
+			return err
+		}
+	}
+	return err
 }
