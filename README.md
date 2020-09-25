@@ -93,7 +93,7 @@ $ verless serve -w my-blog
 ```
 
 After running the command, you can view your new project under [localhost:8080](http://localhost:8080). Building the
-website works similarly:
+project works similary and generates a deployable website:
 
 ```shell script
 $ verless build my-blog
@@ -103,7 +103,8 @@ By default, verless generates the website into `my-blog/target`. You're now good
 
 ## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Documentation
 
-For a detailed reference, check out the [documentation](docs).
+To find out how a verless project is structured, take a look at the [example project](example). For a detailed
+reference, check out the [documentation](docs).
 
 ## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Contributing
 
