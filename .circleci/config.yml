@@ -106,6 +106,43 @@ jobs:
                 -delete "${CIRCLE_TAG}" \
                 /tmp/artifacts
 
+  # Release the Docker image to Docker Hub and GitHub Packages.
+  release-docker:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Log in to Docker Hub
+          command: |
+            echo ${DOCKER_PASS} | docker login --username ${DOCKER_USER} --password-stdin
+      - run:
+          name: Build the distribution Docker image
+          command: |
+            docker image build --build-arg VERSION=${CIRCLE_TAG} -t verless/verless:${CIRCLE_TAG} scripts/app.Dockerfile
+      - run:
+          name: Tag the Docker images as latest
+          command: |
+            docker image tag verless/verless:${CIRCLE_TAG} verless/verless:latest
+      - run:
+          name: Publish the image on Docker Hub
+          command: |
+            docker image push verless/verless:${CIRCLE_TAG}
+            docker image push verless/verless:latest
+      - run:
+          name: Log in to GitHub Packages
+          command: |
+            docker logout
+            echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_USER} --password-stdin
+      - run:
+          name: Tag the previously built Docker image
+          command: |
+            docker image tag verless/verless:${CIRCLE_TAG} docker.pkg.github.com/verless/verless/verless:${CIRCLE_TAG}
+      - run:
+          name: Publish the image on GitHub Packages
+          command: |
+            docker image push docker.pkg.github.com/verless/verless/verless:${CIRCLE_TAG}
+
 workflows:
   version: 2
   # The basic CI workflow for single commits and opened PRs.
