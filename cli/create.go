@@ -16,6 +16,7 @@ func newCreateCmd() *cobra.Command {
 	}
 
 	createCmd.AddCommand(newCreateProjectCmd())
+	createCmd.AddCommand(newCreateThemeCmd())
 
 	return &createCmd
 }
@@ -40,4 +41,21 @@ func newCreateProjectCmd() *cobra.Command {
 		false, `overwrite the directory if it already exists`)
 
 	return &createProjectCmd
+}
+
+// newCreateThemeCmd creates the `verless create theme` command.
+func newCreateThemeCmd() *cobra.Command {
+	createThemeCmd := cobra.Command{
+		Use:   "theme PROJECT NAME",
+		Short: `Create a new verless theme`,
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			path := args[0]
+			name := args[1]
+
+			return core.RunCreateTheme(path, name)
+		},
+	}
+
+	return &createThemeCmd
 }

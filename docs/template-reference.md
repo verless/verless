@@ -5,41 +5,8 @@ these templates.
 
 ## Contents
 
-* [Template path](#template-path)
-* [Required template](#required-templates)
-* [Optional templates](#optional-templates)
 * [Template syntax](#template-syntax)
 * [Field reference](#field-reference)
-
-## Template path
-
-All templates have to live in your project's `templates` directory. You can use the `verless create project` command
-to initialize a new verless project, which will create the directory automatically for you.
-
-## Required templates
-
-There are two types of templates, and each is represented with its own file:
-
-* `page.html`: This template is used to render your Markdown content.
-* `list-page.html`: This template is used to render generated list pages. Verless creates a list page for each
-directory in your content path, and all pages inside that directory are available to the list page.
-
-Both templates are required to build a static website.
-
-## Optional templates
-
-If you've got a special page like an 'About' page, you may provide a distinct template in the Markdown file:
-
-```markdown
-# File: content/about.md
----
-Title: About
-Template: about.html
----
-```
-
-You can then provide a template called `about.html` in your `templates` directory. verless will use the custom template
-instead of `page.html`.
 
 ## Template syntax
 
@@ -74,6 +41,7 @@ Make sure to check out the [example templates](../example/templates).
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field                   | Source      | Description                                        |
 |-------------------------|-------------|----------------------------------------------------|
@@ -88,6 +56,7 @@ Available in:
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field            | Source      | Description                                        |
 |------------------|-------------|----------------------------------------------------|
@@ -108,27 +77,37 @@ Available in:
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
-| Field                   | Source   | Description                                                                                  |
-|-------------------------|----------|----------------------------------------------------------------------------------------------|
-| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages.           |
-| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages.                                                    |
-| `{{.Page.Title}}`       | Markdown |                                                                                              |
-| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                         |
-| `{{.Page.Date}}`        | Markdown |                                                                                              |
-| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.   |
-| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                              |
-| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                           |
-| `{{.Page.Description}}` | Markdown |                                                                                              |
-| `{{.Page.Content}}`     | Markdown |                                                                                              |
-| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`. |
-| `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.          |
-| `{{.Page.Hidden}}`      | Markdown |                                                                                              |
+| Field                   | Source   | Description                                                                                                              |
+|-------------------------|----------|--------------------------------------------------------------------------------------------------------------------------|
+| `{{.Page.Href}}`        | Filepath | Ready to use path to the page for links.                                                                                 |
+| `{{.Page.Route}}`       | Filepath | Page path in the form `/my-blog/coffee`. Useful for creating links to other pages. If possible, prefer `{{.Page.Href}}`. |
+| `{{.Page.ID}}`          | Filename | Useful for creating links to other pages. If possible, prefer `{{.Page.Href}}`.                                          |
+| `{{.Page.Title}}`       | Markdown |                                                                                                                          |
+| `{{.Page.Author}}`      | Markdown | For the global website author, see `{{.Meta.Author`.                                                                     |
+| `{{.Page.Date}}`        | Markdown |                                                                                                                          |
+| `{{.Page.Tags}}`        | Markdown | Array of strings. You can loop through tags with `{{range $t := .Page.Tags}} ... {{end}}`.                               |
+| `{{.Page.Img}}`         | Markdown | It is recommended to use an URL like `/assets/img/picture.jpg`.                                                          |
+| `{{.Page.Credit}}`      | Markdown | This may be the image credit or something related.                                                                       |
+| `{{.Page.Description}}` | Markdown |                                                                                                                          |
+| `{{.Page.Content}}`     | Markdown |                                                                                                                          |
+| `{{.Page.Related}}`     | Markdown | Array of `Page`. You can loop through tags with `{{range $r := .Page.Related}} ... {{end}}`.                             |
+| `{{.Page.Type}}`        | Markdown | An optional page type. Has to be declared in `verless.yml` (see `types` key) first.                                      |
+| `{{.Page.Hidden}}`      | Markdown |                                                                                                                          |
+
+### Links to pages
+
+Normally you should use `{{.Page.Href}}` as it already provides a ready to use file path.  
+Concatenating `{{.Page.Route}}` with `{{.Page.ID}}` manually can lead to undesired effects and therefore this should be avoided.  
+Example:  
+`<p><a href="{{$page.Href}}">read post</a></p>`
 
 ### Pages
 
 Available in:
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field        | Source   | Description                                                                                  |
 |--------------|----------|----------------------------------------------------------------------------------------------|
@@ -139,6 +118,7 @@ Available in:
 Available in:
 * `page.html`
 * `list-page.html`
+* Templates used by an `index.md` page
 
 | Field               | Source      | Description                                        |
 |---------------------|-------------|----------------------------------------------------|

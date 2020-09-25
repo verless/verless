@@ -3,7 +3,9 @@ package core
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/verless/verless/config"
 	"github.com/verless/verless/core/create"
 )
 
@@ -27,4 +29,16 @@ func RunCreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	return create.Project(path)
+}
+
+func RunCreateTheme(path, name string) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return fmt.Errorf("%s does not exist, use `verless create project NAME` first", path)
+	}
+
+	if _, err := os.Stat(filepath.Join(path, config.ThemesDir, name)); !os.IsNotExist(err) {
+		return fmt.Errorf("a theme called %s already exists, remove it first", name)
+	}
+
+	return create.Theme(path, name)
 }

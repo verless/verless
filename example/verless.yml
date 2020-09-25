@@ -22,6 +22,8 @@ site:
 # Enable plugins for your project.
 plugins:
   - atom
+# Specify your theme.
+theme: default
 # Declare custom page types.
 types:
   startpage:

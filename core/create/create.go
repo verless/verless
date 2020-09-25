@@ -10,23 +10,39 @@ import (
 
 // Project creates a new verless default project.
 func Project(path string) error {
-	err := fs.MkdirAll(path, ContentDir, TemplateDir, AssetDir, filepath.Join(AssetDir, "css"))
-	if err != nil {
+	if err := fs.MkdirAll(path, ContentDir,
+		filepath.Join(ThemesDir, DefaultTheme, TemplateDir),
+		filepath.Join(ThemesDir, DefaultTheme, "css"),
+	); err != nil {
 		return err
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                []byte(defaultConfig),
-		filepath.Join(path, TemplateDir, ListPageTpl):     []byte(defaultTpl),
-		filepath.Join(path, TemplateDir, PageTpl):         {},
-		filepath.Join(path, AssetDir, "css", "style.css"): []byte(defaultCss),
+		filepath.Join(path, "verless.yml"):                                     []byte(defaultConfig),
+		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, ListPageTpl): []byte(defaultTpl),
+		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, PageTpl):     {},
+		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, "style.css"):      []byte(defaultCss),
 	}
 
-	if err := createFiles(files); err != nil {
+	return createFiles(files)
+}
+
+// Theme creates a new verless theme.
+func Theme(path, name string) error {
+	if err := fs.MkdirAll(path,
+		filepath.Join(ThemesDir, name, TemplateDir),
+		filepath.Join(ThemesDir, name, "css"),
+		filepath.Join(ThemesDir, name, "js"),
+	); err != nil {
 		return err
 	}
 
-	return nil
+	files := map[string][]byte{
+		filepath.Join(path, ThemesDir, name, TemplateDir, ListPageTpl): {},
+		filepath.Join(path, ThemesDir, name, TemplateDir, PageTpl):     {},
+	}
+
+	return createFiles(files)
 }
 
 // createFiles takes a map of file paths mapped against the

@@ -42,7 +42,7 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 	// If the page has been created as a file called index.md,
 	// register the page as list page.
-	if page.ID == config.ListPageID {
+	if page.ID == config.ListPageID && !page.Hidden {
 		node.ListPage.Page = page
 		return nil
 	}
@@ -50,15 +50,16 @@ func (b *builder) RegisterPage(page model.Page) error {
 	// Otherwise, register the page as normal page.
 	node.Pages = append(node.Pages, page)
 
-	// Assign the list page route if it hasn't a route yet.
-	if node.ListPage.Route == "" {
-		node.ListPage.Route = page.Route
-	}
-
 	// Reference the new page in all parent nodes as well.
 	err = tree.WalkPath(page.Route, b.site.Root, func(currentNode tree.Node) error {
 		n := currentNode.(*model.Node)
-		n.ListPage.Pages = append(n.ListPage.Pages, &node.Pages[len(node.Pages)-1])
+		p := &node.Pages[len(node.Pages)-1]
+
+		if p.Hidden {
+			return nil
+		}
+
+		n.ListPage.Pages = append(n.ListPage.Pages, p)
 		return nil
 	})
 
@@ -71,9 +72,13 @@ func (b *builder) Dispatch() (model.Site, error) {
 	b.site.Nav = b.cfg.Site.Nav
 	b.site.Footer = b.cfg.Site.Footer
 
-	// Sort the pages of each node's list page by date.
-	_ = tree.Walk(b.site.Root, func(node tree.Node) error {
+	// The final tree traversal does some final tasks:
+	//	1. Assign a route to all list pages
+	//	2. Sort the pages in all list pages by date
+	_ = tree.Walk(b.site.Root, func(path string, node tree.Node) error {
 		n := node.(*model.Node)
+
+		n.ListPage.Route = path
 
 		sort.Slice(n.ListPage.Pages, func(i, j int) bool {
 			return n.ListPage.Pages[i].Date.After(n.ListPage.Pages[j].Date)
