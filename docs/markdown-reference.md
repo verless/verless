@@ -62,5 +62,7 @@ This reference shows all available YAML keys for providing metadata. **All keys 
 
 <p align="center">
 <br>
-<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+<a href="https://github.com/verless/verless">
+<img src="https://verless.dominikbraun.io/static/img/logo-footer-v1.0.0.png">
+</a>
 </p>

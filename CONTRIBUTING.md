@@ -36,15 +36,21 @@ changes yourself and open a pull request. When you do so, please take note of ou
 We highly appreciate the time and effort that go into code contributions. There are just some requirements the code
 needs to meet in order to get merged.
 
+### Philosophy
+
+verless isn't a company governed by customer expectations that have to be met for generating revenue. We won't accept
+quick-and-dirty solutions, workarounds or hotfixes, as these terms merely are excuses for justifying inadequate code.
+
+Instead, we strive for perfection, thoughtful design considerations, maintainability and optimizations. When somebody
+is working on the verless codebase, their time shall not be wasted with questionable code.
+
 ### Git conventions
 
-* Your branch names are up to you.
+* Branch names are up to you.
 * Commit messages have to start capitalized and should be written in the imperative, e.g.
 `Read markdown files concurrently`.
 * Create a WIP pull request so that reviewers can track your work continuously and jump in early if there are problems.
 * If your pull request fixes an existing issue, refer to it with the issue number: `Fixes #19.`
-* Branches shall not be merged into master locally. _All_ merges require a pull request. This is also true for internal
-branches from contributors with direct push access.
 
 ### Coding conventions
 
@@ -59,9 +65,16 @@ Most importantly, there are some hard rules for code:
 There also are some 'soft' recommendations that apply to most cases:
 
 * Avoid OOP and global state.
-* Prefer standalone functions that accept an input and provide an output.
+* Prefer standalone functions that accept an input and return an output.
 * Prefer immutability if it doesn't make the code harder to reason about.
 * Make use of closures.
 * Prefer short and concise variable names.
 
 **Thanks for contributing!**
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless">
+<img src="https://verless.dominikbraun.io/static/img/logo-footer-v1.0.0.png">
+</a>
+</p>

@@ -2,7 +2,7 @@
 <br>
 <br>
 <br>
-<img src="https://verless.dominikbraun.io/assets/img/verless-github-v0.2.0.png">
+<img src="https://verless.dominikbraun.io/static/img/logo-github-v1.0.0.png">
 <br>
 <br>
 <br>
@@ -11,11 +11,11 @@
 <h3 align="center">A simple and lightweight Static Site Generator.</h3>
 
 <p align="center">
-<a href="https://circleci.com/gh/dominikbraun/cleanup"><img src="https://circleci.com/gh/dominikbraun/cleanup.svg?style=shield"></a>
-<a href="https://goreportcard.com/report/github.com/dominikbraun/cleanup"><img src="https://goreportcard.com/badge/github.com/dominikbraun/cleanup"></a>
-<a href="https://www.codefactor.io/repository/github/dominikbraun/cleanup"><img src="https://www.codefactor.io/repository/github/dominikbraun/cleanup/badge" /></a>
-<a href="https://github.com/dominikbraun/cleanup/releases"><img src="https://img.shields.io/github/v/release/dominikbraun/cleanup?sort=semver"></a>
-<a href="https://github.com/dominikbraun/cleanup/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-brightgreen"></a>
+<a href="https://circleci.com/gh/verless/verless"><img src="https://circleci.com/gh/verless/verless.svg?style=shield"></a>
+<a href="https://goreportcard.com/report/github.com/verless/verless"><img src="https://goreportcard.com/badge/github.com/verless/verless"></a>
+<a href="https://www.codefactor.io/repository/github/verless/verless"><img src="https://www.codefactor.io/repository/github/verless/verless/badge" /></a>
+<a href="https://github.com/verless/verless/releases"><img src="https://img.shields.io/github/v/release/verless/verless?sort=semver"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-brightgreen"></a>
 <br>
 <br>
 <br>
@@ -26,22 +26,30 @@
 **verless** (pronounced like _serverless_) is a Static Site Generator designed for Markdown-based content with focus on
 simplicity and performance. It reads your Markdown files, applies your HTML templates and renders them as a website.
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Features
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Features
 
-* **Flexible templating:** Create default templates for all pages or use Page Types to use custom templates
-* **Central configuration:** Global information, enabled plugins and other settings are in `verless.yml`
-* **Rapid development:** Create a fresh project within a single command
-* **No webserver required:** verless serves your static site and re-builds it if something changes
-* **Build performance:** Generating your static site is a matter of milliseconds
-* **Choose what you need:** Only generate RSS feeds or overview pages for tags if you want to
-* **Focus on simplicity:** If your project isn't simple, verless probably isn't a good fit
+* **Flexible theming:** Themes define the HTML templates as well as styles and scripts for your frontend. Initializing
+a new theme can be done within a single command, and setting it as active requires a single line of configuration. Since
+verless provides pre-defined template variables, themes are interchangeable.
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Examples
+* **Rapid development:** Just like themes, new projects can be created using a single command. Local development
+requires no third-party webserver as verless comes with a built-in webserver and rebuilds your project when something
+changes.
+
+* **High performance:** Generating a static site typically is a matter of milliseconds. To keep build times short,
+verless lets you choose and explicitly enable features you need - only generate RSS feeds or overview pages for tags if
+you want to.
+
+* **Focus on simplicity:** Global information, page types, plugins and other settings are configured in a central
+configuration file inside your project. We try to keep things small and simple, and if your project isn't simple,
+verless probably isn't a good fit.
+
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Examples
 
 * Example project structure: [example/](example)
 * Real-world example website: [dominikbraun.io](https://dominikbraun.io)
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Installation
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Installation
 
 ### Linux and macOS
 
@@ -69,7 +77,7 @@ another command, just append it to the image name:
 $ docker container run verless/verless version
 ```
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Getting started
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Getting started
 
 The easiest way to create a new project is to use the verless CLI:
 
@@ -85,7 +93,7 @@ $ verless serve -w my-blog
 ```
 
 After running the command, you can view your new project under [localhost:8080](http://localhost:8080). Building the
-website works similarly:
+project works similary and generates a deployable website:
 
 ```shell script
 $ verless build my-blog
@@ -93,15 +101,18 @@ $ verless build my-blog
 
 By default, verless generates the website into `my-blog/target`. You're now good to [create your first content](docs)!
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Documentation
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Documentation
 
-For a detailed reference, check out the [documentation](docs).
+To find out how a verless project is structured, take a look at the [example project](example). For a detailed
+reference, check out the [documentation](docs).
 
-## <img src="https://verless.dominikbraun.io/assets/img/dot.png"> Contributing
+## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Contributing
 
 Anyone is welcome to contribute to verless. Please refer to our [contribution guidelines](CONTRIBUTING.md).
 
 <p align="center">
 <br>
-<a href="https://github.com/verless/verless"><img src="https://verless.dominikbraun.io/assets/img/icon-light.png"></a>
+<a href="https://github.com/verless/verless">
+<img src="https://verless.dominikbraun.io/static/img/logo-footer-v1.0.0.png">
+</a>
 </p>

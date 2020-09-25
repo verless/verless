@@ -14,11 +14,11 @@ build:
 <html lang="en">
     <head>
         <title>{{.Meta.Title}}</title>
-        <link rel="stylesheet" href="../css/style.css" />
+        <link rel="stylesheet" href="/css/style.css" />
     </head>
     <body>
         <main>
-            <img src="https://verless.dominikbraun.io/assets/img/default-logo.png"
+            <img src="https://verless.dominikbraun.io/static/img/logo-default.png"
                  alt="verless" id="logo" />
             <h1>{{.Meta.Title}}</h1>
             <p>

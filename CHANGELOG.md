@@ -104,3 +104,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * [0.1.2](https://github.com/verless/verless/releases/tag/v0.1.2)
 * [0.1.1](https://github.com/verless/verless/releases/tag/v0.1.1)
 * [0.1.0](https://github.com/verless/verless/releases/tag/v0.1.0)
+
+<p align="center">
+<br>
+<a href="https://github.com/verless/verless">
+<img src="https://verless.dominikbraun.io/static/img/logo-footer-v1.0.0.png">
+</a>
+</p>
