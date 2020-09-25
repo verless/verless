@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.1] - 2020-09-25
+
+### Changed
+- Ignore hidden pages in list pages
+- Publish verless Docker images on Docker Hub and GitHub Packages
+
 ## [0.4.0] - 2020-09-23
 
 ### Added
