@@ -110,6 +110,7 @@ jobs:
   release-docker:
     docker:
       - image: circleci/buildpack-deps:stretch
+    steps:
       - checkout
       - setup_remote_docker
       - run:
