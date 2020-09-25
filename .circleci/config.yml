@@ -174,7 +174,7 @@ workflows:
           filters:
             tags:
               only: /v.*/
-      - release-github:
+      - release-docker:
           requires:
             - release-github
           filters:
