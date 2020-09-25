@@ -15,7 +15,7 @@
 <a href="https://goreportcard.com/report/github.com/verless/verless"><img src="https://goreportcard.com/badge/github.com/verless/verless"></a>
 <a href="https://www.codefactor.io/repository/github/verless/verless"><img src="https://www.codefactor.io/repository/github/verless/verless/badge" /></a>
 <a href="https://github.com/verless/verless/releases"><img src="https://img.shields.io/github/v/release/verless/verless?sort=semver"></a>
-<a href="https://github.com/verless/verless/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-brightgreen"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-brightgreen"></a>
 <br>
 <br>
 <br>
