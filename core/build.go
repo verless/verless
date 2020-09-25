@@ -90,8 +90,7 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 		cmd.Dir = ctx.Path
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
-		err := cmd.Run()
-		if err != nil {
+		if err := cmd.Run(); err != nil {
 			return err
 		}
 	}
