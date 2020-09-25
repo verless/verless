@@ -106,7 +106,7 @@ jobs:
                 -delete "${CIRCLE_TAG}" \
                 /tmp/artifacts
 
-  # Release the Docker image to Docker Hub and GitHub Packages.
+  # Release the Docker images to Docker Hub and GitHub Packages.
   release-docker:
     docker:
       - image: circleci/buildpack-deps:stretch
