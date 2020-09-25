@@ -120,7 +120,7 @@ jobs:
       - run:
           name: Build the distribution Docker image
           command: |
-            docker image build --build-arg VERSION=${CIRCLE_TAG} -t verless/verless:${CIRCLE_TAG} scripts/app.Dockerfile
+            docker image build --build-arg VERSION=${CIRCLE_TAG} -t verless/verless:${CIRCLE_TAG} -f scripts/app.Dockerfile .
       - run:
           name: Tag the Docker images as latest
           command: |
