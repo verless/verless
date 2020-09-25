@@ -173,3 +173,9 @@ workflows:
           filters:
             tags:
               only: /v.*/
+      - release-github:
+          requires:
+            - release-github
+          filters:
+            tags:
+              only: /v.*/
