@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.3] - 2020-09-28
+
+### Fixed
+- Fix public verless Docker image.
+
 ## [0.4.2] - 2020-09-28
 
 ### Changed
