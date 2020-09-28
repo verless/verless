@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/spf13/afero"
-	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
 	"github.com/verless/verless/test"
 )
@@ -25,10 +24,10 @@ func TestRunFullBuild(t *testing.T) {
 
 	memMapFs := afero.NewMemMapFs()
 
-	cfg, err := config.FromFile(projectFolderPath, config.Filename)
+	build, err := core.NewBuild(memMapFs, "../example", o)
 	test.Ok(t, err)
 
-	err = core.RunBuild(memMapFs, "../example", o, cfg)
+	err = build.Run()
 	test.Ok(t, err)
 
 	if err := memMapFs.RemoveAll(outTestPath); err != nil {
