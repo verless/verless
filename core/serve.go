@@ -3,6 +3,7 @@ package core
 import (
 	"log"
 	"net"
+	"path/filepath"
 	"sync"
 
 	"github.com/spf13/afero"
@@ -50,10 +51,13 @@ func RunServe(path string, options ServeOptions) error {
 	// Only watch if needed.
 	if options.Watch {
 		if err := watch.Run(watch.Context{
-			IgnorePath: targetFiles,
-			Path:       path,
-			ChangedCh:  rebuildCh,
-			StopCh:     done,
+			IgnorePaths: []string{
+				targetFiles,
+				filepath.Join(path, "static/generated"),
+			},
+			Path:      path,
+			ChangedCh: rebuildCh,
+			StopCh:    done,
 		}); err != nil {
 			return err
 		}

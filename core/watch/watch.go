@@ -13,10 +13,10 @@ import (
 
 // Context provides all components required for serving an already built project.
 type Context struct {
-	Path       string
-	IgnorePath string
-	ChangedCh  chan<- string
-	StopCh     <-chan bool
+	Path        string
+	IgnorePaths []string
+	ChangedCh   chan<- string
+	StopCh      <-chan bool
 }
 
 // Run watches a verless project for changes and writes the changed
@@ -28,6 +28,7 @@ func Run(ctx Context) error {
 	w.FilterOps(watcher.Write)
 
 	go func() {
+	watcherLoop:
 		for {
 
 			select {
@@ -38,9 +39,18 @@ func Run(ctx Context) error {
 				if filepath.Ext(event.Path) == "" {
 					continue
 				}
-				if strings.HasPrefix(event.Path, ctx.IgnorePath) {
-					continue
+
+				for _, ignorePath := range ctx.IgnorePaths {
+					p, err := filepath.Abs(ignorePath)
+					if err != nil {
+						log.Println(err)
+						continue
+					}
+					if strings.HasPrefix(event.Path, p) {
+						continue watcherLoop
+					}
 				}
+
 				ctx.ChangedCh <- event.Path
 
 			case err, ok := <-w.Error:
@@ -61,7 +71,7 @@ func Run(ctx Context) error {
 		return err
 	}
 
-	if err := w.Ignore(ctx.IgnorePath); err != nil {
+	if err := w.Ignore(ctx.IgnorePaths...); err != nil {
 		return err
 	}
 

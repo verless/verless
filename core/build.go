@@ -3,7 +3,9 @@ package core
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/afero"
@@ -80,6 +82,17 @@ func RunBuild(fs afero.Fs, path string, options BuildOptions, cfg config.Config)
 			return fmt.Errorf("plugin %s not found", key)
 		}
 		ctx.Plugins = append(ctx.Plugins, plugins[key]())
+	}
+
+	for _, beforeHook := range cfg.Build.Before {
+		cmdParts := strings.Split(beforeHook, " ")
+		cmd := exec.Command(cmdParts[0], cmdParts[1:]...)
+		cmd.Dir = ctx.Path
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			return err
+		}
 	}
 
 	errs := build.Run(ctx)
