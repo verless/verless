@@ -1,6 +1,6 @@
 // Package watch provides verless' ability to watch a project
 // and react to changes in a verless project.
-package watch
+package core
 
 import (
 	"log"
@@ -11,19 +11,19 @@ import (
 	"github.com/radovskyb/watcher"
 )
 
-// Context provides all components required for serving an already built project.
-type Context struct {
+// watchContext provides all components required for serving an already built project.
+type watchContext struct {
 	Path       string
 	IgnorePath string
 	ChangedCh  chan<- string
 	StopCh     <-chan bool
 }
 
-// Run watches a verless project for changes and writes the changed
-// files to the passed Context.ChangedCh channel.
-// To stop the watcher just close the Context.StopCh channel.
-// Context.IgnorePath can be used to ignore a path inside the given Context.Path.
-func Run(ctx Context) error {
+// watch watches a verless project for changes and writes the changed
+// files to the passed watchContext.ChangedCh channel.
+// To stop the watcher just close the watchContext.StopCh channel.
+// watchContext.IgnorePath can be used to ignore a path inside the given watchContext.Path.
+func watch(ctx watchContext) error {
 	w := watcher.New()
 	w.FilterOps(watcher.Write)
 

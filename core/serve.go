@@ -9,7 +9,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
-	"github.com/verless/verless/core/watch"
 )
 
 // ServeOptions represents options for running a verless listenAndServe command.
@@ -47,7 +46,7 @@ func Serve(path string, options ServeOptions) error {
 
 	// Only watch if needed.
 	if options.Watch {
-		if err := watch.Run(watch.Context{
+		if err := watch(watchContext{
 			IgnorePath: targetFiles,
 			Path:       path,
 			ChangedCh:  rebuildCh,
