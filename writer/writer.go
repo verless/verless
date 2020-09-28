@@ -10,6 +10,7 @@ import (
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
+	"github.com/verless/verless/theme"
 	"github.com/verless/verless/tpl"
 	"github.com/verless/verless/tree"
 )
@@ -142,7 +143,7 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		return tpl.Get(pageTpl)
 	}
 
-	tplPath := filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.TemplateDir, pageTpl)
+	tplPath := filepath.Join(theme.TemplateDir(w.ctx.Path, w.ctx.Theme), pageTpl)
 
 	return tpl.Register(pageTpl, tplPath, w.ctx.RecompileTemplates)
 }
@@ -159,12 +160,12 @@ func (w *writer) copyDirs() error {
 			fileOnly: false,
 		},
 		{
-			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.CssDir),
+			src:      theme.CssDir(w.ctx.Path, w.ctx.Theme),
 			dest:     filepath.Join(w.ctx.OutputDir, config.CssDir),
 			fileOnly: true,
 		},
 		{
-			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.JsDir),
+			src:      theme.JsDir(w.ctx.Path, w.ctx.Theme),
 			dest:     filepath.Join(w.ctx.OutputDir, config.JsDir),
 			fileOnly: true,
 		},

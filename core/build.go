@@ -16,6 +16,7 @@ import (
 	"github.com/verless/verless/parser"
 	"github.com/verless/verless/plugin/atom"
 	"github.com/verless/verless/plugin/tags"
+	"github.com/verless/verless/theme"
 	"github.com/verless/verless/writer"
 )
 
@@ -130,6 +131,10 @@ func NewBuild(targetFs afero.Fs, path string, options BuildOptions) (*Build, err
 			return nil, fmt.Errorf("plugin %s not found", key)
 		}
 		b.Plugins = append(b.Plugins, plugins[key]())
+	}
+
+	if err := theme.RunBeforeHooks(path, cfg.Theme); err != nil {
+		return nil, err
 	}
 
 	return &b, nil

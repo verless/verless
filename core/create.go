@@ -89,7 +89,7 @@ func CreateTheme(path, name string) error {
 	files := map[string][]byte{
 		filepath.Join(theme.TemplateDir(path, name), ListPageTpl): {},
 		filepath.Join(theme.TemplateDir(path, name), PageTpl):     {},
-		filepath.Join(theme.Path(path, name), "theme.yml"):        defaultThemeConfig,
+		filepath.Join(theme.Dir(path, name), "theme.yml"):         defaultThemeConfig,
 	}
 
 	return createFiles(files)
