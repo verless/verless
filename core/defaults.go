@@ -1,4 +1,4 @@
-package create
+package core
 
 const (
 	defaultConfig = `version: 1

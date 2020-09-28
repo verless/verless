@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/afero"
 	"github.com/verless/verless/builder"
 	"github.com/verless/verless/config"
-	"github.com/verless/verless/core/build"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/parser"
@@ -28,8 +27,8 @@ const (
 var (
 	// ErrCannotOverwrite states that verless isn't allowed to delete or
 	// overwrite the output directory.
-	ErrCannotOverwrite = errors.New(`Cannot overwrite the output directory.
-Consider using the --overwrite flag or enabled build.overwrite in the configuration file.`)
+	ErrCannotOverwrite = errors.New(`cannot overwrite the output directory.
+Consider using the --overwrite flag or enable build.overwrite in verless.yml`)
 
 	// ErrMissingVersionKey states that the top-level `version` key is
 	// empty or missing in verless.yml.
@@ -283,11 +282,11 @@ func outputDir(path string, options *BuildOptions) string {
 
 // loadPlugins returns a map of all available plugins. Each entry
 // is a function that returns a fully initialized plugin instance.
-func loadPlugins(cfg *config.Config, fs afero.Fs, outputDir string) map[string]func() build.Plugin {
+func loadPlugins(cfg *config.Config, fs afero.Fs, outputDir string) map[string]func() Plugin {
 
-	plugins := map[string]func() build.Plugin{
-		"atom": func() build.Plugin { return atom.New(&cfg.Site.Meta, fs, outputDir) },
-		"tags": func() build.Plugin { return tags.New() },
+	plugins := map[string]func() Plugin{
+		"atom": func() Plugin { return atom.New(&cfg.Site.Meta, fs, outputDir) },
+		"tags": func() Plugin { return tags.New() },
 	}
 
 	return plugins
