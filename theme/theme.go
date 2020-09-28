@@ -1,10 +1,10 @@
 package theme
 
 import (
-	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/viper"
 	"github.com/verless/verless/config"
 )
 
