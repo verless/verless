@@ -36,7 +36,7 @@ func RunServe(path string, options ServeOptions) error {
 		return err
 	}
 
-	targetFiles := getOutputDir(path, &options.BuildOptions)
+	targetFiles := outputDir(path, &options.BuildOptions)
 
 	// If yes, build it if requested to do so.
 	options.BuildOptions.RecompileTemplates = options.Watch
@@ -74,15 +74,13 @@ func RunServe(path string, options ServeOptions) error {
 					return
 				}
 				log.Println("rebuild")
-				// Re-read config as it may have changed also.
-				cfg, err := config.FromFile(path, config.Filename)
+				build, err := NewBuild(memMapFs, path, options.BuildOptions)
 				if err != nil {
-					log.Println("rebuild error:", err)
-					continue
+					log.Println("rebuild error:", err.Error())
 				}
-				err = RunBuild(memMapFs, path, options.BuildOptions, cfg)
-				if err != nil {
-					log.Println("rebuild error:", err)
+
+				if err := build.Run(); err != nil {
+					log.Println("rebuild error:", err.Error())
 				}
 
 				if first {

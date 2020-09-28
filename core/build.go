@@ -3,7 +3,6 @@ package core
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -31,6 +30,10 @@ var (
 	// overwrite the output directory.
 	ErrCannotOverwrite = errors.New(`Cannot overwrite the output directory.
 Consider using the --overwrite flag or enabled build.overwrite in the configuration file.`)
+
+	// ErrMissingVersionKey states that the top-level `version` key is
+	// empty or missing in verless.yml.
+	ErrMissingVersionKey = errors.New("missing `version` key in verless.yml")
 )
 
 // Parser represents a parser that processes Markdown files and converts
@@ -87,68 +90,75 @@ type Build struct {
 	Options BuildOptions
 }
 
-// Run executes the build using the provided build context.
-//
-// The current build implementation runs the following steps to build
-// the static site:
-//	1. Read all Markdown files and send them through a channel.
-//	2. Spawn n workers reading from the channel, where n = `parallelism`.
-//	3. Build the pages concurrently:
-//		3.1. Read the file as a []byte
-//		3.2. Parse the file and convert it to a model.Page.
-//		3.3. Register the page in the builder's site model.
-//		3.4. Let each plugin process the page.
-//	4. Get the finished site model with all pages from the builder.
-//	5. Render that site model as HTML.
-//	6. Let each plugin finish its work, e.g. by writing a file.
-//
-// If any error occurs it is returned as a slice of errors as there can be
-// several errors from the concurrent goroutines at the same time. If any
-// error occurs all goroutines are stopped as soon as possible.
-func (b *Build) Run(targetFs afero.Fs, path string, cfg config.Config) []error {
-	outputDir := getOutputDir(b.Path, &b.Options)
-
-	if !canOverwrite(targetFs, outputDir, &b.Options, &cfg) {
-		return []error{ErrCannotOverwrite}
+// New initializes a new Build instance.
+func NewBuild(targetFs afero.Fs, path string, options BuildOptions) (*Build, error) {
+	cfg, err := config.FromFile(path, config.Filename)
+	if err != nil {
+		return nil, err
 	}
 
 	if cfg.Version == "" {
-		return []error{errors.New("the configuration has to include the version key")}
+		return nil, ErrMissingVersionKey
+	}
+
+	outputDir := outputDir(path, &options)
+
+	if !fs.IsSafeToRemove(targetFs, outputDir, options.Overwrite || cfg.Build.Overwrite) {
+		return nil, ErrCannotOverwrite
 	}
 
 	writerCtx := writer.Context{
 		Fs:                 targetFs,
-		Path:               b.Path,
+		Path:               path,
 		OutputDir:          outputDir,
 		Theme:              cfg.Theme,
-		RecompileTemplates: b.Options.RecompileTemplates,
+		RecompileTemplates: options.RecompileTemplates,
 	}
 
-	b.Path = path
-	b.Parser = parser.NewMarkdown()
-	b.Builder = builder.New(&cfg)
-	b.Writer = writer.New(writerCtx)
-	b.Types = cfg.Types
+	b := Build{
+		Path:    path,
+		Parser:  parser.NewMarkdown(),
+		Builder: builder.New(&cfg),
+		Writer:  writer.New(writerCtx),
+		Types:   cfg.Types,
+		Options: options,
+	}
 
 	plugins := loadPlugins(&cfg, targetFs, outputDir)
 
 	for _, key := range cfg.Plugins {
 		if _, exists := plugins[key]; !exists {
-			return []error{fmt.Errorf("plugin %s not found", key)}
+			return nil, fmt.Errorf("plugin %s not found", key)
 		}
 		b.Plugins = append(b.Plugins, plugins[key]())
 	}
 
+	return &b, nil
+}
+
+// Run executes the build using the provided build context.
+//
+// The current build implementation runs the following steps:
+//	1. Read all files in the content directory and send them through a channel.
+//	2. Spawn workers reading from that channel.
+//	3. Process each received file:
+//		3.1. Read the file as a []byte
+//		3.2. Parse the []byte and convert it to a model.Page.
+//		3.3. Register the page in the builder's site model.
+//		3.4. Let each plugin process the page.
+//	4. Get the site model from the builder and render it as a website.
+//	5. Let each plugin finish its work, e.g. by writing a file.
+func (b *Build) Run() error {
 	var (
-		files      = make(chan string)
-		errorChan  = make(chan error)
-		retErrors  = make([]error, 0)
-		contentDir = filepath.Join(b.Path, config.ContentDir)
+		files           = make(chan string)
+		errorCh         = make(chan error)
+		collectedErrors = make([]error, 0)
+		contentDir      = filepath.Join(b.Path, config.ContentDir)
 	)
 
 	go func() {
 		if err := fs.StreamFiles(contentDir, files, fs.MarkdownOnly, fs.NoUnderscores); err != nil {
-			errorChan <- err
+			errorCh <- err
 		}
 	}()
 
@@ -160,54 +170,51 @@ func (b *Build) Run(targetFs afero.Fs, path string, cfg config.Config) []error {
 			// Process the files received via the files channel.
 			for file := range files {
 				if err := b.processFile(contentDir, file); err != nil {
-					errorChan <- err
+					errorCh <- err
 				}
 			}
 			wg.Done()
 		}()
 	}
 
-	// Observe the WaitGroup and close the error channel when all workers
-	// have finished.
+	// Close the error channel as soon as all workers have finished.
 	go func() {
 		for {
 			wg.Wait()
-			close(errorChan)
+			close(errorCh)
 			break
 		}
 	}()
 
-	// Collect all errors. This automatically stops when the workers have
-	// finished, as the channel gets closed.
-	for err := range errorChan {
+	for err := range errorCh {
 		if errors.Is(err, fs.ErrStreaming) {
-			return []error{err}
+			return err
 		}
-		retErrors = append(retErrors, err)
+		collectedErrors = append(collectedErrors, err)
 	}
 
-	if len(retErrors) > 0 {
-		return retErrors
+	if len(collectedErrors) > 0 {
+		return fmt.Errorf("errors while processing files: %v", collectedErrors)
 	}
 
 	site, err := b.Builder.Dispatch()
 	if err != nil {
-		return []error{err}
+		return err
 	}
 
 	for _, plugin := range b.Plugins {
 		if err := plugin.PreWrite(&site); err != nil {
-			return []error{err}
+			return err
 		}
 	}
 
 	if err := b.Writer.Write(site); err != nil {
-		return []error{err}
+		return err
 	}
 
 	for _, plugin := range b.Plugins {
 		if err := plugin.PostWrite(); err != nil {
-			return []error{err}
+			return err
 		}
 	}
 
@@ -225,17 +232,13 @@ func (b *Build) processFile(contentDir, file string) error {
 		return err
 	}
 
-	// For a file path like /blog/coffee/making-espresso.md, the resulting
-	// page route will be /blog/coffee.
+	// A page like /blog/coffee/making-espresso.md will have /blog/coffee as
+	// route and making-espresso as ID.
 	page.Route = filepath.ToSlash(filepath.Dir(file))
-
-	// For a file name like making-espresso.md, the resulting page ID will
-	// be making-espresso.
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
-
 	page.Href = filepath.Join(page.Route, page.ID)
 
-	if err := b.setTypeForPage(&page); err != nil {
+	if err := b.setPageType(&page); err != nil {
 		return err
 	}
 
@@ -252,10 +255,9 @@ func (b *Build) processFile(contentDir, file string) error {
 	return nil
 }
 
-// setTypeForPage sets the Type field of a page if a page type has been
-// provided by the user. Returns an error if the provided page type has
-// not been configured in the given types map.
-func (b *Build) setTypeForPage(page *model.Page) error {
+// setPageType sets the Type field of a page if a page type has been
+// provided by the user.
+func (b *Build) setPageType(page *model.Page) error {
 	providedType := page.ProvidedType()
 
 	if providedType == "" {
@@ -263,35 +265,20 @@ func (b *Build) setTypeForPage(page *model.Page) error {
 	}
 
 	if _, exists := b.Types[providedType]; !exists {
-		return fmt.Errorf("%s: type %s has not been declared in verless.yml", page.ID, providedType)
+		return fmt.
+			Errorf("%s: type %s has not been declared", page.ID, providedType)
 	}
-
 	page.Type = b.Types[providedType]
+
 	return nil
 }
 
-// getOutputDir determines the final output path.
-func getOutputDir(path string, options *BuildOptions) string {
+func outputDir(path string, options *BuildOptions) string {
 	if options.OutputDir != "" {
 		return options.OutputDir
 	}
 
 	return filepath.Join(path, config.OutputDir)
-}
-
-// canOverwrite determines of the output directory can be removed
-// or overwritten safely. This is true if
-//	- the user specified the --overwrite flag,
-//	- the user opted in to overwriting in verless.yml,
-//	- or the output directory doesn't exist yet.
-func canOverwrite(fs afero.Fs, outputDir string, options *BuildOptions, cfg *config.Config) bool {
-	if options.Overwrite || cfg.Build.Overwrite {
-		return true
-	}
-	if _, err := fs.Stat(outputDir); os.IsNotExist(err) {
-		return true
-	}
-	return false
 }
 
 // loadPlugins returns a map of all available plugins. Each entry

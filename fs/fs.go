@@ -39,8 +39,9 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 		return err
 	}
 
-	// Convert to absolute path so that it does not make a difference if the paths are in different formats.
-	// e.g. one "example/" and the other one "./example"
+	// Convert to absolute path so that it does not make a difference if
+	// the paths are in different formats. e.g. one "example/" and the
+	// other one "./example"
 	path, err := filepath.Abs(path)
 	if err != nil {
 		return err
@@ -59,8 +60,9 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 			}
 		}
 
-		// Convert to absolute path so that it does not make a difference if the paths are in different formats.
-		// e.g. one "example/" and the other one "./example"
+		// Convert to absolute path so that it does not make a difference if
+		// the paths are in different formats. e.g. one "example/" and the
+		// other one "./example"
 		file, err = filepath.Abs(file)
 		if err != nil {
 			return err
@@ -140,4 +142,15 @@ func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 		}
 	}
 	return err
+}
+
+// IsSafeToRemove determines if a directory can be removed safely.
+func IsSafeToRemove(targetFs afero.Fs, path string, force bool) bool {
+	if force {
+		return true
+	}
+	if _, err := targetFs.Stat(path); os.IsNotExist(err) {
+		return true
+	}
+	return false
 }
