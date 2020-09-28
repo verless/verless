@@ -45,6 +45,8 @@ Note that all configuration keys except `version` are optional.
 * **`plugins`** _(Array)_:
     - **`<plugin key>`** _(String)_: The key of the plugin to be used. You can find the plugin key in the [plugin reference](#plugin-reference).
 * **`build`** _(Map)_:
+    * **`before`** _(Array)_:
+        - **`<command>`** _(String)_: A command to run before the build starts.
     * **`overwrite`** _(Bool)_: Allow verless to overwrite the output directory completely. This removes the need for the `--overwrite` flag for builds.
     
 <p align="center">
