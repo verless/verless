@@ -2,13 +2,13 @@ package core
 
 import (
 	"errors"
-	"github.com/spf13/afero"
-	"github.com/verless/verless/fs"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/afero"
 	. "github.com/verless/verless/config"
+	"github.com/verless/verless/fs"
 )
 
 var (
