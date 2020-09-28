@@ -3,7 +3,6 @@
 package watch
 
 import (
-	"fmt"
 	"log"
 	"path/filepath"
 	"strings"
@@ -44,7 +43,7 @@ func Run(ctx Context) error {
 				for _, ignorePath := range ctx.IgnorePaths {
 					p, err := filepath.Abs(ignorePath)
 					if err != nil {
-						fmt.Errorf("%v", err)
+						log.Println(err)
 						continue
 					}
 					if strings.HasPrefix(event.Path, p) {
