@@ -159,13 +159,13 @@ func (w *writer) copyDirs() error {
 			fileOnly: false,
 		},
 		{
-			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.CSSDir),
-			dest:     filepath.Join(w.ctx.OutputDir, config.CSSDir),
+			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.CssDir),
+			dest:     filepath.Join(w.ctx.OutputDir, config.CssDir),
 			fileOnly: true,
 		},
 		{
-			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.JSDir),
-			dest:     filepath.Join(w.ctx.OutputDir, config.JSDir),
+			src:      filepath.Join(w.ctx.Path, config.ThemesDir, w.ctx.Theme, config.JsDir),
+			dest:     filepath.Join(w.ctx.OutputDir, config.JsDir),
 			fileOnly: true,
 		},
 	}

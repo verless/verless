@@ -20,11 +20,11 @@ const (
 	// TemplateDir is the directory for templates inside ThemesDir.
 	TemplateDir string = "templates"
 
-	// CSSDir is the directory for CSS files.
-	CSSDir string = "css"
+	// CssDir is the directory for CSS files.
+	CssDir string = "css"
 
-	// JSDir is the directory for JavaScript files.
-	JSDir string = "js"
+	// JsDir is the directory for JavaScript files.
+	JsDir string = "js"
 
 	// DefaultTheme is the name of the default theme.
 	DefaultTheme string = "default"

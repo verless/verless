@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/afero"
 	. "github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
+	"github.com/verless/verless/theme"
 )
 
 var (
@@ -41,8 +42,8 @@ func CreateProject(path string, options CreateProjectOptions) error {
 
 	dirs := []string{
 		filepath.Join(path, ContentDir),
-		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir),
-		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir),
+		theme.TemplateDir(path, DefaultTheme),
+		theme.CssDir(path, DefaultTheme),
 	}
 
 	for _, dir := range dirs {
@@ -52,10 +53,10 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                                     []byte(defaultConfig),
-		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, ListPageTpl): []byte(defaultTpl),
-		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, PageTpl):     {},
-		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, "style.css"):      []byte(defaultCss),
+		filepath.Join(path, "verless.yml"):                                defaultConfig,
+		filepath.Join(theme.TemplateDir(path, DefaultTheme), ListPageTpl): defaultTpl,
+		filepath.Join(theme.TemplateDir(path, DefaultTheme), PageTpl):     {},
+		filepath.Join(theme.CssDir(path, DefaultTheme), "style.css"):      defaultCss,
 	}
 
 	return createFiles(files)
@@ -69,14 +70,14 @@ func CreateTheme(path, name string) error {
 		return ErrProjectNotExists
 	}
 
-	if _, err := os.Stat(filepath.Join(path, ThemesDir, name)); !os.IsNotExist(err) {
+	if theme.Exists(path, name) {
 		return ErrThemeExists
 	}
 
 	dirs := []string{
-		filepath.Join(path, ThemesDir, name, TemplateDir),
-		filepath.Join(path, ThemesDir, name, CSSDir),
-		filepath.Join(path, ThemesDir, name, JSDir),
+		theme.TemplateDir(path, name),
+		theme.CssDir(path, name),
+		theme.JsDir(path, name),
 	}
 
 	for _, dir := range dirs {
@@ -86,8 +87,9 @@ func CreateTheme(path, name string) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, ThemesDir, name, TemplateDir, ListPageTpl): {},
-		filepath.Join(path, ThemesDir, name, TemplateDir, PageTpl):     {},
+		filepath.Join(theme.TemplateDir(path, name), ListPageTpl): {},
+		filepath.Join(theme.TemplateDir(path, name), PageTpl):     {},
+		filepath.Join(theme.Path(path, name), "theme.yml"):        defaultThemeConfig,
 	}
 
 	return createFiles(files)

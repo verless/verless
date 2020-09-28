@@ -1,16 +1,16 @@
 package core
 
-const (
-	defaultConfig = `version: 1
+var (
+	defaultConfig = []byte(`version: 1
 site:
   meta:
     title: Your verless Project
 theme: default
 build:
   # overwrite: true
-`
+`)
 
-	defaultTpl = `<!DOCTYPE html>
+	defaultTpl = []byte(`<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>{{.Meta.Title}}</title>
@@ -29,9 +29,9 @@ build:
             </p>
         </main>
     </body>
-</html>`
+</html>`)
 
-	defaultCss = `* {
+	defaultCss = []byte(`* {
     font-family: Arial, Tahoma, sans-serif;
     color: #32343D;
 }
@@ -51,5 +51,14 @@ h1 {
 
 #logo {
     margin: 2rem;
-}`
+}`)
+
+	defaultThemeConfig = []byte(`version: 1
+build:
+  # Here you can specify commands you need to run in order to build
+  # your theme, like generating CSS.
+  before:
+    # - Your command here - just comment out the line
+    # - Another command there
+`)
 )
