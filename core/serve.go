@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"path/filepath"
 	"sync"
 
 	"github.com/spf13/afero"
@@ -47,10 +48,13 @@ func Serve(path string, options ServeOptions) error {
 	// Only watch if needed.
 	if options.Watch {
 		if err := watch(watchContext{
-			IgnorePath: targetFiles,
-			Path:       path,
-			ChangedCh:  rebuildCh,
-			StopCh:     done,
+			IgnorePaths: []string{
+				targetFiles,
+				filepath.Join(path, "static/generated"),
+			},
+			Path:      path,
+			ChangedCh: rebuildCh,
+			StopCh:    done,
 		}); err != nil {
 			return err
 		}

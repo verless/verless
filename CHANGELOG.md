@@ -7,11 +7,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.3] - 2020-09-28
+
+### Fixed
+- Fix public verless Docker image.
+
+## [0.4.2] - 2020-09-28
+
+### Changed
+- Make pre-build hooks available in project configuration.
+- Ignore `static/generated` directory when watching the site.
+- Improve the verless documentation.
+
 ## [0.4.1] - 2020-09-25
 
 ### Changed
-- Ignore hidden pages in list pages
-- Publish verless Docker images on Docker Hub and GitHub Packages
+- Ignore hidden pages in list pages.
+- Publish verless Docker images on Docker Hub and GitHub Packages.
 
 ## [0.4.0] - 2020-09-23
 
