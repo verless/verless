@@ -149,8 +149,6 @@ func IsSafeToRemove(targetFs afero.Fs, path string, force bool) bool {
 	if force {
 		return true
 	}
-	if _, err := targetFs.Stat(path); os.IsNotExist(err) {
-		return true
-	}
-	return false
+	_, err := targetFs.Stat(path)
+	return os.IsNotExist(err)
 }
