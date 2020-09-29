@@ -5,7 +5,7 @@ Description: This is a guide for steaming milk.
 Tags:
     - Cappuccino
     - Coffee
-Img: /assets/img/blog/cappuccino.jpg
+Img: /static/img/cappuccino.jpg
 Credit: Chevanon Photography on Pexels
 ---
 
