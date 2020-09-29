@@ -27,6 +27,9 @@ LABEL org.label-schema.docker.cmd="docker container run -v $(pwd)/my-blog:/proje
 
 COPY --from=downloader ["/bin/verless", "/bin/verless"]
 
+# Create a symlink for musl, see https://stackoverflow.com/a/35613430.
+RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+
 WORKDIR /project
 
 ENTRYPOINT ["/bin/verless"]

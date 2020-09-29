@@ -5,7 +5,7 @@ Description: This is a guide for making italian Espresso.
 Tags:
     - Espresso
     - Coffee
-Img: espresso.jpg
+Img: /static/img/espresso.jpg
 Credit: Burst on Pexels
 ---
 

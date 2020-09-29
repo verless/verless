@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/afero"
 	. "github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
-	"github.com/verless/verless/theme"
 )
 
 var (

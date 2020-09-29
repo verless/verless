@@ -29,7 +29,8 @@ types:
   startpage:
     template: startpage.html
 build:
-  # Uncomment the following line to automatically overwrite
-  # the output directory without having to use --overwrite.
-  # Use with caution!
-  # overwrite: true
+  before:
+    # - If you need to run a command before the build, add it here.
+  # Automatically overwrite the output directory without having
+  # to specify the --overwrite flag each time.
+  overwrite: true

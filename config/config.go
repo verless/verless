@@ -19,6 +19,7 @@ type Config struct {
 	Types   map[string]*model.Type
 	Build   struct {
 		Overwrite bool
+		Before    []string
 	}
 }
 

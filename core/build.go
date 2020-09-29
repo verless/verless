@@ -3,6 +3,8 @@ package core
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -131,6 +133,17 @@ func NewBuild(targetFs afero.Fs, path string, options BuildOptions) (*Build, err
 			return nil, fmt.Errorf("plugin %s not found", key)
 		}
 		b.Plugins = append(b.Plugins, plugins[key]())
+	}
+
+	for _, beforeHook := range cfg.Build.Before {
+		cmdParts := strings.Split(beforeHook, " ")
+		cmd := exec.Command(cmdParts[0], cmdParts[1:]...)
+		cmd.Dir = path
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			return nil, err
+		}
 	}
 
 	if err := theme.RunBeforeHooks(path, cfg.Theme); err != nil {

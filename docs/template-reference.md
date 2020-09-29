@@ -1,7 +1,7 @@
 # Template reference
 
-verless renders Markdown content as static HTML sites using templates. This reference explains how to create and use
-these templates.
+verless renders Markdown content as static HTML sites using templates. This reference explains how to use these
+templates. If you want to know how to _create_ them, see the [theme reference](theme-reference.md).
 
 ## Contents
 
