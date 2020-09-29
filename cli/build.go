@@ -3,7 +3,6 @@ package cli
 import (
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"github.com/verless/verless/config"
 	"github.com/verless/verless/core"
 )
 
@@ -17,13 +16,15 @@ func newBuildCmd() *cobra.Command {
 		Use:   "build PROJECT",
 		Short: `Build your verless project`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfg, err := config.FromFile(args[0], config.Filename)
+			path := args[0]
+			targetFs := afero.NewOsFs()
+
+			build, err := core.NewBuild(targetFs, path, options)
 			if err != nil {
 				return err
 			}
 
-			err = core.RunBuild(afero.NewOsFs(), args[0], options, cfg)
-			return err
+			return build.Run()
 		},
 		Args: cobra.ExactArgs(1),
 	}

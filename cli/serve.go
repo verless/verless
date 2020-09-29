@@ -17,13 +17,8 @@ func newServeCmd() *cobra.Command {
 		Use:   "serve PROJECT",
 		Short: `Serve your verless project`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			err := core.RunServe(args[0], options)
-
-			if err != nil {
-				return err
-			}
-
-			return nil
+			path := args[0]
+			return core.Serve(path, options)
 		},
 		Args: cobra.ExactArgs(1),
 	}
@@ -32,7 +27,7 @@ func newServeCmd() *cobra.Command {
 		8080, `specify the port for the web server`)
 
 	serveCmd.Flags().BoolVarP(&options.Watch, "watch", "w",
-		false, `build the project whenever something in the project changes, allows using all flags which are valid for verless build`)
+		false, `rebuild the project when a file changes`)
 
 	serveCmd.Flags().IPVarP(&options.IP, "ip", "i",
 		net.IP{0, 0, 0, 0}, `specify the IP to listen on, it has to be a valid IPv4 or IPv6`)

@@ -1,43 +1,40 @@
 package core
 
 import (
+	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"path/filepath"
 	"sync"
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
-	"github.com/verless/verless/core/serve"
-	"github.com/verless/verless/core/watch"
 )
 
-// ServeOptions represents options for running a verless serve command.
+// ServeOptions represents options for running a verless listenAndServe command.
 type ServeOptions struct {
 	// BuildOptions stores all options for re-builds when watching the site.
 	BuildOptions
-
 	// Port specifies the port to run the server at.
 	Port uint16
-
 	// IP specifies the IP to listen on in combination with the port.
 	IP net.IP
-
 	// Watch enables automatic re-builds when a file changes.
 	Watch bool
 }
 
-// RunServe serves a verless project using a simple file server.
+// Serve serves a verless project using a simple file server.
 // It can build the project automatically if ServeOptions.Build is true and
 // even watch the whole project directory for changes if ServeOptions.Watch is true.
-func RunServe(path string, options ServeOptions) error {
+func Serve(path string, options ServeOptions) error {
 	// First check if the passed path is a verless project (valid verless cfg).
 	_, err := config.FromFile(path, config.Filename)
 	if err != nil {
 		return err
 	}
 
-	targetFiles := getOutputDir(path, &options.BuildOptions)
+	targetFiles := outputDir(path, &options.BuildOptions)
 
 	// If yes, build it if requested to do so.
 	options.BuildOptions.RecompileTemplates = options.Watch
@@ -50,7 +47,7 @@ func RunServe(path string, options ServeOptions) error {
 
 	// Only watch if needed.
 	if options.Watch {
-		if err := watch.Run(watch.Context{
+		if err := watch(watchContext{
 			IgnorePaths: []string{
 				targetFiles,
 				filepath.Join(path, "static/generated"),
@@ -68,7 +65,7 @@ func RunServe(path string, options ServeOptions) error {
 	// Start rebuild goroutine.
 	// If watch is not enabled, it's still used for the initial build.
 	go func() {
-		first := true
+		isFirst := true
 		initialBuild.Add(1)
 
 		for {
@@ -77,21 +74,20 @@ func RunServe(path string, options ServeOptions) error {
 				if !ok {
 					return
 				}
-				log.Println("rebuild")
-				// Re-read config as it may have changed also.
-				cfg, err := config.FromFile(path, config.Filename)
+				log.Println("rebuilding project")
+
+				build, err := NewBuild(memMapFs, path, options.BuildOptions)
 				if err != nil {
-					log.Println("rebuild error:", err)
-					continue
-				}
-				err = RunBuild(memMapFs, path, options.BuildOptions, cfg)
-				if err != nil {
-					log.Println("rebuild error:", err)
+					log.Println("rebuild error:", err.Error())
 				}
 
-				if first {
+				if err := build.Run(); err != nil {
+					log.Println("rebuild error:", err.Error())
+				}
+
+				if isFirst {
 					initialBuild.Done()
-					first = false
+					isFirst = false
 				}
 			case _, ok := <-done:
 				// Stops the goroutine if requested to.
@@ -118,12 +114,27 @@ func RunServe(path string, options ServeOptions) error {
 		return err
 	}
 
-	// Then serve it.
-	err = serve.Run(memMapFs, serve.Context{Path: targetFiles, Port: options.Port, IP: options.IP})
+	err = listenAndServe(memMapFs, targetFiles, options.IP, options.Port)
 
 	// Stop building goroutine just to be sure.
 	done <- true
 	close(done)
 
 	return err
+}
+
+// listenAndServe starts a file server serving the built project.
+func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
+	addr := fmt.Sprintf("%v:%v", ip, port)
+	log.Printf("serving project on %s\n", addr)
+
+	if ip.To4() == nil {
+		addr = fmt.Sprintf("[%v]:%v", ip, port)
+	}
+
+	httpFs := afero.NewHttpFs(fs)
+	server := http.FileServer(httpFs.Dir(path))
+	http.Handle("/", server)
+
+	return http.ListenAndServe(addr, server)
 }

@@ -33,7 +33,7 @@ func newCreateProjectCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
-			return core.RunCreateProject(path, options)
+			return core.CreateProject(path, options)
 		},
 	}
 
@@ -53,7 +53,7 @@ func newCreateThemeCmd() *cobra.Command {
 			path := args[0]
 			name := args[1]
 
-			return core.RunCreateTheme(path, name)
+			return core.CreateTheme(path, name)
 		},
 	}
 
