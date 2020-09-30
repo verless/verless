@@ -42,8 +42,8 @@ func CreateProject(path string, options CreateProjectOptions) error {
 
 	dirs := []string{
 		filepath.Join(path, ContentDir),
-		theme.TemplateDir(path, DefaultTheme),
-		theme.CssDir(path, DefaultTheme),
+		theme.TemplatePath(path, theme.Default),
+		theme.CssPath(path, theme.Default),
 	}
 
 	for _, dir := range dirs {
@@ -53,10 +53,10 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                                defaultConfig,
-		filepath.Join(theme.TemplateDir(path, DefaultTheme), ListPageTpl): defaultTpl,
-		filepath.Join(theme.TemplateDir(path, DefaultTheme), PageTpl):     {},
-		filepath.Join(theme.CssDir(path, DefaultTheme), "style.css"):      defaultCss,
+		filepath.Join(path, "verless.yml"):                                             defaultConfig,
+		filepath.Join(theme.TemplatePath(path, theme.Default), theme.ListPageTemplate): defaultTpl,
+		filepath.Join(theme.TemplatePath(path, theme.Default), theme.PageTemplate):     {},
+		filepath.Join(theme.CssPath(path, theme.Default), "style.css"):                 defaultCss,
 	}
 
 	return createFiles(files)
@@ -75,9 +75,9 @@ func CreateTheme(path, name string) error {
 	}
 
 	dirs := []string{
-		theme.TemplateDir(path, name),
-		theme.CssDir(path, name),
-		theme.JsDir(path, name),
+		theme.TemplatePath(path, name),
+		theme.CssPath(path, name),
+		theme.JsPath(path, name),
 	}
 
 	for _, dir := range dirs {
@@ -87,9 +87,9 @@ func CreateTheme(path, name string) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(theme.TemplateDir(path, name), ListPageTpl): {},
-		filepath.Join(theme.TemplateDir(path, name), PageTpl):     {},
-		filepath.Join(theme.Dir(path, name), "theme.yml"):         defaultThemeConfig,
+		filepath.Join(theme.TemplatePath(path, name), theme.ListPageTemplate): {},
+		filepath.Join(theme.TemplatePath(path, name), theme.PageTemplate):     {},
+		filepath.Join(theme.Path(path, name), "theme.yml"):                    defaultThemeConfig,
 	}
 
 	return createFiles(files)

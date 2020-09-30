@@ -8,7 +8,6 @@ import (
 
 	"github.com/gorilla/feeds"
 	"github.com/spf13/afero"
-	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
 )
 
@@ -50,7 +49,7 @@ type atom struct {
 // ProcessPage takes a page to be processed by the plugin, reads
 // metadata for that page and creates a new feed item from it.
 func (a *atom) ProcessPage(page *model.Page) error {
-	if page.Hidden || page.ID == config.ListPageID {
+	if page.Hidden || page.IsCustomListPage() {
 		return nil
 	}
 

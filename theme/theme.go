@@ -14,34 +14,42 @@ import (
 	"github.com/verless/verless/config"
 )
 
-const configFilename string = "theme"
+const (
+	TemplatesDir     string = "templates"
+	CssDir           string = "css"
+	JsDir            string = "js"
+	Default          string = "default"
+	PageTemplate     string = "page.html"
+	ListPageTemplate string = "list-page.html"
+	configFilename   string = "theme"
+)
 
-// Dir returns the directory path for the theme with the given name
-// inside the given path. Dir does not ensure that the directory
+// Path returns the directory path for the theme with the given name
+// inside the given path. Path does not ensure that the directory
 // physically exists.
-func Dir(path, name string) string {
+func Path(path, name string) string {
 	return filepath.Join(path, config.ThemesDir, name)
 }
 
-// TemplateDir returns the template directory path of a given theme.
-func TemplateDir(path, name string) string {
-	return filepath.Join(Dir(path, name), config.TemplateDir)
+// TemplatePath returns the template directory path of a given theme.
+func TemplatePath(path, name string) string {
+	return filepath.Join(Path(path, name), TemplatesDir)
 }
 
-// CssDir returns the css directory path of a given theme.
-func CssDir(path, name string) string {
-	return filepath.Join(Dir(path, name), config.CssDir)
+// CssPath returns the css directory path of a given theme.
+func CssPath(path, name string) string {
+	return filepath.Join(Path(path, name), CssDir)
 }
 
-// JsDir returns the js directory path of a given theme.
-func JsDir(path, name string) string {
-	return filepath.Join(Dir(path, name), config.JsDir)
+// JsPath returns the js directory path of a given theme.
+func JsPath(path, name string) string {
+	return filepath.Join(Path(path, name), JsDir)
 }
 
 // Exists determines whether a theme with the provided name inside
 // the given path exists.
 func Exists(path, name string) bool {
-	if _, err := os.Stat(Dir(path, name)); os.IsNotExist(err) {
+	if _, err := os.Stat(Path(path, name)); os.IsNotExist(err) {
 		return false
 	}
 	return true
@@ -60,7 +68,7 @@ type Config struct {
 // with the given name inside the given path. Since theme.yml isn't
 // mandatory, GetConfig returns an empty config if it doesn't exist.
 func GetConfig(path, name string) (Config, error) {
-	viper.AddConfigPath(Dir(path, name))
+	viper.AddConfigPath(Path(path, name))
 	viper.SetConfigName(configFilename)
 
 	var cfg Config
@@ -93,7 +101,7 @@ func RunBeforeHooks(path, name string) error {
 	for _, beforeHook := range cfg.Build.Before {
 		parts := strings.Split(beforeHook, " ")
 		cmd := exec.Command(parts[0], parts[1:]...)
-		cmd.Dir = Dir(path, name)
+		cmd.Dir = Path(path, name)
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
 

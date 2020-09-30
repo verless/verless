@@ -42,7 +42,7 @@ func (b *builder) RegisterPage(page model.Page) error {
 
 	// If the page has been created as a file called index.md,
 	// register the page as list page.
-	if page.ID == config.ListPageID && !page.Hidden {
+	if page.IsCustomListPage() && !page.Hidden {
 		node.ListPage.Page = page
 		return nil
 	}
