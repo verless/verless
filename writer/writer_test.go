@@ -1,7 +1,6 @@
 package writer
 
 import (
-	"github.com/verless/verless/theme"
 	"os"
 	"path"
 	"testing"
@@ -9,6 +8,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/test"
+	"github.com/verless/verless/theme"
 )
 
 const (
