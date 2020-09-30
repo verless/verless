@@ -17,10 +17,12 @@ func newServeCmd() *cobra.Command {
 		Use:   "serve PROJECT",
 		Short: `Serve your verless project`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			path := args[0]
+			var path = "."
+			if len(args) == 1 {
+				path = args[0]
+			}
 			return core.Serve(path, options)
 		},
-		Args: cobra.ExactArgs(1),
 	}
 
 	serveCmd.Flags().Uint16VarP(&options.Port, "port", "p",
