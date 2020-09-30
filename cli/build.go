@@ -16,7 +16,10 @@ func newBuildCmd() *cobra.Command {
 		Use:   "build PROJECT",
 		Short: `Build your verless project`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			path := args[0]
+			var path = "."
+			if len(args) == 1 {
+				path = args[0]
+			}
 			targetFs := afero.NewOsFs()
 
 			build, err := core.NewBuild(targetFs, path, options)
@@ -26,7 +29,6 @@ func newBuildCmd() *cobra.Command {
 
 			return build.Run()
 		},
-		Args: cobra.ExactArgs(1),
 	}
 
 	addBuildOptions(&buildCmd, &options, true)
