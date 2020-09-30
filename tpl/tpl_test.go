@@ -5,7 +5,6 @@ import (
 	"testing"
 	"text/template"
 
-	. "github.com/verless/verless/config"
 	"github.com/verless/verless/test"
 	"github.com/verless/verless/theme"
 )
