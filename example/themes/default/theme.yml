@@ -6,6 +6,5 @@ build:
   # your theme, like generating CSS.
   before:
   # If you have sassc installed, uncomment the following lines to test the before-hook functionality.
-  # - rm -R generated
   # - mkdir -p generated/css
   # - sassc scss/startpage.scss generated/css/startpage.css
