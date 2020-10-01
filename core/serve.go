@@ -10,6 +10,7 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
+	"github.com/verless/verless/theme"
 )
 
 // ServeOptions represents options for running a verless listenAndServe command.
@@ -29,7 +30,7 @@ type ServeOptions struct {
 // even watch the whole project directory for changes if ServeOptions.Watch is true.
 func Serve(path string, options ServeOptions) error {
 	// First check if the passed path is a verless project (valid verless cfg).
-	_, err := config.FromFile(path, config.Filename)
+	cfg, err := config.FromFile(path, config.Filename)
 	if err != nil {
 		return err
 	}
@@ -45,12 +46,14 @@ func Serve(path string, options ServeOptions) error {
 	done := make(chan bool)
 	rebuildCh := make(chan string)
 
+	fmt.Println(theme.GeneratedDir(filepath.Join(path, config.ThemesDir), cfg.Theme))
 	// Only watch if needed.
 	if options.Watch {
 		if err := watch(watchContext{
 			IgnorePaths: []string{
 				targetFiles,
-				filepath.Join(path, "static/generated"),
+				filepath.Join(path, config.StaticDir, config.GeneratedDir),
+				theme.GeneratedDir(path, cfg.Theme),
 			},
 			Path:      path,
 			ChangedCh: rebuildCh,

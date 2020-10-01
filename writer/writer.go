@@ -169,6 +169,11 @@ func (w *writer) copyDirs() error {
 			dest:     filepath.Join(w.ctx.OutputDir, config.JsDir),
 			fileOnly: true,
 		},
+		{
+			src:      theme.GeneratedDir(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, config.GeneratedDir),
+			fileOnly: false,
+		},
 	}
 
 	for _, dir := range dirs {

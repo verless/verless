@@ -20,6 +20,11 @@ const (
 	// TemplateDir is the directory for templates inside ThemesDir.
 	TemplateDir string = "templates"
 
+	// GeneratedDir is the directory which can be used by hook-commands
+	// and which gets ignored by the serve command.
+	// The directory can exist in each theme directory and in the StaticDir.
+	GeneratedDir string = "generated"
+
 	// CssDir is the directory for CSS files.
 	CssDir string = "css"
 

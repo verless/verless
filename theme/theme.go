@@ -38,6 +38,11 @@ func JsDir(path, name string) string {
 	return filepath.Join(Dir(path, name), config.JsDir)
 }
 
+// GeneratedDir returns the generated directory path of a given theme.
+func GeneratedDir(path, name string) string {
+	return filepath.Join(Dir(path, name), config.GeneratedDir)
+}
+
 // Exists determines whether a theme with the provided name inside
 // the given path exists.
 func Exists(path, name string) bool {
