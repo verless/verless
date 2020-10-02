@@ -139,13 +139,7 @@ func CreateFile(filePath string, options CreateFileOptions) error {
 		return ErrProjectNotExists
 	}
 
-	var contentPath string
-	if options.Project != "." {
-		contentPath = filepath.Join(options.Project, ContentDir, filePath)
-
-	} else {
-		contentPath = filepath.Join(ContentDir, filePath)
-	}
+	contentPath := filepath.Join(options.Project, ContentDir, filePath)
 
 	if _, err := os.Stat(path.Dir(contentPath)); os.IsNotExist(err) {
 		return ErrNoSuchDirExists
