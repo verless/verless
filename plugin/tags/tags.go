@@ -34,10 +34,6 @@ type tags struct {
 // page and adds the page to the entry's list page.
 func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
-		//sanitizing the tags like "Making Coffee" to "making-coffee"
-		tag = strings.Replace(tag, " ", "-", -1)
-		tag = strings.ToLower(tag)
-		
 		if _, exists := t.m[tag]; !exists {
 			t.createListPage(tag)
 		}
