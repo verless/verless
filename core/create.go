@@ -24,6 +24,9 @@ var (
 	// ErrThemeExists states that the specified theme already exists.
 	ErrThemeExists = errors.New("theme already exists, remove it first")
 
+	// ErrFileExist states that the specified file already exists.
+	ErrFileExists = errors.New("file already exists.")
+
 	// ErrNoSuchDirExists states that the specified directory doesn't exist
 	ErrNoSuchDirExists = errors.New("no such directory exist, create it first")
 )
@@ -31,6 +34,11 @@ var (
 // CreateProjectOptions represents options for creating a project.
 type CreateProjectOptions struct {
 	Overwrite bool
+}
+
+// CreateFileOptions represents project path for creating file.
+type CreateFileOptions struct {
+	Project string
 }
 
 // CreateProject creates a new verless project. If the specified project
@@ -125,13 +133,28 @@ func CreateTheme(path, name string) error {
 }
 
 // CreateFile creates a file with specified path under content directory.
-func CreateFile(filePath string) error {
+func CreateFile(filePath string, options CreateFileOptions) error {
 
-	contentPath := filepath.Join(ContentDir, filePath)
+	if _, err := os.Stat(options.Project); os.IsNotExist(err) {
+		return ErrProjectNotExists
+	}
+
+	var contentPath string
+	if options.Project != "." {
+		contentPath = filepath.Join(options.Project, ContentDir, filePath)
+
+	} else {
+		contentPath = filepath.Join(ContentDir, filePath)
+	}
 
 	if _, err := os.Stat(path.Dir(contentPath)); os.IsNotExist(err) {
 		return ErrNoSuchDirExists
 	}
+
+	if _, err := os.Stat(contentPath); !os.IsNotExist(err) {
+		return ErrFileExists
+	}
+
 	defaultContentTemplate :=
 		`---
 Title:

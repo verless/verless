@@ -24,16 +24,20 @@ func newCreateCmd() *cobra.Command {
 
 // newCreateFile creates the `verless create file` command
 func newCreateFile() *cobra.Command {
-
+	var (
+		options core.CreateFileOptions
+	)
 	createFileCmd := cobra.Command{
 		Use:   "file NAME",
 		Short: `Create a new content file`,
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path := args[0]
-			return core.CreateFile(path)
+			return core.CreateFile(path, options)
 		},
 	}
+
+	createFileCmd.Flags().StringVar(&options.Project, "project", ".", `project path to create file in.`)
 
 	return &createFileCmd
 }
