@@ -49,7 +49,7 @@ func newCreateThemeCmd() *cobra.Command {
 		options core.CreateThemeOptions
 	)
 	createThemeCmd := cobra.Command{
-		Use:   "theme PROJECT NAME",
+		Use:   "theme THEME_NAME",
 		Short: `Create a new verless theme`,
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -59,6 +59,6 @@ func newCreateThemeCmd() *cobra.Command {
 		},
 	}
 
-	createThemeCmd.Flags().StringVar(&options.Project, "project", ".", `project path to create new theme in.`)
+	createThemeCmd.Flags().StringVarP(&options.Project, "project", "p", ".", `project path to create new theme in.`)
 	return &createThemeCmd
 }
