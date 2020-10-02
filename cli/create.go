@@ -37,7 +37,7 @@ func newCreateFile() *cobra.Command {
 		},
 	}
 
-	createFileCmd.Flags().StringVar(&options.Project, "project", ".", `project path to create file in.`)
+	createFileCmd.Flags().StringVarP(&options.Project, "project", "p", ".", `project path to create file in.`)
 
 	return &createFileCmd
 }
