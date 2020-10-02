@@ -6,7 +6,6 @@ import (
 
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
-	"strings"
 )
 
 const (
