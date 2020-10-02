@@ -86,22 +86,27 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	return createFiles(files)
 }
 
+// CreateThemeOptions represents project path for creating new theme.
+type CreateThemeOptions struct {
+	Project string
+}
+
 // CreateTheme creates a new theme with the specified name inside the
 // given path. Returns an error if it already exists, unless --overwrite
 // has been used.
-func CreateTheme(path, name string) error {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
+func CreateTheme(options CreateThemeOptions, name string) error {
+	if _, err := os.Stat(options.Project); os.IsNotExist(err) {
 		return ErrProjectNotExists
 	}
 
-	if _, err := os.Stat(filepath.Join(path, ThemesDir, name)); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(options.Project, ThemesDir, name)); !os.IsNotExist(err) {
 		return ErrThemeExists
 	}
 
 	dirs := []string{
-		filepath.Join(path, ThemesDir, name, TemplateDir),
-		filepath.Join(path, ThemesDir, name, CSSDir),
-		filepath.Join(path, ThemesDir, name, JSDir),
+		filepath.Join(options.Project, ThemesDir, name, TemplateDir),
+		filepath.Join(options.Project, ThemesDir, name, CSSDir),
+		filepath.Join(options.Project, ThemesDir, name, JSDir),
 	}
 
 	for _, dir := range dirs {
@@ -111,8 +116,8 @@ func CreateTheme(path, name string) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, ThemesDir, name, TemplateDir, ListPageTpl): {},
-		filepath.Join(path, ThemesDir, name, TemplateDir, PageTpl):     {},
+		filepath.Join(options.Project, ThemesDir, name, TemplateDir, ListPageTpl): {},
+		filepath.Join(options.Project, ThemesDir, name, TemplateDir, PageTpl):     {},
 	}
 
 	return createFiles(files)
