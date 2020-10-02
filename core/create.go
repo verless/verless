@@ -77,6 +77,7 @@ func CreateProject(path string, options CreateProjectOptions) error {
 
 	files := map[string][]byte{
 		filepath.Join(path, "verless.yml"):                                     []byte(defaultConfig),
+		filepath.Join(path, ".gitignore"):                                      []byte(defaultGitignore),
 		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, ListPageTpl): []byte(defaultTpl),
 		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, PageTpl):     {},
 		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, "style.css"):      []byte(defaultCss),
