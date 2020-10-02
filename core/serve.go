@@ -46,7 +46,6 @@ func Serve(path string, options ServeOptions) error {
 	done := make(chan bool)
 	rebuildCh := make(chan string)
 
-	fmt.Println(theme.GeneratedDir(filepath.Join(path, config.ThemesDir), cfg.Theme))
 	// Only watch if needed.
 	if options.Watch {
 		if err := watch(watchContext{
