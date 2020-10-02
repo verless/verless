@@ -2,9 +2,12 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/afero"
 	. "github.com/verless/verless/config"
@@ -20,6 +23,9 @@ var (
 
 	// ErrThemeExists states that the specified theme already exists.
 	ErrThemeExists = errors.New("theme already exists, remove it first")
+
+	// ErrNoSuchDirExists states that the specified directory doesn't exist
+	ErrNoSuchDirExists = errors.New("no such directory exist, create it first")
 )
 
 // CreateProjectOptions represents options for creating a project.
@@ -116,6 +122,31 @@ func CreateTheme(path, name string) error {
 	}
 
 	return createFiles(files)
+}
+
+// CreateFile creates a file with specified path under content directory.
+func CreateFile(filePath string) error {
+
+	contentPath := filepath.Join(ContentDir, filePath)
+
+	if _, err := os.Stat(path.Dir(contentPath)); os.IsNotExist(err) {
+		return ErrNoSuchDirExists
+	}
+	defaultContentTemplate :=
+		`---
+Title:
+Description:
+Date: %s
+---
+`
+
+	content := fmt.Sprintf(defaultContentTemplate, time.Now().Format("2006-01-02"))
+	if err := ioutil.WriteFile(contentPath, []byte(content), 0755); err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func createFiles(files map[string][]byte) error {

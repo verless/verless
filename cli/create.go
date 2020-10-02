@@ -17,8 +17,25 @@ func newCreateCmd() *cobra.Command {
 
 	createCmd.AddCommand(newCreateProjectCmd())
 	createCmd.AddCommand(newCreateThemeCmd())
+	createCmd.AddCommand(newCreateFile())
 
 	return &createCmd
+}
+
+// newCreateFile creates the `verless create file` command
+func newCreateFile() *cobra.Command {
+
+	createFileCmd := cobra.Command{
+		Use:   "file NAME",
+		Short: `Create a new content file`,
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			path := args[0]
+			return core.CreateFile(path)
+		},
+	}
+
+	return &createFileCmd
 }
 
 // newCreateProjectCmd creates the `verless create project` command.
