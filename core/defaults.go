@@ -52,4 +52,6 @@ h1 {
 #logo {
     margin: 2rem;
 }`
+
+	defaultGitignore = `generated/`
 )
