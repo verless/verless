@@ -2,9 +2,12 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/afero"
 	. "github.com/verless/verless/config"
@@ -21,11 +24,19 @@ var (
 
 	// ErrThemeExists states that the specified theme already exists.
 	ErrThemeExists = errors.New("theme already exists, remove it first")
+
+	// ErrFileExist states that the specified file already exists.
+	ErrFileExists = errors.New("file already exists")
 )
 
 // CreateProjectOptions represents options for creating a project.
 type CreateProjectOptions struct {
 	Overwrite bool
+}
+
+// CreateFileOptions represents project path for creating file.
+type CreateFileOptions struct {
+	Project string
 }
 
 // CreateProject creates a new verless project. If the specified project
@@ -60,7 +71,7 @@ func CreateProject(path string, options CreateProjectOptions) error {
 			return nil
 		})
 		if err != nil {
-			return errors.New("Cannot remove existing files from current directory.")
+			return errors.New("Cannot remove existing files from current directory")
 		}
 	}
 
@@ -123,6 +134,40 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 	}
 
 	return createFiles(files)
+}
+
+// CreateFile creates a file with specified path under content directory.
+func CreateFile(filePath string, options CreateFileOptions) error {
+
+	if _, err := os.Stat(options.Project); os.IsNotExist(err) {
+		return ErrProjectNotExists
+	}
+
+	contentPath := filepath.Join(options.Project, ContentDir, filePath)
+
+	if _, err := os.Stat(path.Dir(contentPath)); os.IsNotExist(err) {
+		return fmt.Errorf("no such dir %s exist, create it first", path.Dir(contentPath))
+	}
+
+	if _, err := os.Stat(contentPath); !os.IsNotExist(err) {
+		return ErrFileExists
+	}
+
+	defaultContentTemplate :=
+		`---
+Title:
+Description:
+Date: %s
+---
+`
+
+	content := fmt.Sprintf(defaultContentTemplate, time.Now().Format("2006-01-02"))
+	if err := ioutil.WriteFile(contentPath, []byte(content), 0755); err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func createFiles(files map[string][]byte) error {
