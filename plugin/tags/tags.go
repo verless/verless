@@ -3,6 +3,7 @@ package tags
 
 import (
 	"path/filepath"
+	"strings"
 
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
@@ -33,6 +34,10 @@ type tags struct {
 // page and adds the page to the entry's list page.
 func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
+		//sanitizing the tags like "Making Coffee" to "making-coffee"
+		tag = strings.Replace(tag, " ", "-", -1)
+		tag = strings.ToLower(tag)
+
 		if _, exists := t.m[tag]; !exists {
 			t.createListPage(tag)
 		}
@@ -72,5 +77,8 @@ func (t *tags) PostWrite() error {
 func (t *tags) createListPage(key string) {
 	t.m[key] = &model.ListPage{
 		Pages: make([]*model.Page, 0),
+		Page: model.Page{
+			Route: tagsDir + "/" + key,
+		},
 	}
 }
