@@ -25,10 +25,7 @@ var (
 	ErrThemeExists = errors.New("theme already exists, remove it first")
 
 	// ErrFileExist states that the specified file already exists.
-	ErrFileExists = errors.New("file already exists.")
-
-	// ErrNoSuchDirExists states that the specified directory doesn't exist
-	ErrNoSuchDirExists = errors.New("no such directory exist, create it first")
+	ErrFileExists = errors.New("file already exists")
 )
 
 // CreateProjectOptions represents options for creating a project.
@@ -73,7 +70,7 @@ func CreateProject(path string, options CreateProjectOptions) error {
 			return nil
 		})
 		if err != nil {
-			return errors.New("Cannot remove existing files from current directory.")
+			return errors.New("Cannot remove existing files from current directory")
 		}
 	}
 
@@ -142,7 +139,7 @@ func CreateFile(filePath string, options CreateFileOptions) error {
 	contentPath := filepath.Join(options.Project, ContentDir, filePath)
 
 	if _, err := os.Stat(path.Dir(contentPath)); os.IsNotExist(err) {
-		return ErrNoSuchDirExists
+		return fmt.Errorf("no such dir %s exist, create it first", path.Dir(contentPath))
 	}
 
 	if _, err := os.Stat(contentPath); !os.IsNotExist(err) {
