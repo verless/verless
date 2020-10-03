@@ -77,6 +77,8 @@ func (t *tags) PostWrite() error {
 func (t *tags) createListPage(key string) {
 	t.m[key] = &model.ListPage{
 		Pages: make([]*model.Page, 0),
-		Route: tagsDir + "/" + key,
+		Page: model.Page{
+			Route: tagsDir + "/" + key,
+		},
 	}
 }

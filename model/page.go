@@ -48,7 +48,6 @@ func (p *Page) SetProvidedType(providedType string) {
 type ListPage struct {
 	Page
 	Pages []*Page
-	Route string
 }
 
 // Type represents a page type.
