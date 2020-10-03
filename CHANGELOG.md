@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.5] - 2020-10-03
+
+### Changed
+- Introduce configurations for themes.
+- Introduce `--project` flag for `verless create theme` command.
+- Create default `.gitignore` file for new verless projects.
+- Make `verless create file` command available.
+
+### Fixed
+- Fix generated routes for `tags` plugin.
+- Fix initialization of list pages for tags.
+- Fix `version` key in configuration reference.
+
 ## [0.4.4] - 2020-10-02
 
 ### Changed
