@@ -7,12 +7,13 @@ import (
 
 	. "github.com/verless/verless/config"
 	"github.com/verless/verless/test"
+	"github.com/verless/verless/theme"
 )
 
 const (
-	projectFolderPath = "../example"
-	testKey           = "test key"
-	invalidKey        = "invalid key"
+	projectPath = "../example"
+	testKey     = "test key"
+	invalidKey  = "invalid key"
 )
 
 // TestRegister checks if the Register function register all templates
@@ -47,7 +48,7 @@ func TestRegister(t *testing.T) {
 
 	for _, testCase := range tests {
 		t.Logf("Testing '%s'", testCase.testName)
-		pageTplPath := filepath.Join(projectFolderPath, ThemesDir, DefaultTheme, TemplateDir, PageTpl)
+		pageTplPath := filepath.Join(theme.TemplateDir(projectPath, DefaultTheme), PageTpl)
 
 		_, err := Register(testCase.key, pageTplPath, testCase.force)
 		test.ExpectedError(t, testCase.expectedError, err)

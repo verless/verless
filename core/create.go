@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/afero"
 	. "github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
+	"github.com/verless/verless/theme"
 )
 
 var (
@@ -65,8 +66,8 @@ func CreateProject(path string, options CreateProjectOptions) error {
 
 	dirs := []string{
 		filepath.Join(path, ContentDir),
-		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir),
-		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir),
+		theme.TemplateDir(path, DefaultTheme),
+		theme.CssDir(path, DefaultTheme),
 	}
 
 	for _, dir := range dirs {
@@ -76,11 +77,11 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                                     []byte(defaultConfig),
-		filepath.Join(path, ".gitignore"):                                      []byte(defaultGitignore),
-		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, ListPageTpl): []byte(defaultTpl),
-		filepath.Join(path, ThemesDir, DefaultTheme, TemplateDir, PageTpl):     {},
-		filepath.Join(path, ThemesDir, DefaultTheme, CSSDir, "style.css"):      []byte(defaultCss),
+		filepath.Join(path, "verless.yml"):                                defaultConfig,
+		filepath.Join(path, ".gitignore"):                                 defaultGitignore,
+		filepath.Join(theme.TemplateDir(path, DefaultTheme), ListPageTpl): defaultTpl,
+		filepath.Join(theme.TemplateDir(path, DefaultTheme), PageTpl):     {},
+		filepath.Join(theme.CssDir(path, DefaultTheme), "style.css"):      defaultCss,
 	}
 
 	return createFiles(files)
@@ -99,14 +100,14 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 		return ErrProjectNotExists
 	}
 
-	if _, err := os.Stat(filepath.Join(options.Project, ThemesDir, name)); !os.IsNotExist(err) {
+	if theme.Exists(options.Project, name) {
 		return ErrThemeExists
 	}
 
 	dirs := []string{
-		filepath.Join(options.Project, ThemesDir, name, TemplateDir),
-		filepath.Join(options.Project, ThemesDir, name, CSSDir),
-		filepath.Join(options.Project, ThemesDir, name, JSDir),
+		theme.TemplateDir(options.Project, name),
+		theme.CssDir(options.Project, name),
+		theme.JsDir(options.Project, name),
 	}
 
 	for _, dir := range dirs {
@@ -116,8 +117,9 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(options.Project, ThemesDir, name, TemplateDir, ListPageTpl): {},
-		filepath.Join(options.Project, ThemesDir, name, TemplateDir, PageTpl):     {},
+		filepath.Join(theme.TemplateDir(options.Project, name), ListPageTpl): {},
+		filepath.Join(theme.TemplateDir(options.Project, name), PageTpl):     {},
+		filepath.Join(theme.Dir(options.Project, name), "theme.yml"):         defaultThemeConfig,
 	}
 
 	return createFiles(files)
