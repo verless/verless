@@ -71,14 +71,14 @@ if there's a project `my-blog` and you want to create a markdown file called `ve
 $ verless create file verless-is-awsome.md -p my-blog
 ```
 
-Just as with other commands,if there's a `PROJECT` is the path to your project. If you already are _inside_ `my-blog` directory, the
+Just as with other commands, `PROJECT` is the path to your project. If you already are _inside_ `my-blog` directory, the
 command is:
 
 ```shell script
 $ verless create file verless-is-awsome.md
 ```
 
-You can pass a path to a directory already existing directory inside `content` directory. For example, if there's a directory called
+You can pass a path to already existing directory inside `content` directory. For example, if there's a directory called
 `blog` inside `content` directory and you want to create a markdown file inside `blog`, use the following command: 
 
 ```shell script
@@ -87,7 +87,7 @@ $ verless create file blog/verless-is-awsome.md
 
 | Option        | Short | Type   | Example       | Description                                                         |
 |---------------|-------|--------|---------------|---------------------------------------------------------------------|
-| `--project`   | -p    | Bool   | `--project`   | Create markdown file in the specified project if it already exists. |
+| `--project`   | `-p`  | Bool   | `--project`   | Create markdown file in the specified project if it already exists. |
 
 ## verless create theme
 
@@ -96,7 +96,7 @@ $ verless create file blog/verless-is-awsome.md
 following command:
 
 ```shell script
-$ verless create theme dark-theme -p my-project
+$ verless create theme dark-theme -p my-blog
 ```
 
 Just as with other commands, `PROJECT` is the path to your project. If you already are _inside_ `my-blog` directory, the
@@ -108,7 +108,7 @@ $ verless create theme dark-theme
 
 | Option        | Short | Type   | Example       | Description                                                   |
 |---------------|-------|--------|---------------|---------------------------------------------------------------|
-| `--project`   | -p    | Bool   | `--project`   | Create theme in the specified directory if it already exists. |
+| `--project`   | `-p`  | Bool   | `--project`   | Create theme in the specified directory if it already exists. |
 
 ## verless serve
 
