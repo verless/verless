@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.6] - 2020-10-04
+
+### Fixed
+- Fix generated route of list page for `/tags`.
+
 ## [0.4.5] - 2020-10-03
 
 ### Changed
