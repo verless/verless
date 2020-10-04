@@ -65,6 +65,10 @@ func (w *writer) Write(site model.Site) error {
 
 		lp := node.(*model.Node).ListPage
 
+		if lp.Route == "" {
+			panic("route must not be empty")
+		}
+
 		return w.writeListPage(lp.Route, listPage{
 			Meta:     &w.site.Meta,
 			Nav:      &w.site.Nav,
