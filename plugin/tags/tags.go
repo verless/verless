@@ -52,7 +52,7 @@ func (t *tags) ProcessPage(page *model.Page) error {
 func (t *tags) PreWrite(site *model.Site) error {
 	node := model.NewNode()
 	node.ListPage.Route = tagsDir
-	
+
 	if err := tree.CreateNode(tagsDir, site.Root, node); err != nil {
 		return err
 	}
