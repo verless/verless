@@ -50,7 +50,10 @@ func (t *tags) ProcessPage(page *model.Page) error {
 // PreWrite registers each list page in the site model. Those list
 // pages will be rendered by the writer.
 func (t *tags) PreWrite(site *model.Site) error {
-	if err := tree.CreateNode(tagsDir, site.Root, model.NewNode()); err != nil {
+	node := model.NewNode()
+	node.ListPage.Route = tagsDir
+	
+	if err := tree.CreateNode(tagsDir, site.Root, node); err != nil {
 		return err
 	}
 
