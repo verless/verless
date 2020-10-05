@@ -14,7 +14,7 @@ build:
 <html lang="en">
     <head>
         <title>{{.Meta.Title}}</title>
-        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/assets/style.css" />
     </head>
     <body>
         <main>

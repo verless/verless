@@ -92,7 +92,7 @@ func CreateProject(path string, options CreateProjectOptions) error {
 		filepath.Join(path, ".gitignore"):                                 defaultGitignore,
 		filepath.Join(theme.TemplateDir(path, DefaultTheme), ListPageTpl): defaultTpl,
 		filepath.Join(theme.TemplateDir(path, DefaultTheme), PageTpl):     {},
-		filepath.Join(theme.CssDir(path, DefaultTheme), "style.css"):      defaultCss,
+		filepath.Join(theme.AssetsDir(path, DefaultTheme), "style.css"):   defaultCss,
 	}
 
 	return createFiles(files)

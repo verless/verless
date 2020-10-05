@@ -38,6 +38,11 @@ func JsDir(path, name string) string {
 	return filepath.Join(Dir(path, name), config.JsDir)
 }
 
+// AssetsDir returns the assets directory path of a given theme.
+func AssetsDir(path, name string) string {
+	return filepath.Join(Dir(path, name), config.AssetsDir)
+}
+
 // GeneratedDir returns the generated directory path of a given theme.
 func GeneratedDir(path, name string) string {
 	return filepath.Join(Dir(path, name), config.GeneratedDir)
