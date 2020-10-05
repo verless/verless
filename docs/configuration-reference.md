@@ -22,8 +22,8 @@ Note that all configuration keys except `version` are optional.
 
 ## Configuration key reference
 
+* **`version`** _(String)_: The configuration version (currently `1`).
 * **`site`** _(Map)_:
-    * **`version`** _(String)_: The configuration version (currently `1`).
     * **`meta`** _(Map)_:
         * **`title`** _(String)_: The global website title that applies to all pages.
         * **`subtitle`** _(String)_: The global website subtitle that applies to all pages.

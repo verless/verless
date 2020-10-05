@@ -17,8 +17,29 @@ func newCreateCmd() *cobra.Command {
 
 	createCmd.AddCommand(newCreateProjectCmd())
 	createCmd.AddCommand(newCreateThemeCmd())
+	createCmd.AddCommand(newCreateFile())
 
 	return &createCmd
+}
+
+// newCreateFile creates the `verless create file` command
+func newCreateFile() *cobra.Command {
+	var (
+		options core.CreateFileOptions
+	)
+	createFileCmd := cobra.Command{
+		Use:   "file NAME",
+		Short: `Create a new content file`,
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			path := args[0]
+			return core.CreateFile(path, options)
+		},
+	}
+
+	createFileCmd.Flags().StringVarP(&options.Project, "project", "p", ".", `project path to create file in.`)
+
+	return &createFileCmd
 }
 
 // newCreateProjectCmd creates the `verless create project` command.
@@ -45,17 +66,20 @@ func newCreateProjectCmd() *cobra.Command {
 
 // newCreateThemeCmd creates the `verless create theme` command.
 func newCreateThemeCmd() *cobra.Command {
+	var (
+		options core.CreateThemeOptions
+	)
 	createThemeCmd := cobra.Command{
-		Use:   "theme PROJECT NAME",
+		Use:   "theme THEME_NAME",
 		Short: `Create a new verless theme`,
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			path := args[0]
-			name := args[1]
+			name := args[0]
 
-			return core.CreateTheme(path, name)
+			return core.CreateTheme(options, name)
 		},
 	}
 
+	createThemeCmd.Flags().StringVarP(&options.Project, "project", "p", ".", `project path to create new theme in.`)
 	return &createThemeCmd
 }

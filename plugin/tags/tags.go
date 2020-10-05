@@ -3,6 +3,7 @@ package tags
 
 import (
 	"path/filepath"
+	"strings"
 
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
@@ -33,6 +34,10 @@ type tags struct {
 // page and adds the page to the entry's list page.
 func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
+		//sanitizing the tags like "Making Coffee" to "making-coffee"
+		tag = strings.Replace(tag, " ", "-", -1)
+		tag = strings.ToLower(tag)
+
 		if _, exists := t.m[tag]; !exists {
 			t.createListPage(tag)
 		}
@@ -45,7 +50,10 @@ func (t *tags) ProcessPage(page *model.Page) error {
 // PreWrite registers each list page in the site model. Those list
 // pages will be rendered by the writer.
 func (t *tags) PreWrite(site *model.Site) error {
-	if err := tree.CreateNode(tagsDir, site.Root, model.NewNode()); err != nil {
+	node := model.NewNode()
+	node.ListPage.Route = tagsDir
+
+	if err := tree.CreateNode(tagsDir, site.Root, node); err != nil {
 		return err
 	}
 
@@ -72,5 +80,8 @@ func (t *tags) PostWrite() error {
 func (t *tags) createListPage(key string) {
 	t.m[key] = &model.ListPage{
 		Pages: make([]*model.Page, 0),
+		Page: model.Page{
+			Route: tagsDir + "/" + key,
+		},
 	}
 }

@@ -61,4 +61,6 @@ build:
     # - Your command here - just comment out the line
     # - Another command there
 `)
+
+	defaultGitignore = []byte(`generated/`)
 )

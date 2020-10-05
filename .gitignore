@@ -10,6 +10,8 @@ venv/
 
 # The built example project.
 example/target/
+example/generated/
+example/themes/default/generated/
 
 # Binaries for programs and plugins.
 *.exe

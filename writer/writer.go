@@ -69,6 +69,10 @@ func (w *writer) Write(site model.Site) error {
 
 		lp := node.(*model.Node).ListPage
 
+		if lp.Route == "" {
+			panic("route must not be empty")
+		}
+
 		return w.writeListPage(lp.Route, listPage{
 			Meta:     &w.site.Meta,
 			Nav:      &w.site.Nav,
@@ -172,6 +176,11 @@ func (w *writer) copyDirs() error {
 			src:      theme.JsPath(w.ctx.Path, w.ctx.Theme),
 			dest:     filepath.Join(w.ctx.OutputDir, theme.JsDir),
 			fileOnly: true,
+		},
+		{
+			src:      theme.GeneratedDir(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, config.GeneratedDir),
+			fileOnly: false,
 		},
 	}
 
