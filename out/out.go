@@ -11,22 +11,34 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/verless/verless/out/style"
 )
 
-// Unicode mappings for all supported emojis.
-const (
-	Tada = "\U0001f389"
+var (
+	outFile io.Writer = os.Stdout
+	errFile io.Writer = os.Stderr
 )
 
-var outFile io.Writer = os.Stdout
-
-// T prints a prefixed, formatted text to outFile.
-func T(prefix, format string, a ...interface{}) {
-	output := fmt.Sprintf("%s %s\n", prefix, fmt.Sprintf(format, a))
-	_, _ = outFile.Write([]byte(output))
+// T prints a prefixed, formatted text to the out file as a new line.
+func T(prefix style.Emoji, format string, a ...interface{}) {
+	printf(outFile, prefix, format, a...)
 }
 
-// SetOutFile sets the output file, which defaults to os.Stdout.
-func SetOutFile(w io.Writer) {
-	outFile = w
+// Err prints a prefixed, formatted text to the error file as a new line.
+func Err(prefix style.Emoji, format string, a ...interface{}) {
+	printf(errFile, prefix, format, a...)
+}
+
+func printf(w io.Writer, prefix style.Emoji, format string, a ...interface{}) {
+	formatted := fmt.Sprintf(format, a...)
+	var output string
+
+	if prefix == style.None {
+		output = fmt.Sprintf("%s\n", formatted)
+	} else {
+		output = fmt.Sprintf("%s %s\n", prefix, formatted)
+	}
+
+	_, _ = w.Write([]byte(output))
 }
