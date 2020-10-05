@@ -16,12 +16,13 @@ import (
 
 const (
 	TemplatesDir     string = "templates"
-	CssDir           string = "css"
-	JsDir            string = "js"
-	Default          string = "default"
-	PageTemplate     string = "page.html"
-	ListPageTemplate string = "list-page.html"
-	configFilename   string = "theme"
+	GeneratedDir            = "generated"
+	CssDir                  = "css"
+	JsDir                   = "js"
+	Default                 = "default"
+	PageTemplate            = "page.html"
+	ListPageTemplate        = "list-page.html"
+	configFilename          = "theme"
 )
 
 // Path returns the directory path for the theme with the given name
@@ -34,6 +35,11 @@ func Path(path, name string) string {
 // TemplatePath returns the template directory path of a given theme.
 func TemplatePath(path, name string) string {
 	return filepath.Join(Path(path, name), TemplatesDir)
+}
+
+// GeneratedPath returns the generated directory path of a given theme.
+func GeneratedPath(path, name string) string {
+	return filepath.Join(Path(path, name), GeneratedDir)
 }
 
 // CssPath returns the css directory path of a given theme.
