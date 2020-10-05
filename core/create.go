@@ -88,11 +88,11 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                                defaultConfig,
-		filepath.Join(path, ".gitignore"):                                 defaultGitignore,
+		filepath.Join(path, "verless.yml"):                                             defaultConfig,
+		filepath.Join(path, ".gitignore"):                                              defaultGitignore,
 		filepath.Join(theme.TemplatePath(path, theme.Default), theme.ListPageTemplate): defaultTpl,
 		filepath.Join(theme.TemplatePath(path, theme.Default), theme.PageTemplate):     {},
-		filepath.Join(theme.CssPath(path, theme.Default), "style.css"):      defaultCss,
+		filepath.Join(theme.CssPath(path, theme.Default), "style.css"):                 defaultCss,
 	}
 
 	return createFiles(files)
@@ -130,7 +130,7 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 	files := map[string][]byte{
 		filepath.Join(theme.TemplatePath(options.Project, name), theme.ListPageTemplate): {},
 		filepath.Join(theme.TemplatePath(options.Project, name), theme.PageTemplate):     {},
-		filepath.Join(theme.Path(options.Project, name), "theme.yml"):         defaultThemeConfig,
+		filepath.Join(theme.Path(options.Project, name), "theme.yml"):                    defaultThemeConfig,
 	}
 
 	return createFiles(files)
