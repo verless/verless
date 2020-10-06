@@ -29,6 +29,9 @@ const (
 	// JsDir is the directory for JavaScript files.
 	JsDir string = "js"
 
+	// AssetsDir is the directory containing CSS and JavaScript files.
+	AssetsDir string = "assets"
+
 	// DefaultTheme is the name of the default theme.
 	DefaultTheme string = "default"
 
