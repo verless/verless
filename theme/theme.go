@@ -15,14 +15,17 @@ import (
 )
 
 const (
-	TemplatesDir     string = "templates"
-	GeneratedDir            = "generated"
-	CssDir                  = "css"
-	JsDir                   = "js"
-	Default                 = "default"
-	PageTemplate            = "page.html"
-	ListPageTemplate        = "list-page.html"
-	configFilename          = "theme"
+	TemplatesDir string = "templates"
+	GeneratedDir        = "generated"
+	CssDir              = "css"
+	JsDir               = "js"
+	// AssetsDir is the directory containing CSS and JavaScript files.
+	// It will replace CssDir and JsDir in a future release.
+	AssetsDir        = "assets"
+	Default          = "default"
+	PageTemplate     = "page.html"
+	ListPageTemplate = "list-page.html"
+	configFilename   = "theme"
 )
 
 // Path returns the directory path for the theme with the given name
@@ -52,14 +55,9 @@ func JsPath(path, name string) string {
 	return filepath.Join(Path(path, name), JsDir)
 }
 
-// AssetsDir returns the assets directory path of a given theme.
-func AssetsDir(path, name string) string {
-	return filepath.Join(Path(path, name), config.AssetsDir)
-}
-
-// GeneratedDir returns the generated directory path of a given theme.
-func GeneratedDir(path, name string) string {
-	return filepath.Join(Path(path, name), config.GeneratedDir)
+// AssetsPath returns the assets directory path of a given theme.
+func AssetsPath(path, name string) string {
+	return filepath.Join(Path(path, name), AssetsDir)
 }
 
 // Exists determines whether a theme with the provided name inside

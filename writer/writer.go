@@ -178,8 +178,8 @@ func (w *writer) copyDirs() error {
 			fileOnly: true,
 		},
 		{
-			src:      theme.AssetsDir(w.ctx.Path, w.ctx.Theme),
-			dest:     filepath.Join(w.ctx.OutputDir, config.AssetsDir),
+			src:      theme.AssetsPath(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, theme.AssetsDir),
 			fileOnly: true,
 		},
 		{

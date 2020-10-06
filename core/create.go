@@ -88,11 +88,11 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                                defaultConfig,
-		filepath.Join(path, ".gitignore"):                                 defaultGitignore,
+		filepath.Join(path, "verless.yml"):                                             defaultConfig,
+		filepath.Join(path, ".gitignore"):                                              defaultGitignore,
 		filepath.Join(theme.TemplatePath(path, theme.Default), theme.ListPageTemplate): defaultTpl,
 		filepath.Join(theme.TemplatePath(path, theme.Default), theme.PageTemplate):     {},
-		filepath.Join(theme.AssetsPath(path, theme.Default), "style.css"):   defaultCss,
+		filepath.Join(theme.AssetsPath(path, theme.Default), "style.css"):              defaultCss,
 	}
 
 	return createFiles(files)
