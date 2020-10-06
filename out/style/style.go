@@ -8,6 +8,13 @@ type Emoji string
 // Enumerations for all supported emojis. This package uses the
 // GitHub and Slack shortcodes as enumeration names.
 const (
-	None Emoji = ""
-	Tada       = "🎉"
+	None           Emoji = ""
+	Tada                 = "🎉"
+	Fire                 = "🔥"
+	Sparkles             = "✨"
+	Exclamation          = "❗"
+	Bulb                 = "💡"
+	X                    = "❌"
+	HeavyCheckMark       = "✔️"
+	Warning              = "⚠️"
 )
