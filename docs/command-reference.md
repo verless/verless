@@ -62,22 +62,53 @@ directory with the new project.
 |---------------|-------|--------|---------------|---------------------------------------------------------|
 | `--overwrite` | -     | Bool   | `--overwrite` | Overwrite the specified directory if it already exists. |
 
-## verless create theme
+## verless create file
 
-`verless create theme PROJECT NAME` initializes a new verless theme called `NAME` within an existing project called
-`PROJECT`. For example, if there's a project `my-blog` and you want to create a theme called `dark-theme`, use the
-following command:
+`verless create file NAME -p PROJECT` creates a new markdown file in `content` folder under current project. For example, 
+if there's a project `my-blog` and you want to create a markdown file called `verless-is-awsome.md` use the following command:
 
 ```shell script
-$ verless create theme my-blog dark-theme
+$ verless create file verless-is-awsome.md -p my-blog
 ```
 
 Just as with other commands, `PROJECT` is the path to your project. If you already are _inside_ `my-blog` directory, the
 command is:
 
 ```shell script
-$ verless create theme . dark-theme
+$ verless create file verless-is-awsome.md
 ```
+
+You can pass a path to an already existing directory inside `content` directory. For example, if there's a directory called
+`blog` inside `content` directory and you want to create a markdown file inside `blog`, use the following command: 
+
+```shell script
+$ verless create file blog/verless-is-awsome.md
+```
+
+| Option        | Short | Type   | Example       | Description                                                         |
+|---------------|-------|--------|---------------|---------------------------------------------------------------------|
+| `--project`   | `-p`  | Bool   | `--project`   | Create markdown file in the specified project if it already exists. |
+
+## verless create theme
+
+`verless create theme NAME -p PROJECT` initializes a new verless theme called `NAME` within an existing project called
+`PROJECT`. For example, if there's a project `my-blog` and you want to create a theme called `dark-theme`, use the
+following command:
+
+```shell script
+$ verless create theme dark-theme -p my-blog
+```
+
+Just as with other commands, `PROJECT` is the path to your project. If you already are _inside_ `my-blog` directory, the
+command is:
+
+```shell script
+$ verless create theme dark-theme
+```
+
+| Option        | Short | Type   | Example       | Description                                                   |
+|---------------|-------|--------|---------------|---------------------------------------------------------------|
+| `--project`   | `-p`  | Bool   | `--project`   | Create theme in the specified directory if it already exists. |
 
 ## verless serve
 
