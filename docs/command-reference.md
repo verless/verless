@@ -78,7 +78,7 @@ command is:
 $ verless create file verless-is-awsome.md
 ```
 
-You can pass a path to already existing directory inside `content` directory. For example, if there's a directory called
+You can pass a path to an already existing directory inside `content` directory. For example, if there's a directory called
 `blog` inside `content` directory and you want to create a markdown file inside `blog`, use the following command: 
 
 ```shell script
