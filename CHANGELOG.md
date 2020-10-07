@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.7] - 2020-10-07
+
+### Changed
+- Panic when there are invalid list pages.
+- Introduce the `assets` directory for themes.
+
 ## [0.4.6] - 2020-10-04
 
 ### Fixed
