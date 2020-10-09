@@ -2,14 +2,14 @@
 package main
 
 import (
-	"log"
-
 	"github.com/verless/verless/cli"
+	"github.com/verless/verless/out"
+	"github.com/verless/verless/out/style"
 )
 
 // main runs the verless CLI.
 func main() {
 	if err := cli.NewRootCmd().Execute(); err != nil {
-		log.Fatal(err)
+		out.T(style.X, err.Error())
 	}
 }

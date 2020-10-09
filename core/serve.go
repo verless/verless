@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"path/filepath"
@@ -10,6 +9,8 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
+	"github.com/verless/verless/out"
+	"github.com/verless/verless/out/style"
 	"github.com/verless/verless/theme"
 )
 
@@ -76,15 +77,15 @@ func Serve(path string, options ServeOptions) error {
 				if !ok {
 					return
 				}
-				log.Println("rebuilding project")
+				out.T(style.Sparkles, "building project ...")
 
 				build, err := NewBuild(memMapFs, path, options.BuildOptions)
 				if err != nil {
-					log.Println("rebuild error:", err.Error())
+					out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
 				}
 
 				if err := build.Run(); err != nil {
-					log.Println("rebuild error:", err.Error())
+					out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
 				}
 
 				if isFirst {
@@ -128,11 +129,12 @@ func Serve(path string, options ServeOptions) error {
 // listenAndServe starts a file server serving the built project.
 func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
 	addr := fmt.Sprintf("%v:%v", ip, port)
-	log.Printf("serving project on %s\n", addr)
 
 	if ip.To4() == nil {
 		addr = fmt.Sprintf("[%v]:%v", ip, port)
 	}
+
+	out.T(style.Bulb, "serving project on %s", addr)
 
 	httpFs := afero.NewHttpFs(fs)
 	server := http.FileServer(httpFs.Dir(path))
