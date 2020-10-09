@@ -88,6 +88,8 @@ func Serve(path string, options ServeOptions) error {
 					out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
 				}
 
+				out.T(style.HeavyCheckMark, "project built successfully")
+
 				if isFirst {
 					initialBuild.Done()
 					isFirst = false
@@ -134,7 +136,7 @@ func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
 		addr = fmt.Sprintf("[%v]:%v", ip, port)
 	}
 
-	out.T(style.Bulb, "serving project on %s", addr)
+	out.T(style.Bulb, "serving website on %s", addr)
 
 	httpFs := afero.NewHttpFs(fs)
 	server := http.FileServer(httpFs.Dir(path))
