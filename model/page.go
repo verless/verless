@@ -2,6 +2,10 @@ package model
 
 import "time"
 
+const (
+	customListPageID string = "index"
+)
+
 // Page represents a sub-page of the website.
 type Page struct {
 	Route       string
@@ -21,6 +25,12 @@ type Page struct {
 
 	providedRelated []string
 	providedType    string
+}
+
+// IsCustomListPage returns whether the page is a custom list page that has
+// been created from a file called index.md in a content directory.
+func (p *Page) IsCustomListPage() bool {
+	return p.ID == customListPageID
 }
 
 // ProvidedRelated returns all Fully Qualified Name URIs related to the page.

@@ -52,7 +52,7 @@ func Serve(path string, options ServeOptions) error {
 			IgnorePaths: []string{
 				targetFiles,
 				filepath.Join(path, config.StaticDir, config.GeneratedDir),
-				theme.GeneratedDir(path, cfg.Theme),
+				theme.GeneratedPath(path, cfg.Theme),
 			},
 			Path:      path,
 			ChangedCh: rebuildCh,

@@ -5,7 +5,6 @@ import (
 	"testing"
 	"text/template"
 
-	. "github.com/verless/verless/config"
 	"github.com/verless/verless/test"
 	"github.com/verless/verless/theme"
 )
@@ -48,7 +47,7 @@ func TestRegister(t *testing.T) {
 
 	for _, testCase := range tests {
 		t.Logf("Testing '%s'", testCase.testName)
-		pageTplPath := filepath.Join(theme.TemplateDir(projectPath, DefaultTheme), PageTpl)
+		pageTplPath := filepath.Join(theme.TemplatePath(projectPath, theme.Default), theme.PageTemplate)
 
 		_, err := Register(testCase.key, pageTplPath, testCase.force)
 		test.ExpectedError(t, testCase.expectedError, err)

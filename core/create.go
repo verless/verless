@@ -77,8 +77,8 @@ func CreateProject(path string, options CreateProjectOptions) error {
 
 	dirs := []string{
 		filepath.Join(path, ContentDir),
-		theme.TemplateDir(path, DefaultTheme),
-		theme.CssDir(path, DefaultTheme),
+		theme.TemplatePath(path, theme.Default),
+		theme.CssPath(path, theme.Default),
 	}
 
 	for _, dir := range dirs {
@@ -88,11 +88,11 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(path, "verless.yml"):                                defaultConfig,
-		filepath.Join(path, ".gitignore"):                                 defaultGitignore,
-		filepath.Join(theme.TemplateDir(path, DefaultTheme), ListPageTpl): defaultTpl,
-		filepath.Join(theme.TemplateDir(path, DefaultTheme), PageTpl):     {},
-		filepath.Join(theme.AssetsDir(path, DefaultTheme), "style.css"):   defaultCss,
+		filepath.Join(path, "verless.yml"):                                             defaultConfig,
+		filepath.Join(path, ".gitignore"):                                              defaultGitignore,
+		filepath.Join(theme.TemplatePath(path, theme.Default), theme.ListPageTemplate): defaultTpl,
+		filepath.Join(theme.TemplatePath(path, theme.Default), theme.PageTemplate):     {},
+		filepath.Join(theme.AssetsPath(path, theme.Default), "style.css"):              defaultCss,
 	}
 
 	return createFiles(files)
@@ -116,9 +116,9 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 	}
 
 	dirs := []string{
-		theme.TemplateDir(options.Project, name),
-		theme.CssDir(options.Project, name),
-		theme.JsDir(options.Project, name),
+		theme.TemplatePath(options.Project, name),
+		theme.CssPath(options.Project, name),
+		theme.JsPath(options.Project, name),
 	}
 
 	for _, dir := range dirs {
@@ -128,9 +128,9 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 	}
 
 	files := map[string][]byte{
-		filepath.Join(theme.TemplateDir(options.Project, name), ListPageTpl): {},
-		filepath.Join(theme.TemplateDir(options.Project, name), PageTpl):     {},
-		filepath.Join(theme.Dir(options.Project, name), "theme.yml"):         defaultThemeConfig,
+		filepath.Join(theme.TemplatePath(options.Project, name), theme.ListPageTemplate): {},
+		filepath.Join(theme.TemplatePath(options.Project, name), theme.PageTemplate):     {},
+		filepath.Join(theme.Path(options.Project, name), "theme.yml"):                    defaultThemeConfig,
 	}
 
 	return createFiles(files)

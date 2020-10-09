@@ -15,6 +15,10 @@ import (
 	"github.com/verless/verless/tree"
 )
 
+const (
+	indexFile string = "index.html"
+)
+
 type Context struct {
 	Fs                 afero.Fs
 	Path               string
@@ -27,7 +31,7 @@ type Context struct {
 // filesystem instance to outputDir.
 func New(ctx Context) *writer {
 	if ctx.Theme == "" {
-		ctx.Theme = config.DefaultTheme
+		ctx.Theme = theme.Default
 	}
 
 	w := writer{ctx: ctx}
@@ -97,12 +101,12 @@ func (w *writer) writePage(route string, page page) error {
 		return err
 	}
 
-	file, err := w.ctx.Fs.Create(filepath.Join(path, config.IndexFile))
+	file, err := w.ctx.Fs.Create(filepath.Join(path, indexFile))
 	if err != nil {
 		return err
 	}
 
-	pageTpl, err := w.loadTemplate(page.Page.Type, config.PageTpl)
+	pageTpl, err := w.loadTemplate(page.Page.Type, theme.PageTemplate)
 	if err != nil {
 		return err
 	}
@@ -118,12 +122,12 @@ func (w *writer) writeListPage(route string, listPage listPage) error {
 		return err
 	}
 
-	file, err := w.ctx.Fs.Create(filepath.Join(path, config.IndexFile))
+	file, err := w.ctx.Fs.Create(filepath.Join(path, indexFile))
 	if err != nil {
 		return err
 	}
 
-	listPageTpl, err := w.loadTemplate(listPage.Type, config.ListPageTpl)
+	listPageTpl, err := w.loadTemplate(listPage.Type, theme.ListPageTemplate)
 	if err != nil {
 		return err
 	}
@@ -147,7 +151,7 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		return tpl.Get(pageTpl)
 	}
 
-	tplPath := filepath.Join(theme.TemplateDir(w.ctx.Path, w.ctx.Theme), pageTpl)
+	tplPath := filepath.Join(theme.TemplatePath(w.ctx.Path, w.ctx.Theme), pageTpl)
 
 	return tpl.Register(pageTpl, tplPath, w.ctx.RecompileTemplates)
 }
@@ -164,23 +168,23 @@ func (w *writer) copyDirs() error {
 			fileOnly: false,
 		},
 		{
-			src:      theme.CssDir(w.ctx.Path, w.ctx.Theme),
-			dest:     filepath.Join(w.ctx.OutputDir, config.CssDir),
+			src:      theme.CssPath(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, theme.CssDir),
 			fileOnly: true,
 		},
 		{
-			src:      theme.JsDir(w.ctx.Path, w.ctx.Theme),
-			dest:     filepath.Join(w.ctx.OutputDir, config.JsDir),
+			src:      theme.JsPath(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, theme.JsDir),
 			fileOnly: true,
 		},
 		{
-			src:      theme.AssetsDir(w.ctx.Path, w.ctx.Theme),
-			dest:     filepath.Join(w.ctx.OutputDir, config.AssetsDir),
+			src:      theme.AssetsPath(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, theme.AssetsDir),
 			fileOnly: true,
 		},
 		{
-			src:      theme.GeneratedDir(w.ctx.Path, w.ctx.Theme),
-			dest:     filepath.Join(w.ctx.OutputDir, config.GeneratedDir),
+			src:      theme.GeneratedPath(w.ctx.Path, w.ctx.Theme),
+			dest:     filepath.Join(w.ctx.OutputDir, theme.GeneratedDir),
 			fileOnly: false,
 		},
 	}

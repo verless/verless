@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/spf13/afero"
-	"github.com/verless/verless/config"
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/test"
+	"github.com/verless/verless/theme"
 )
 
 const (
@@ -79,7 +79,7 @@ func setupNewWriter(fs afero.Fs) *writer {
 		Fs:                 fs,
 		Path:               testPath,
 		OutputDir:          testOutPath,
-		Theme:              config.DefaultTheme,
+		Theme:              theme.Default,
 		RecompileTemplates: false,
 	})
 }
