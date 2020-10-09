@@ -146,7 +146,7 @@ func CreateFile(filePath string, options CreateFileOptions) error {
 	contentPath := filepath.Join(options.Project, ContentDir, filePath)
 
 	if _, err := os.Stat(path.Dir(contentPath)); os.IsNotExist(err) {
-		return fmt.Errorf("no such dir %s exist, create it first", path.Dir(contentPath))
+		createDirIfNotExist(path.Dir(contentPath))
 	}
 
 	if _, err := os.Stat(contentPath); !os.IsNotExist(err) {
@@ -175,6 +175,13 @@ func createFiles(files map[string][]byte) error {
 		if err := ioutil.WriteFile(path, content, 0755); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func createDirIfNotExist(filePath string) error {
+	if err := os.Mkdir(filePath, 0755); err != nil {
+		return err
 	}
 	return nil
 }
