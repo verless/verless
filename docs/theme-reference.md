@@ -5,16 +5,43 @@ you therefore need to customize the default theme, create your own theme or use 
 
 ## Contents
 
-* [Theme structure](#theme-structure)
-* [Required templates](#required-templates)
-* [Custom templates](#custom-templates)
 * [Customize the default theme](#customize-the-default-theme)
 * [Create your own theme](#create-your-own-theme)
+* [Theme structure](#theme-structure)
+* [Theme configuration](#theme-configuration)
+* [Required templates](#required-templates)
+* [Custom templates](#custom-templates)
+* [Pre-build hooks](#pre-build-hooks)
+
+## Customize the default theme
+
+When you create a new project using `verless create project`, verless generates a default theme inside the `themes`
+directory.
+
+You can customize this theme by changing the templates and stylesheets. To view your changes, re-build the project or
+just use `verless serve -w my-blog`.
+
+## Create your own theme
+
+The simplest way to create your own theme is to use the `verless create theme` command. It expects two arguments: The
+project for which you want to create a theme and the theme name itself.
+
+For example, creating the `dark-theme` theme for the `my-blog` project is as easy as:
+
+```shell script
+$ verless create theme my-blog dark-theme
+```
+
+Or, if you already are _inside_ the `my-blog` directory:
+
+```shell script
+$ verless create theme . dark-theme
+```
 
 ## Theme structure
 
 All themes are stored inside the `themes` directory in your project, and each theme has its own directory. Inside this
-directory, there has to be a `templates` directory. The `css` and `js` directories are optional.
+directory, there has to be a `templates` directory.
 
 Let's take a theme called `dark-theme` as an example. The directory structure has to look as follows:
 
@@ -22,16 +49,18 @@ Let's take a theme called `dark-theme` as an example. The directory structure ha
 my-blog/
 └── themes/
     └── dark-theme/
-        ├── css/
-        │   └── style.css
-        ├── js/
+        ├── theme.yml
+        ├── assets/
+        │   └── css/
+        │       └── style.css
         └── templates/
             ├── list-page.html
             └── page.html
 ```
 
-The `css` and `js` directories will be copied into the root of your website, so your stylesheet will be directly
-available as `/css/style.css`, for example.
+Stylesheets, JavaScript files or even images can be stored in `assets`. This directory will be copied into the root of
+your website, so the stylesheet from the example above is directly available as `/assets/css/style.css`. Any
+theme-specific configuration goes into `theme.yml`.
 
 **To activate your theme, set it in `verless.yml`:**
 
@@ -62,7 +91,6 @@ types:
 
 You can now use that type in your page:
 
-
 ```markdown
 # File: content/about.md
 ---
@@ -71,38 +99,26 @@ Type: my-special-page
 ---
 ```
 
-## Customize the default theme
+## Pre-build hooks
 
-When you create a new project using `verless create project`, verless generates a default theme inside the `themes`
-directory.
+Modern front-end development often requires preprocessing CSS or JS files, for example when using Sass for CSS. For
+this purpose, verless offers _pre-build hooks_.
 
-```shell script
-$ verless create project my-blog
-$ cd my-blog/themes/default
-$ ls -l
-  Sep 23 08:18 css/
-  Sep 23 10:02 templates/
+If it doesn't exist yet, create a `theme.yml` inside the directory of your theme. All you have to do is to add the
+command to the `build` section:
+
+```yaml
+# File: theme.yml
+
+build:
+   before:
+      - sass css/style.scss generated/style.css
 ```
 
-You can customize this theme by changing the templates and stylesheets. To view your changes, re-build the project or
-just use `verless serve -w my-blog`.
+**We highly recommend to store generated files like `style.css` inside a directory called `generated`.**
 
-## Create your own theme
-
-The simplest way to create your own theme is to use the `verless create theme` command. It expects two arguments: The
-project for which you want to create a theme and the theme name itself.
-
-For example, creating the `dark-theme` theme for the `my-blog` project is as easy as:
-
-```shell script
-$ verless create theme my-blog dark-theme
-```
-
-Or, if you already are _inside_ the `my-blog` directory:
-
-```shell script
-$ verless create theme . dark-theme
-```
+If you don't do this, `verless serve -w` will run into an infinite loop - because the build triggers the generation of
+files, and the generated files will trigger another build because verless notices that something changed.
 
 <p align="center">
 <br>
