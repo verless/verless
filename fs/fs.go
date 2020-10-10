@@ -143,8 +143,8 @@ func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 			return err
 		}
 
-		srcFile.Close()
-		destFile.Close()
+		_ = srcFile.Close()
+		_ = destFile.Close()
 	}
 	return err
 }
