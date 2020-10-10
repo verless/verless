@@ -59,6 +59,7 @@ Some general recommendations:
 * Avoid OOP and global state if possible.
 * Prefer standalone functions that accept an input and return an output.
 * Prefer short and concise variable names.
+* Complex logic and edge cases in your code should be explained.
 
 We are very supportive and helpful, so don't hesitate to ask any questions during your work. Thanks for contributing!
 
