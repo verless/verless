@@ -29,13 +29,13 @@ project for which you want to create a theme and the theme name itself.
 For example, creating the `dark-theme` theme for the `my-blog` project is as easy as:
 
 ```shell script
-$ verless create theme my-blog dark-theme
+$ verless create theme -p my-blog dark-theme
 ```
 
-Or, if you already are _inside_ the `my-blog` directory:
+You can leave out the `-p` flag if you already are _inside_ the `my-blog` directory:
 
 ```shell script
-$ verless create theme . dark-theme
+$ verless create theme dark-theme
 ```
 
 ## Theme structure
