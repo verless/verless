@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.4.8] - 2020-10-10
+
+### Changed
+- Create directories for files created with `verless create file`.
+- Improve performance of copying files.
+- Improve log messages.
+
+### Deprecated
+- Deprecate `css` and `js` directories in themes.
+
 ## [0.4.7] - 2020-10-07
 
 ### Changed
