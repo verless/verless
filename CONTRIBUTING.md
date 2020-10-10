@@ -33,44 +33,35 @@ changes yourself and open a pull request. When you do so, please take note of ou
 
 ## Contributing code
 
-We highly appreciate the time and effort that go into code contributions. There are just some requirements the code
-needs to meet in order to get merged.
-
 ### Philosophy
 
-verless isn't a company governed by customer expectations that have to be met for generating revenue. We won't accept
-quick-and-dirty solutions, workarounds or hotfixes, as these terms merely are excuses for justifying inadequate code.
-
-Instead, we strive for perfection, thoughtful design considerations, maintainability and optimizations. When somebody
-is working on the verless codebase, their time shall not be wasted with questionable code.
+Since verless isn't a company governed by customer expectations that have to be met for generating revenue, we try to
+avoid quick-and-dirty solutions, workarounds and hotfixes at all costs. Instead, we strive for perfection,
+maintainability and a thoughtful design. Working on the verless codebase should be fun!
 
 ### Git conventions
 
-* Branch names are up to you.
 * Commit messages have to start capitalized and should be written in the imperative, e.g.
 `Read markdown files concurrently`.
-* Create a WIP pull request so that reviewers can track your work continuously and jump in early if there are problems.
 * If your pull request fixes an existing issue, refer to it with the issue number: `Fixes #19.`
+* You may create a Draft Pull Request so reviewers can track your work and jump in early if there are problems.
 
 ### Coding conventions
 
 Most importantly, there are some hard rules for code:
 
-* All code has to be testable, maintainable and extendable.
 * All code has to follow the [Effective Go](https://golang.org/doc/effective_go.html) guidelines.
 * All code has to be formatted with `gofmt -s`.
 * All exported types, methods and variables have to be documented briefly.
-* All code has to pass the CI jobs successfully.
 
-There also are some 'soft' recommendations that apply to most cases:
+Some general recommendations:
 
-* Avoid OOP and global state.
+* Avoid OOP and global state if possible.
 * Prefer standalone functions that accept an input and return an output.
-* Prefer immutability if it doesn't make the code harder to reason about.
-* Make use of closures.
 * Prefer short and concise variable names.
+* Complex logic and edge cases in your code should be explained.
 
-**Thanks for contributing!**
+We are very supportive and helpful, so don't hesitate to ask any questions during your work. Thanks for contributing!
 
 <p align="center">
 <br>
