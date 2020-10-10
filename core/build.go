@@ -16,8 +16,7 @@ import (
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/parser"
-	"github.com/verless/verless/plugin/atom"
-	"github.com/verless/verless/plugin/tags"
+	"github.com/verless/verless/plugin"
 	"github.com/verless/verless/theme"
 	"github.com/verless/verless/writer"
 )
@@ -59,17 +58,6 @@ type Writer interface {
 	Write(site model.Site) error
 }
 
-// Plugin represents a built-in verless plugin.
-type Plugin interface {
-	// ProcessPage will be invoked after parsing the page. Must be safe
-	// for concurrent usage.
-	ProcessPage(page *model.Page) error
-	// PreWrite will be invoked before writing the site.
-	PreWrite(site *model.Site) error
-	// PostWrite will be invoked after writing the site.
-	PostWrite() error
-}
-
 // BuildOptions represents options for running a verless build.
 type BuildOptions struct {
 	// OutputDir sets the output directory. If this field is empty, config.OutputDir
@@ -87,7 +75,7 @@ type Build struct {
 	Parser  Parser
 	Builder Builder
 	Writer  Writer
-	Plugins []Plugin
+	Plugins []plugin.Plugin
 	Types   map[string]*model.Type
 	Options BuildOptions
 }
@@ -126,7 +114,7 @@ func NewBuild(targetFs afero.Fs, path string, options BuildOptions) (*Build, err
 		Options: options,
 	}
 
-	plugins := loadPlugins(&cfg, targetFs, outputDir)
+	plugins := plugin.LoadAll(&cfg, targetFs, outputDir)
 
 	for _, key := range cfg.Plugins {
 		if _, exists := plugins[key]; !exists {
@@ -296,16 +284,4 @@ func outputDir(path string, options *BuildOptions) string {
 	}
 
 	return filepath.Join(path, config.OutputDir)
-}
-
-// loadPlugins returns a map of all available plugins. Each entry
-// is a function that returns a fully initialized plugin instance.
-func loadPlugins(cfg *config.Config, fs afero.Fs, outputDir string) map[string]func() Plugin {
-
-	plugins := map[string]func() Plugin{
-		"atom": func() Plugin { return atom.New(&cfg.Site.Meta, fs, outputDir) },
-		"tags": func() Plugin { return tags.New() },
-	}
-
-	return plugins
 }
