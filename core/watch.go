@@ -3,12 +3,13 @@
 package core
 
 import (
-	"log"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/radovskyb/watcher"
+	"github.com/verless/verless/out"
+	"github.com/verless/verless/out/style"
 )
 
 // watchContext provides all components required for serving an already built project.
@@ -43,7 +44,7 @@ func watch(ctx watchContext) error {
 				for _, ignorePath := range ctx.IgnorePaths {
 					p, err := filepath.Abs(ignorePath)
 					if err != nil {
-						log.Println(err)
+						out.Err(style.Exclamation, "failed to read ignored filepath: %s", err.Error())
 						continue
 					}
 					if strings.HasPrefix(event.Path, p) {
@@ -57,7 +58,7 @@ func watch(ctx watchContext) error {
 				if !ok {
 					return
 				}
-				log.Println("watcher error:", err)
+				out.Err(style.Exclamation, "failed to watch project files: %s", err.Error())
 
 			case _, ok := <-ctx.StopCh:
 				if !ok {
