@@ -9,12 +9,12 @@ type Emoji string
 // GitHub and Slack shortcodes as enumeration names.
 const (
 	None           Emoji = ""
-	Tada                 = "🎉"
-	Fire                 = "🔥"
-	Sparkles             = "✨"
-	Exclamation          = "❗"
-	Bulb                 = "💡"
-	X                    = "❌"
-	HeavyCheckMark       = "✔️"
-	Warning              = "⚠️"
+	Tada           Emoji = "🎉"
+	Fire           Emoji = "🔥"
+	Sparkles       Emoji = "✨"
+	Exclamation    Emoji = "❗"
+	Bulb           Emoji = "💡"
+	X              Emoji = "❌"
+	HeavyCheckMark Emoji = "✔️"
+	Warning        Emoji = "⚠️"
 )
