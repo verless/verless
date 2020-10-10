@@ -51,6 +51,7 @@ my-blog/
     └── dark-theme/
         ├── theme.yml
         ├── assets/
+        ├── generated/ (optional)
         │   └── css/
         │       └── style.css
         └── templates/
