@@ -51,17 +51,17 @@ my-blog/
     └── dark-theme/
         ├── theme.yml
         ├── assets/
-        ├── generated/ (optional)
         │   └── css/
         │       └── style.css
+        ├── generated/ (optional)
         └── templates/
             ├── list-page.html
             └── page.html
 ```
 
-Stylesheets, JavaScript files or even images can be stored in `assets`. This directory will be copied into the root of
-your website, so the stylesheet from the example above is directly available as `/assets/css/style.css`. Any
-theme-specific configuration goes into `theme.yml`.
+Stylesheets, JavaScript files or even images can be stored in `assets`. This directory will be copied along with the
+`generated` directory into the root of your website, so the stylesheet from the example above is directly available as
+`/assets/css/style.css`. Any theme-specific configuration goes into `theme.yml`.
 
 **To activate your theme, set it in `verless.yml`:**
 
