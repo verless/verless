@@ -10,8 +10,7 @@ import (
 )
 
 const (
-	outTestPath       = "../output-dir"
-	projectFolderPath = "../example"
+	outTestPath = "../output-dir"
 )
 
 // TestRunFullBuild tests a full verless build and asserts

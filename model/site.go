@@ -1,8 +1,5 @@
 package model
 
-// walkFn is invoked by WalkTree for each node in the route tree.
-type walkFn func(node *Node) error
-
 // Site represents the actual website. The site model is generated
 // and populated with data and content during the website build.
 //

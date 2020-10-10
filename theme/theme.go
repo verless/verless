@@ -16,16 +16,16 @@ import (
 
 const (
 	TemplatesDir string = "templates"
-	GeneratedDir        = "generated"
-	CssDir              = "css"
-	JsDir               = "js"
+	GeneratedDir string = "generated"
+	CssDir       string = "css"
+	JsDir        string = "js"
 	// AssetsDir is the directory containing CSS and JavaScript files.
 	// It will replace CssDir and JsDir in a future release.
-	AssetsDir        = "assets"
-	Default          = "default"
-	PageTemplate     = "page.html"
-	ListPageTemplate = "list-page.html"
-	configFilename   = "theme"
+	AssetsDir        string = "assets"
+	Default          string = "default"
+	PageTemplate     string = "page.html"
+	ListPageTemplate string = "list-page.html"
+	configFilename   string = "theme"
 )
 
 // Path returns the directory path for the theme with the given name
