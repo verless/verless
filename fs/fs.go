@@ -77,17 +77,6 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 	return ErrStreaming
 }
 
-// MkdirAll creates one or more directories inside the given path.
-func MkdirAll(path string, dirs ...string) error {
-	for _, dir := range dirs {
-		if err := os.MkdirAll(filepath.Join(path, dir), 0755); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 // Rmdir removes an entire directory along with its contents. If the
 // directory does not exist, nothing happens.
 func Rmdir(fs afero.Fs, path string) error {
