@@ -2,7 +2,7 @@
 package fs
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -114,32 +114,37 @@ func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 	}()
 
 	for file := range files {
-		// ToDo: Check if joining the filepath is okay in terms of performance.
-		bytes, err := ioutil.ReadFile(filepath.Join(src, file))
-		if err != nil {
-			return err
-		}
+		var destPath, srcPath string
 
-		var path string
+		// ToDo: Check if joining the filepath is okay in terms of performance.
+		srcPath = filepath.Join(src, file)
 
 		if fileOnly {
 			filename := filepath.Base(file)
-			path = filepath.ToSlash(filepath.Join(dest, filename))
+			destPath = filepath.ToSlash(filepath.Join(dest, filename))
 		} else {
-			path = filepath.ToSlash(filepath.Join(dest, file))
+			destPath = filepath.ToSlash(filepath.Join(dest, file))
 		}
 
-		if err := targetFs.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		if err := targetFs.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
 			return err
 		}
 
-		memFile, err := targetFs.Create(path)
+		srcFile, err := os.Open(srcPath)
 		if err != nil {
 			return err
 		}
-		if _, err := memFile.Write(bytes); err != nil {
+		destFile, err := targetFs.Create(destPath)
+		if err != nil {
 			return err
 		}
+
+		if _, err = io.Copy(destFile, srcFile); err != nil {
+			return err
+		}
+
+		_ = srcFile.Close()
+		_ = destFile.Close()
 	}
 	return err
 }
