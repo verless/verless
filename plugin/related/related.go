@@ -3,6 +3,7 @@ package related
 
 import (
 	"fmt"
+
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
 )
