@@ -207,8 +207,8 @@ func (b *Build) Run() error {
 		return err
 	}
 
-	for _, plugin := range b.Plugins {
-		if err := plugin.PreWrite(&site); err != nil {
+	for _, p := range b.Plugins {
+		if err := p.PreWrite(&site); err != nil {
 			return err
 		}
 	}
@@ -217,8 +217,8 @@ func (b *Build) Run() error {
 		return err
 	}
 
-	for _, plugin := range b.Plugins {
-		if err := plugin.PostWrite(); err != nil {
+	for _, p := range b.Plugins {
+		if err := p.PostWrite(); err != nil {
 			return err
 		}
 	}

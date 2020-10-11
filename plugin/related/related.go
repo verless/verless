@@ -2,8 +2,6 @@
 package related
 
 import (
-	"fmt"
-
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
 )
@@ -23,7 +21,6 @@ func New() *related {
 // map. This prevents that each page has to be resolved from the tre later.
 func (r *related) ProcessPage(page *model.Page) error {
 	r.pages[page.Href] = page
-	fmt.Println("registering page", page.Href)
 	return nil
 }
 
@@ -36,11 +33,12 @@ func (r *related) ProcessPage(page *model.Page) error {
 // ToDo: Log a warning if the page URI cannot be resolved.
 func (r *related) PreWrite(site *model.Site) error {
 	resolver := func(path string, node tree.Node) error {
-		for _, page := range node.(*model.Node).Pages {
-			for _, related := range page.ProvidedRelated() {
+		pages := node.(*model.Node).Pages
+
+		for i, _ := range pages {
+			for _, related := range pages[i].ProvidedRelated() {
 				if p, ok := r.pages[related]; ok {
-					page.Related = append(page.Related, p)
-					fmt.Printf("got page %s\n", related)
+					pages[i].Related = append(pages[i].Related, p)
 				}
 			}
 		}
