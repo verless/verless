@@ -241,7 +241,7 @@ func (b *Build) processFile(contentDir, file string) error {
 	// route and making-espresso as ID.
 	page.Route = filepath.ToSlash(filepath.Dir(file))
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
-	page.Href = filepath.Join(page.Route, page.ID)
+	page.Href = filepath.ToSlash(filepath.Join(page.Route, page.ID))
 
 	if err := b.setPageType(&page); err != nil {
 		return err
