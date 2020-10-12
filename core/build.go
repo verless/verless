@@ -105,12 +105,17 @@ func NewBuild(targetFs afero.Fs, path string, options BuildOptions) (*Build, err
 		RecompileTemplates: options.RecompileTemplates,
 	}
 
+	themeCfg, err := theme.GetConfig(path, cfg.Theme)
+	if err != nil {
+		return nil, err
+	}
+
 	b := Build{
 		Path:    path,
 		Parser:  parser.NewMarkdown(),
 		Builder: builder.New(&cfg),
 		Writer:  writer.New(writerCtx),
-		Types:   cfg.Types,
+		Types:   theme.GetTypes(&themeCfg, cfg.Types),
 		Options: options,
 	}
 
@@ -134,7 +139,7 @@ func NewBuild(targetFs afero.Fs, path string, options BuildOptions) (*Build, err
 		}
 	}
 
-	if err := theme.RunBeforeHooks(path, cfg.Theme); err != nil {
+	if err := theme.RunBeforeHooks(path, cfg.Theme, &themeCfg); err != nil {
 		return nil, err
 	}
 
