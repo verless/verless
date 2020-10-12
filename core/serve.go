@@ -74,6 +74,13 @@ func Serve(path string, options ServeOptions) error {
 		for {
 			select {
 			case _, ok := <-rebuildCh:
+				finishFirst := func() {
+					if isFirst {
+						initialBuild.Done()
+						isFirst = false
+					}
+				}
+
 				if !ok {
 					return
 				}
@@ -82,18 +89,19 @@ func Serve(path string, options ServeOptions) error {
 				build, err := NewBuild(memMapFs, path, options.BuildOptions)
 				if err != nil {
 					out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
+					finishFirst()
+					continue
 				}
 
 				if err := build.Run(); err != nil {
 					out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
+					finishFirst()
+					continue
 				}
 
 				out.T(style.HeavyCheckMark, "project built successfully")
 
-				if isFirst {
-					initialBuild.Done()
-					isFirst = false
-				}
+				finishFirst()
 			case _, ok := <-done:
 				// Stops the goroutine if requested to.
 				// Triggers on closing of the done channel.
