@@ -78,7 +78,7 @@ func CreateProject(path string, options CreateProjectOptions) error {
 	dirs := []string{
 		filepath.Join(path, ContentDir),
 		theme.TemplatePath(path, theme.Default),
-		theme.CssPath(path, theme.Default),
+		theme.AssetsPath(path, theme.Default),
 	}
 
 	for _, dir := range dirs {
