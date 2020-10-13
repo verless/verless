@@ -25,10 +25,6 @@ plugins:
   - related
 # Specify your theme.
 theme: default
-# Declare custom page types.
-types:
-  startpage:
-    template: startpage.html
 build:
   before:
     # - If you need to run a command before the build, add it here.

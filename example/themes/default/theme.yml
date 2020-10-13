@@ -1,6 +1,9 @@
 # theme.yml is the theme configuration. This example
 # file contains all configuration keys available.
 version: 1
+types:
+  startpage:
+    template: startpage.html
 build:
   # Here you can specify commands you need to run in order to build
   # your theme, like generating CSS.
