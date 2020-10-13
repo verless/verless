@@ -5,6 +5,7 @@ import (
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/plugin/atom"
+	"github.com/verless/verless/plugin/related"
 	"github.com/verless/verless/plugin/tags"
 )
 
@@ -23,7 +24,8 @@ type Plugin interface {
 // is a function that returns a fully initialized plugin instance.
 func LoadAll(cfg *config.Config, fs afero.Fs, outputDir string) map[string]func() Plugin {
 	return map[string]func() Plugin{
-		"atom": func() Plugin { return atom.New(&cfg.Site.Meta, fs, outputDir) },
-		"tags": func() Plugin { return tags.New() },
+		"atom":    func() Plugin { return atom.New(&cfg.Site.Meta, fs, outputDir) },
+		"related": func() Plugin { return related.New() },
+		"tags":    func() Plugin { return tags.New() },
 	}
 }

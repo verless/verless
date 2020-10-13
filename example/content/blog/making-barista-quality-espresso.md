@@ -6,6 +6,8 @@ Tags:
     - Espresso
     - Coffee
 Img: /static/img/espresso.jpg
+Related:
+    - /blog/steaming-milk-for-cappuccino
 Credit: Burst on Pexels
 ---
 

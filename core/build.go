@@ -207,8 +207,8 @@ func (b *Build) Run() error {
 		return err
 	}
 
-	for _, plugin := range b.Plugins {
-		if err := plugin.PreWrite(&site); err != nil {
+	for _, p := range b.Plugins {
+		if err := p.PreWrite(&site); err != nil {
 			return err
 		}
 	}
@@ -217,8 +217,8 @@ func (b *Build) Run() error {
 		return err
 	}
 
-	for _, plugin := range b.Plugins {
-		if err := plugin.PostWrite(); err != nil {
+	for _, p := range b.Plugins {
+		if err := p.PostWrite(); err != nil {
 			return err
 		}
 	}
@@ -241,7 +241,7 @@ func (b *Build) processFile(contentDir, file string) error {
 	// route and making-espresso as ID.
 	page.Route = filepath.ToSlash(filepath.Dir(file))
 	page.ID = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
-	page.Href = filepath.Join(page.Route, page.ID)
+	page.Href = filepath.ToSlash(filepath.Join(page.Route, page.ID))
 
 	if err := b.setPageType(&page); err != nil {
 		return err

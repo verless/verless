@@ -22,5 +22,11 @@
 
             {{.Page.Content}}
         </main>
+        <aside>
+            <h4>Related</h4>
+            {{range $related := .Page.Related}}
+                <p><a href="{{$related.Href}}">{{$related.Title}}</a></p>
+            {{end}}
+        </aside>
     </body>
 </html>
