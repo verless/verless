@@ -234,7 +234,7 @@ The built website will go into the `target` directory of our project and you're 
 ## Plugins
 
 verless supports some plugins that are desirable for many, but not all project out there - so verless wants you to
-explicitly active the plugins you need. Maybe you noticed that small `plugins` section in `verless.yml`:
+explicitly activate the plugins you need. Maybe you noticed that small `plugins` section in `verless.yml`:
 
 ```yaml
 plugins:
