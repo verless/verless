@@ -45,6 +45,27 @@ As verless has just been released, we're constantly adding new plugins.
 * **What it does:** Generates an Atom RSS feed for your pages. You can exclude a page with `Hide: true`. The generated
 RSS feed will be available in your project root.
 
+### related
+
+* **Plugin key:** `related`
+* **What it does:** Allows you to put page URIs in the `Related` section of your Markdown Front Matter and access those
+related pages as [`{{.Page.Related}}`](template-reference.md#page) in templates.
+
+```markdown
+---
+Title: Making Barista-Quality Espresso
+Related:
+    - /blog/steaming-milk-for-cappuccino
+---
+
+...
+```
+
+The page URI is a verless path inside the `content` directory - in the example above, the related page physically is
+`content/blog/steaming-milk-for-cappuccino.md`.
+
+The `{{.Page.Related}}` array contains full `Page` instances with _all_ page data available.
+
 ### tags
 
 * **Plugin key:** `tags`
