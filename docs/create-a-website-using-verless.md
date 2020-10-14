@@ -45,7 +45,9 @@ $ verless serve -w coffee-blog
 The `-w` or `--watch` flag will verless make watch the project for changes.
 
 <br>
+
 ![verless standard project](img/standard-project.png)
+
 <br>
 
 ## Project configuration
