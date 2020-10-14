@@ -105,7 +105,7 @@ By default, verless generates the website into `my-blog/target`. You're now good
 To find out how a verless project is structured, take a look at the [example project](example). For a detailed
 reference, check out the [documentation](docs).
 
-**New tutorial:** [Create a website using verless](docs/create-a-website-using-verless.md)
+**:fire: New tutorial:** [Create a website using verless](docs/create-a-website-using-verless.md)
 
 ## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Contributing
 
