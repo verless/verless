@@ -48,8 +48,6 @@ The `-w` or `--watch` flag will verless make watch the project for changes.
 
 ![verless standard project](img/standard-project.png)
 
-<br>
-
 ## Project configuration
 
 verless created a top-level configuration file called `verless.yml` for you. Here you can set metadata, define your
