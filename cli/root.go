@@ -14,6 +14,8 @@ func NewRootCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Help()
 		},
+		SilenceErrors: true,
+		SilenceUsage:  true,
 	}
 
 	rootCmd.AddCommand(newBuildCmd())
