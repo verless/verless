@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.5.0] - 2020-10-13
+
+### Added
+- Introduce the `related` plugin.
+- Introduce page types for themes.
+
+### Deprecated
+- Deprecate the `types` section in `verless.yml`.
+- Deprecate the `css` and `js` directories in themes.
+
+### Fixed
+- Fix `serve` behavior when an error occurs.
+
 ## [0.4.8] - 2020-10-10
 
 ### Changed

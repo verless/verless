@@ -12,6 +12,7 @@ import (
 
 	"github.com/spf13/viper"
 	"github.com/verless/verless/config"
+	"github.com/verless/verless/model"
 )
 
 const (
@@ -73,6 +74,7 @@ func Exists(path, name string) bool {
 // stored in the theme.yml file, which currently is not mandatory.
 type Config struct {
 	Version string
+	Types   map[string]*model.Type
 	Build   struct {
 		Before []string
 	}
@@ -101,17 +103,25 @@ func GetConfig(path, name string) (Config, error) {
 	return cfg, nil
 }
 
-// RunBeforeHooks executes all pre-build commands specified in the
-// configuration of the theme with the specified name.
+// GetTypes returns the declared page types from the given configuration.
+// If there are no types configured, it returns the given default types.
+//
+// verless 1.0.0 will remove the types key in verless.yml, which will make
+// this function obsolete.
+func GetTypes(cfg *Config, defaultTypes map[string]*model.Type) map[string]*model.Type {
+	if cfg.Types == nil || len(cfg.Types) == 0 {
+		return defaultTypes
+	}
+
+	return cfg.Types
+}
+
+// RunBeforeHooks executes all pre-build commands specified in the given
+// theme configuration.
 //
 // Note that the command context directory is the the theme directory
 // instead of the project directory.
-func RunBeforeHooks(path, name string) error {
-	cfg, err := GetConfig(path, name)
-	if err != nil {
-		return err
-	}
-
+func RunBeforeHooks(path, name string, cfg *Config) error {
 	for _, beforeHook := range cfg.Build.Before {
 		parts := strings.Split(beforeHook, " ")
 		cmd := exec.Command(parts[0], parts[1:]...)

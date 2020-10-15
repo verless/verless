@@ -80,17 +80,17 @@ directory in your content path, and all pages inside that directory are availabl
 ## Custom templates
 
 If your theme offers any special pages, you may provide an additional template inside `templates`. To use this
-template for a certain page, first define a new page type in the project configuration:
+template for a certain page, first declare a new page type in the theme configuration:
 
 ```yaml
-# File: verless.yml
+# File: theme.yml
 
 types:
    my-special-page:
       template: my-special-template.html
 ```
 
-You can now use that type in your page:
+Once the page type is declared, you can use that type in your Markdown files:
 
 ```markdown
 # File: content/about.md
