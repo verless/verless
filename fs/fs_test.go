@@ -32,3 +32,29 @@ func TestIsSafeToRemove(t *testing.T) {
 		})
 	}
 }
+
+func TestRmdir(t *testing.T) {
+	type args struct {
+		fs   afero.Fs
+		path string
+	}
+	tempFS := afero.NewMemMapFs()
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// Add test entries here
+		{"Remove example", args{tempFS, "../example"}, false},
+		// BUG: This works, but it should not, according to IsSafeToRemove
+		{"Should not remove", args{tempFS, "."}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := Rmdir(tt.args.fs, tt.args.path); (err != nil) != tt.wantErr {
+				t.Errorf("Rmdir() error = %v, wantErr %v", err, tt.wantErr)
+				test.ExpectedError(t, nil, err)
+			}
+		})
+	}
+}

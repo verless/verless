@@ -79,12 +79,12 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 
 // Rmdir removes an entire directory along with its contents. If the
 // directory does not exist, nothing happens.
-func Rmdir(fs afero.Fs, path string) error {
-	if _, err := fs.Stat(path); !os.IsNotExist(err) {
+func Rmdir(targetFs afero.Fs, path string) error {
+	if _, err := targetFs.Stat(path); !os.IsNotExist(err) {
 		return err
 	}
 
-	return fs.RemoveAll(path)
+	return targetFs.RemoveAll(path)
 }
 
 // CopyFromOS copies a given directory from the OS filesystem into
