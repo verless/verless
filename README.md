@@ -22,7 +22,7 @@
 
 ---
 
-**verless** (pronounced like _serverless_) is a Static Site Generator designed for Markdown-based content with focus on
+**verless** (pronounced like _serverless_) is a Static Site Generator designed for Markdown-based content with a focus on
 simplicity and performance. It reads your Markdown files, applies your HTML templates and renders them as a website.
 
 ## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Features
@@ -98,7 +98,7 @@ project works similary and generates a deployable website:
 $ verless build my-blog
 ```
 
-By default, verless generates the website into `my-blog/target`. You're now good to [create your first content](docs)!
+By default, verless generates the website into `my-blog/target`. You are now ready to [create your first blog post](docs)!
 
 ## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Documentation
 
