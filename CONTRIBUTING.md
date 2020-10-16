@@ -9,7 +9,7 @@
 
 ## Reporting issues
 
-If you encountered an unexpected behavior or a bug, feel free to
+If you encounter an unexpected behavior or a bug, feel free to
 [file an issue](https://github.com/verless/verless/issues/new). When you do so, please make sure to ...
 * include version information from the output of `verless version`.
 * provide steps to reproduce the behavior.
@@ -61,7 +61,7 @@ Some general recommendations:
 * Prefer short and concise variable names.
 * Complex logic and edge cases in your code should be explained.
 
-We are very supportive and helpful, so don't hesitate to ask any questions during your work. Thanks for contributing!
+We are very supportive and helpful, so don't hesitate to ask any questions you may have while working with us. Thanks for contributing!
 
 <p align="center">
 <br>
