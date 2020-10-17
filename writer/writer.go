@@ -180,7 +180,7 @@ func (w *writer) copyDirs() error {
 		{
 			src:      theme.AssetsPath(w.ctx.Path, w.ctx.Theme),
 			dest:     filepath.Join(w.ctx.OutputDir, theme.AssetsDir),
-			fileOnly: true,
+			fileOnly: false,
 		},
 		{
 			src:      theme.GeneratedPath(w.ctx.Path, w.ctx.Theme),
