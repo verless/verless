@@ -8,17 +8,16 @@ import (
 )
 
 func TestIsSafeToRemove(t *testing.T) {
-	type args struct {
-		targetFs afero.Fs
-		path     string
-		force    bool
-	}
-
 	// Create new in-memory FS with one file and one directory
 	tempFS := afero.NewMemMapFs()
 	_, _ = tempFS.Create("file.go")
 	_ = tempFS.Mkdir("directory", 0755)
 
+	type args struct {
+		targetFs afero.Fs
+		path     string
+		force    bool
+	}
 	tests := []struct {
 		name string
 		args args
@@ -39,11 +38,6 @@ func TestIsSafeToRemove(t *testing.T) {
 }
 
 func TestRmdir(t *testing.T) {
-	type args struct {
-		fs   afero.Fs
-		path string
-	}
-
 	// Create new in-memory FS with -
 	// One file, One empty directory, One directory with files
 	tempFS := afero.NewMemMapFs()
@@ -52,6 +46,10 @@ func TestRmdir(t *testing.T) {
 	_ = tempFS.MkdirAll("first/second", 0755)
 	_, _ = tempFS.Create("first/second/third.go")
 
+	type args struct {
+		fs   afero.Fs
+		path string
+	}
 	tests := []struct {
 		name    string
 		args    args
@@ -74,13 +72,6 @@ func TestRmdir(t *testing.T) {
 }
 
 func TestCopyFromOS(t *testing.T) {
-	type args struct {
-		targetFs afero.Fs
-		src      string
-		dest     string
-		fileOnly bool
-	}
-
 	// Create blank in-memory FS
 	// One directory for source files, one for destination files
 	// One nested directory for source files being copied with structure
@@ -97,12 +88,18 @@ func TestCopyFromOS(t *testing.T) {
 	_ = tempFS.Mkdir("restricted", 0000)
 	_, _ = tempFS.Create("restricted/cantread.go")
 
+	type args struct {
+		targetFs afero.Fs
+		src      string
+		dest     string
+		fileOnly bool
+	}
 	tests := []struct {
 		name    string
 		args    args
 		wantErr bool
 	}{
-		// Add test cases here
+		// Add test entries here
 		{"Copy from src to dest dir", args{tempFS, "src", "dest", true}, false},
 		{"Copy with source structure", args{tempFS, "nestdir", "dest", false}, false},
 		{"Copy file from parent of dest", args{tempFS, "srcfile3.go", "dest", false}, false},
@@ -115,6 +112,46 @@ func TestCopyFromOS(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := CopyFromOS(tt.args.targetFs, tt.args.src, tt.args.dest, tt.args.fileOnly); (err != nil) != tt.wantErr {
 				t.Errorf("CopyFromOS() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestStreamFiles(t *testing.T) {
+	// Filters:
+	noFilter := []func(string) bool{}
+	markFilter := []func(string) bool{MarkdownOnly}
+	underscoreFilter := []func(string) bool{NoUnderscores}
+	allFilter := []func(string) bool{MarkdownOnly, NoUnderscores}
+
+	type args struct {
+		path    string
+		files   chan string
+		filters []func(file string) bool
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// Add test entries here
+		{"No filters", args{"../example", make(chan string), noFilter}, false},
+		{"Markdown filters", args{"../example", make(chan string), markFilter}, false},
+		{"Underscore filters", args{"../example", make(chan string), underscoreFilter}, false},
+		{"All filters", args{"../example", make(chan string), allFilter}, false},
+		{"Path does not exist", args{"notexist", make(chan string), allFilter}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			channel := tt.args.files
+			go func() {
+				// Drain all data that goes into channel
+				for i := range channel {
+					_ = i
+				}
+			}()
+			if err := StreamFiles(tt.args.path, channel, tt.args.filters...); (err != nil) != tt.wantErr {
+				t.Errorf("StreamFiles() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
