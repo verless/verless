@@ -1,6 +1,8 @@
 package fs
 
 import (
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -118,6 +120,20 @@ func TestCopyFromOS(t *testing.T) {
 }
 
 func TestStreamFiles(t *testing.T) {
+	// Filter functions kept here for independence from fs.go
+
+	// MarkdownOnly is a filter that only lets pass Markdown files.
+	MarkdownOnly = func(file string) bool {
+		return filepath.Ext(file) == ".md"
+	}
+
+	// NoUnderscores is a predefined filter that doesn't let pass
+	// files starting with an underscore.
+	NoUnderscores = func(file string) bool {
+		filename := filepath.Base(file)
+		return !strings.HasPrefix(filename, "_")
+	}
+
 	// Filters:
 	noFilter := []func(string) bool{}
 	markFilter := []func(string) bool{MarkdownOnly}
@@ -142,17 +158,15 @@ func TestStreamFiles(t *testing.T) {
 		{"Path does not exist", args{"notexist", make(chan string), allFilter}, false},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			channel := tt.args.files
-			go func() {
-				// Drain all data that goes into channel
-				for i := range channel {
-					_ = i
-				}
-			}()
-			if err := StreamFiles(tt.args.path, channel, tt.args.filters...); (err != nil) != tt.wantErr {
-				t.Errorf("StreamFiles() error = %v, wantErr %v", err, tt.wantErr)
+		go func() {
+			// Drain all data that goes into channel
+			for file := range tt.args.files {
+				_ = file
 			}
-		})
+		}()
+		err := StreamFiles(tt.args.path, tt.args.files, tt.args.filters...)
+		if (err != nil) != tt.wantErr {
+			t.Errorf("StreamFiles() error = %v, wantErr %v", err, tt.wantErr)
+		}
 	}
 }
