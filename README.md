@@ -76,6 +76,14 @@ another command, just append it to the image name:
 $ docker container run verless/verless version
 ```
 
+### 3rd-Party method
+
+[gobinaries.com](https://gobinaries.com) let you compile non-release verless version without needed to have Go installed on your machine
+
+```sh
+curl -sf https://gobinaries.com/verless/verless/cmd/verless | sh
+```
+
 ## <img src="https://verless.dominikbraun.io/static/img/list-icon-v1.0.0.png"> Getting started
 
 The easiest way to create a new project is to use the verless CLI:
