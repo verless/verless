@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.5.1] - 2020-10-25
+
+### Changed
+- Don't print the command usage in case of a business error.
+- Create the `assets` directory instead of `js` and `css`.
+
+### Fixed
+- Preserve the `assets` directory structure when copying.
+- Fix grammatical errors in the documentation.
+
 ## [0.5.0] - 2020-10-13
 
 ### Added
