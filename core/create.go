@@ -118,8 +118,7 @@ func CreateTheme(options CreateThemeOptions, name string) error {
 
 	dirs := []string{
 		theme.TemplatePath(options.Project, name),
-		theme.CssPath(options.Project, name),
-		theme.JsPath(options.Project, name),
+		theme.AssetsPath(options.Project, name),
 	}
 
 	for _, dir := range dirs {
