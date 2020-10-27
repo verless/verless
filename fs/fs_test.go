@@ -74,18 +74,18 @@ func TestRmdir(t *testing.T) {
 }
 
 func TestCopyFromOS(t *testing.T) {
-	// Create blank in-memory FS
-	// One directory for source files, one for destination files
-	// One nested directory for source files being copied with structure
-	// One file in the root directory to copy into the destination
-	// One empty directory, one with no read permissions
+	// Create blank in-memory FS.
 	tempFS := afero.NewMemMapFs()
+	// One directory for source files, one for destination files.
 	_ = tempFS.Mkdir("src", 0755)
 	_, _ = tempFS.Create("src/srcfile1.go")
 	_ = tempFS.Mkdir("dest", 0755)
+	// One nested directory for source files being copied with structure.
 	_ = tempFS.MkdirAll("nestdir/levelone", 0755)
 	_, _ = tempFS.Create("nestdir/levelone/srcfile2.go")
+	// One file in the root directory to copy into the destination.
 	_, _ = tempFS.Create("srcfile3.go")
+	// One empty directory, one with no read permissions.
 	_ = tempFS.Mkdir("empty", 0755)
 	_ = tempFS.Mkdir("restricted", 0000)
 	_, _ = tempFS.Create("restricted/cantread.go")
