@@ -10,9 +10,13 @@ import (
 )
 
 func TestIsSafeToRemove(t *testing.T) {
-	// Create new in-memory FS with one file and one directory
+	// Create new in-memory FS
 	tempFS := afero.NewMemMapFs()
+
+	// Normal file, should be safe to remove
 	_, _ = tempFS.Create("file.go")
+
+	// Empty directory, should be safe to remove
 	_ = tempFS.Mkdir("directory", 0755)
 
 	type args struct {
@@ -40,11 +44,16 @@ func TestIsSafeToRemove(t *testing.T) {
 }
 
 func TestRmdir(t *testing.T) {
-	// Create new in-memory FS with -
-	// One file, One empty directory, One directory with files
+	// Create new in-memory FS
 	tempFS := afero.NewMemMapFs()
+
+	// Single files, to be deleted
 	_, _ = tempFS.Create("file.go")
+
+	// Empty directory, to be deleted
 	_ = tempFS.Mkdir("emptydir", 0755)
+
+	// Nested directory, to test structure preservation
 	_ = tempFS.MkdirAll("first/second", 0755)
 	_, _ = tempFS.Create("first/second/third.go")
 
@@ -110,12 +119,12 @@ func TestCopyFromOS(t *testing.T) {
 		{"Source file does not exist", args{tempFS, "nofile.go", "dest", true}, false},
 		{"Source directory has no read perms", args{tempFS, "restricted", "dest", false}, false},
 	}
+
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := CopyFromOS(tt.args.targetFs, tt.args.src, tt.args.dest, tt.args.fileOnly); (err != nil) != tt.wantErr {
-				t.Errorf("CopyFromOS() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+		err := CopyFromOS(tt.args.targetFs, tt.args.src, tt.args.dest, tt.args.fileOnly)
+		if (err != nil) != tt.wantErr {
+			t.Errorf("CopyFromOS() error = %v, wantErr %v", err, tt.wantErr)
+		}
 	}
 }
 
@@ -157,6 +166,7 @@ func TestStreamFiles(t *testing.T) {
 		{"All filters", args{"../example", make(chan string), allFilter}, false},
 		{"Path does not exist", args{"notexist", make(chan string), allFilter}, false},
 	}
+
 	for _, tt := range tests {
 		go func() {
 			// Drain all data that goes into channel
