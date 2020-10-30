@@ -94,12 +94,14 @@ func Rmdir(targetFs afero.Fs, path string) error {
 // destination directory without their directory structure inside src.
 func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 	var (
-		files = make(chan string)
-		err   error
+		files   = make(chan string)
+		errchan = make(chan error)
+		err     error
 	)
 
 	go func() {
-		err = StreamFiles(src, files)
+		err := StreamFiles(src, files)
+		errchan <- err
 	}()
 
 	for file := range files {
@@ -135,6 +137,8 @@ func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 		_ = srcFile.Close()
 		_ = destFile.Close()
 	}
+
+	err = <-errchan
 	return err
 }
 
