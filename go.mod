@@ -3,7 +3,6 @@ module github.com/verless/verless
 go 1.14
 
 require (
-	github.com/cweill/gotests v1.5.3 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/google/go-cmp v0.5.2
 	github.com/gorilla/feeds v1.1.1
@@ -20,6 +19,6 @@ require (
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691
 	github.com/yuin/goldmark-meta v0.0.0-20191126180153-f0638e958b60
 	golang.org/x/sys v0.0.0-20200803210538-64077c9b5642 // indirect
-	golang.org/x/tools v0.0.0-20201010145503-6e5c6d77ddcc // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/ini.v1 v1.57.0 // indirect
 )
