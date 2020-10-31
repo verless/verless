@@ -79,12 +79,12 @@ func StreamFiles(path string, files chan<- string, filters ...func(file string) 
 
 // Rmdir removes an entire directory along with its contents. If the
 // directory does not exist, nothing happens.
-func Rmdir(fs afero.Fs, path string) error {
-	if _, err := fs.Stat(path); !os.IsNotExist(err) {
+func Rmdir(targetFs afero.Fs, path string) error {
+	if _, err := targetFs.Stat(path); !os.IsNotExist(err) {
 		return err
 	}
 
-	return fs.RemoveAll(path)
+	return targetFs.RemoveAll(path)
 }
 
 // CopyFromOS copies a given directory from the OS filesystem into
@@ -94,12 +94,14 @@ func Rmdir(fs afero.Fs, path string) error {
 // destination directory without their directory structure inside src.
 func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 	var (
-		files = make(chan string)
-		err   error
+		files   = make(chan string)
+		errchan = make(chan error)
+		err     error
 	)
 
 	go func() {
-		err = StreamFiles(src, files)
+		err := StreamFiles(src, files)
+		errchan <- err
 	}()
 
 	for file := range files {
@@ -135,6 +137,8 @@ func CopyFromOS(targetFs afero.Fs, src, dest string, fileOnly bool) error {
 		_ = srcFile.Close()
 		_ = destFile.Close()
 	}
+
+	err = <-errchan
 	return err
 }
 
