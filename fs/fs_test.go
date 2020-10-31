@@ -36,10 +36,8 @@ func TestIsSafeToRemove(t *testing.T) {
 		{"Force remove", args{tempFS, "file.go", true}, true},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := IsSafeToRemove(tt.args.targetFs, tt.args.path, tt.args.force)
-			test.Equals(t, got, tt.want)
-		})
+		got := IsSafeToRemove(tt.args.targetFs, tt.args.path, tt.args.force)
+		test.Equals(t, got, tt.want)
 	}
 }
 
@@ -73,12 +71,11 @@ func TestRmdir(t *testing.T) {
 		{"Try on non-existent file", args{tempFS, "notexist.go"}, false},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := Rmdir(tt.args.fs, tt.args.path); (err != nil) != tt.wantErr {
-				t.Errorf("Rmdir() error = %v, wantErr %v", err, tt.wantErr)
-				test.ExpectedError(t, nil, err)
-			}
-		})
+		err := Rmdir(tt.args.fs, tt.args.path)
+		if (err != nil) != tt.wantErr {
+			t.Errorf("Rmdir() error = %v, wantErr %v", err, tt.wantErr)
+			test.ExpectedError(t, nil, err)
+		}
 	}
 }
 
