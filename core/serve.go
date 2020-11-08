@@ -5,7 +5,6 @@ import (
 	"net"
 	"net/http"
 	"path/filepath"
-	"sync"
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
@@ -47,7 +46,6 @@ func Serve(path string, options ServeOptions) error {
 	done := make(chan bool)
 	rebuildCh := make(chan string)
 
-	// Only watch if needed.
 	if options.Watch {
 		if err := watch(watchContext{
 			IgnorePaths: []string{
@@ -63,63 +61,47 @@ func Serve(path string, options ServeOptions) error {
 		}
 	}
 
-	var initialBuild sync.WaitGroup
+	out.T(style.Sparkles, "building project ...")
 
-	// Start rebuild goroutine.
-	// If watch is not enabled, it's still used for the initial build.
-	go func() {
-		isFirst := true
-		initialBuild.Add(1)
+	build, err := NewBuild(memMapFs, path, options.BuildOptions)
+	if err != nil {
+		return err
+	}
 
-		for {
-			select {
-			case _, ok := <-rebuildCh:
-				finishFirst := func() {
-					if isFirst {
-						initialBuild.Done()
-						isFirst = false
+	if err := build.Run(); err != nil {
+		return err
+	}
+
+	out.T(style.HeavyCheckMark, "project built successfully")
+
+	// If --watch is enabled, launch a goroutine that handles rebuilds.
+	if options.Watch {
+		go func() {
+			for {
+				select {
+				case _, ok := <-rebuildCh:
+					if !ok {
+						return
 					}
-				}
+					out.T(style.Sparkles, "rebuilding project ...")
 
-				if !ok {
-					return
-				}
-				out.T(style.Sparkles, "building project ...")
+					build, err := NewBuild(memMapFs, path, options.BuildOptions)
+					if err != nil {
+						out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
+						continue
+					}
 
-				build, err := NewBuild(memMapFs, path, options.BuildOptions)
-				if err != nil {
-					out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
-					finishFirst()
-					continue
-				}
+					if err := build.Run(); err != nil {
+						out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
+						continue
+					}
 
-				if err := build.Run(); err != nil {
-					out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
-					finishFirst()
-					continue
-				}
-
-				out.T(style.HeavyCheckMark, "project built successfully")
-
-				finishFirst()
-			case _, ok := <-done:
-				// Stops the goroutine if requested to.
-				// Triggers on closing of the done channel.
-				if !ok {
+					out.T(style.HeavyCheckMark, "project built successfully")
+				case _, _ = <-done:
 					return
 				}
 			}
-		}
-	}()
-
-	// Trigger and wait for the initial rebuild.
-	rebuildCh <- path
-	initialBuild.Wait()
-
-	// Stop rebuilding goroutine if not watching.
-	if !options.Watch {
-		done <- true
-		close(done)
+		}()
 	}
 
 	// If the target folder doesn't exist, return an error.
@@ -128,9 +110,6 @@ func Serve(path string, options ServeOptions) error {
 	}
 
 	err = listenAndServe(memMapFs, targetFiles, options.IP, options.Port)
-
-	// Stop building goroutine just to be sure.
-	done <- true
 	close(done)
 
 	return err
