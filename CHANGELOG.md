@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.5.2] - 2020-11-10
+
+### Fixed
+- Fix deadlock when serving the project.
+
 ## [0.5.1] - 2020-10-25
 
 ### Changed
