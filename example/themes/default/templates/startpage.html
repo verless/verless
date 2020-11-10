@@ -28,6 +28,12 @@
                     <h3>{{$page.Title}}</h3>
                     <p><small>Posted on {{$page.Date.Format "Jan 2 2006"}}</small></p>
                     <p>{{$page.Description}}</p>
+                    <p>
+                        Tags:
+                        {{range $tag := $page.Tags}}
+                            <a href={{$tag.Href}}>{{$tag}}</a>
+                        {{end}}
+                    </p>
                     <p><a href="{{$page.Href}}">read post</a></p>
                 </div>
             {{end}}
