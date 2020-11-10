@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/verless/verless/model"
 	"github.com/verless/verless/test"
 )
 
@@ -15,7 +16,7 @@ func TestMarkdown_ParsePage(t *testing.T) {
 		src     string
 		title   string
 		date    time.Time
-		tags    []string
+		tags    []model.Tag
 		content string
 	}{
 		{
@@ -28,9 +29,18 @@ Tags:
 ---
 
 This is a blog post.`,
-			title:   "Coffee Roasting Basics",
-			date:    time.Time{},
-			tags:    []string{"Coffee", "Roasting"},
+			title: "Coffee Roasting Basics",
+			date:  time.Time{},
+			tags: []model.Tag{
+				{
+					Name: "Coffee",
+					Href: "/tags/coffee",
+				},
+				{
+					Name: "Roasting",
+					Href: "/tags/roasting",
+				},
+			},
 			content: "<p>This is a blog post.</p>\n",
 		},
 	}

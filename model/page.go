@@ -6,6 +6,15 @@ const (
 	customListPageID string = "index"
 )
 
+type Tag struct {
+	Name string
+	Href string
+}
+
+func (t Tag) String() string {
+	return t.Name
+}
+
 // Page represents a sub-page of the website.
 type Page struct {
 	Route       string
@@ -14,7 +23,7 @@ type Page struct {
 	Title       string
 	Author      string
 	Date        time.Time
-	Tags        []string
+	Tags        []Tag
 	Img         string
 	Credit      string
 	Description string
