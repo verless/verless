@@ -4,7 +4,6 @@ package atom
 import (
 	"fmt"
 	"path/filepath"
-	"sync"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -35,6 +34,8 @@ func New(meta *model.Meta, fs afero.Fs, outputDir string) *atom {
 		outputDir: outputDir,
 	}
 
+	a.feedItems = make(chan *feeds.Item)
+
 	return &a
 }
 
@@ -43,9 +44,49 @@ func New(meta *model.Meta, fs afero.Fs, outputDir string) *atom {
 type atom struct {
 	meta      *model.Meta
 	feed      *feeds.Feed
-	feedMutex sync.RWMutex
+	feedItems chan *feeds.Item
 	fs        afero.Fs
 	outputDir string
+
+	// workerShouldStop is a channel which indicates that the worker should stop working.
+	// To stop it, pass true to it. The worker will close the channel.
+	workerShouldStop chan bool
+	// workerFinishedSignal gets closed by the worker to indicate that it finished all it's work.
+	workerFinishedSignal chan bool
+}
+
+// PreProcessPages starts a worker goroutine which handles the a.feed.Add.
+// This improves speed as the ProcessPage can add new items in a non blocking way.
+func (a *atom) PreProcessPages() error {
+	a.workerShouldStop = make(chan bool)
+	a.workerFinishedSignal = make(chan bool)
+
+	go func() {
+		defer func() {
+			close(a.workerShouldStop)
+			fmt.Println("do end")
+			close(a.workerFinishedSignal)
+			fmt.Println("did end")
+		}()
+
+		for {
+			select {
+			case shouldStop := <-a.workerShouldStop:
+				if shouldStop {
+					return
+				}
+			default:
+			}
+
+			select {
+			case feedItem := <-a.feedItems:
+				a.feed.Add(feedItem)
+			default:
+			}
+		}
+	}()
+
+	return nil
 }
 
 // ProcessPage takes a page to be processed by the plugin, reads
@@ -65,9 +106,18 @@ func (a *atom) ProcessPage(page *model.Page) error {
 		Created:     page.Date,
 	}
 
-	a.feedMutex.Lock()
-	a.feed.Add(item)
-	a.feedMutex.Unlock()
+	a.feedItems <- item
+	return nil
+}
+
+// PostProcessPages stops and waits for the worker from PreProcessPages to finish.
+func (a *atom) PostProcessPages() error {
+	if a.workerShouldStop != nil {
+		a.workerShouldStop <- true
+	}
+	fmt.Println("wait end")
+	_, _ = <-a.workerFinishedSignal
+	fmt.Println("end")
 	return nil
 }
 

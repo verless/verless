@@ -172,6 +172,17 @@ func (b *Build) Run() error {
 		}
 	}()
 
+	for _, p := range b.Plugins {
+		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
+		if !ok {
+			continue
+		}
+
+		if err := prePostPlugin.PreProcessPages(); err != nil {
+			return err
+		}
+	}
+
 	wg := sync.WaitGroup{}
 	wg.Add(parallelism)
 
@@ -205,6 +216,17 @@ func (b *Build) Run() error {
 
 	if len(collectedErrors) > 0 {
 		return fmt.Errorf("errors while processing files: %v", collectedErrors)
+	}
+
+	for _, p := range b.Plugins {
+		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
+		if !ok {
+			continue
+		}
+
+		if err := prePostPlugin.PostProcessPages(); err != nil {
+			return err
+		}
 	}
 
 	site, err := b.Builder.Dispatch()

@@ -20,6 +20,17 @@ type Plugin interface {
 	PostWrite() error
 }
 
+type PrePostProcessPlugin interface {
+	Plugin
+
+	// PreProcessPages will be invoked before all pages get processed.
+	// So this will be called only once.
+	PreProcessPages() error
+	// PostProcessPages will be invoked after all pages were processed.
+	// So this will be called only once.
+	PostProcessPages() error
+}
+
 // LoadAll returns a map of all available plugins. Each entry
 // is a function that returns a fully initialized plugin instance.
 func LoadAll(cfg *config.Config, fs afero.Fs, outputDir string) map[string]func() Plugin {
