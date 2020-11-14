@@ -217,6 +217,15 @@ func (b *Build) Run() error {
 		return err
 	}
 
+	err = b.render()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (b *Build) render() error {
 	site, err := b.Builder.Dispatch()
 	if err != nil {
 		return err
