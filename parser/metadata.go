@@ -51,9 +51,10 @@ func readMetadata(metadata metadata, page *model.Page) {
 	})
 
 	readList(metadata["Tags"], func(val interface{}) {
+		name := val.(string)
 		page.Tags = append(page.Tags, model.Tag{
-			Name: val.(string),
-			Href: "/tags/" + strings.ToLower(val.(string)),
+			Name: name,
+			Href: "/tags/" + strings.ToLower(name),
 		})
 	})
 
