@@ -64,9 +64,7 @@ func (a *atom) PreProcessPages() error {
 	go func() {
 		defer func() {
 			close(a.workerShouldStop)
-			fmt.Println("do end")
 			close(a.workerFinishedSignal)
-			fmt.Println("did end")
 		}()
 
 		for {
@@ -115,9 +113,7 @@ func (a *atom) PostProcessPages() error {
 	if a.workerShouldStop != nil {
 		a.workerShouldStop <- true
 	}
-	fmt.Println("wait end")
 	_, _ = <-a.workerFinishedSignal
-	fmt.Println("end")
 	return nil
 }
 
