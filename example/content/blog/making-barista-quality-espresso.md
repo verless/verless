@@ -8,7 +8,7 @@ Tags:
 Img: /static/img/espresso.jpg
 Related:
     - /blog/steaming-milk-for-cappuccino
-Credit: Burst on Pexels
+Credit: Burst on Pexels 
 ---
 
 Do you enjoy a high-quality italian Espresso as much as I do? Quite frankly,

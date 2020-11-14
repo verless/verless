@@ -35,13 +35,13 @@ type tags struct {
 func (t *tags) ProcessPage(page *model.Page) error {
 	for _, tag := range page.Tags {
 		//sanitizing the tags like "Making Coffee" to "making-coffee"
-		tag = strings.Replace(tag, " ", "-", -1)
-		tag = strings.ToLower(tag)
+		tag.Name = strings.Replace(tag.Name, " ", "-", -1)
+		tag.Name = strings.ToLower(tag.Name)
 
-		if _, exists := t.m[tag]; !exists {
-			t.createListPage(tag)
+		if _, exists := t.m[tag.Name]; !exists {
+			t.createListPage(tag.Name)
 		}
-		t.m[tag].Pages = append(t.m[tag].Pages, page)
+		t.m[tag.Name].Pages = append(t.m[tag.Name].Pages, page)
 	}
 
 	return nil

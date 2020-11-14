@@ -6,6 +6,19 @@ const (
 	customListPageID string = "index"
 )
 
+// Tag is used for grouping pages with similar content.
+type Tag struct {
+	Name string
+	Href string
+}
+
+// String implements the Stringer interface and allows
+// accessing the name field directly in templates without calling .Name
+// which preserves backwards compatibility with older versions.
+func (t Tag) String() string {
+	return t.Name
+}
+
 // Page represents a sub-page of the website.
 type Page struct {
 	Route       string
@@ -14,7 +27,7 @@ type Page struct {
 	Title       string
 	Author      string
 	Date        time.Time
-	Tags        []string
+	Tags        []Tag
 	Img         string
 	Credit      string
 	Description string
