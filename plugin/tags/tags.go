@@ -4,6 +4,7 @@ package tags
 import (
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
@@ -18,7 +19,7 @@ const (
 // build path and outputs the tag directories to outputDir.
 func New() *tags {
 	t := tags{
-		m: make(map[string]*model.ListPage),
+		tags: make(map[string]*model.ListPage),
 	}
 
 	return &t
@@ -27,21 +28,29 @@ func New() *tags {
 // tags is the actual tags plugin that maintains a map with all
 // tags from all processed pages.
 type tags struct {
-	m map[string]*model.ListPage
+	tags      map[string]*model.ListPage
+	tagsMutex sync.RWMutex
 }
 
 // ProcessPage creates a new map entry for each tag in the processed
 // page and adds the page to the entry's list page.
 func (t *tags) ProcessPage(page *model.Page) error {
-	for _, tag := range page.Tags {
+	for _, tagName := range page.Tags {
 		//sanitizing the tags like "Making Coffee" to "making-coffee"
-		tag = strings.Replace(tag, " ", "-", -1)
-		tag = strings.ToLower(tag)
+		tagName = strings.Replace(tagName, " ", "-", -1)
+		tagName = strings.ToLower(tagName)
 
-		if _, exists := t.m[tag]; !exists {
-			t.createListPage(tag)
+		t.tagsMutex.RLock()
+		_, tagExists := t.tags[tagName]
+		t.tagsMutex.RUnlock()
+
+		if !tagExists {
+			t.createListPage(tagName)
 		}
-		t.m[tag].Pages = append(t.m[tag].Pages, page)
+
+		t.tagsMutex.Lock()
+		t.tags[tagName].Pages = append(t.tags[tagName].Pages, page)
+		t.tagsMutex.Unlock()
 	}
 
 	return nil
@@ -57,7 +66,7 @@ func (t *tags) PreWrite(site *model.Site) error {
 		return err
 	}
 
-	for tag, listPage := range t.m {
+	for tag, listPage := range t.tags {
 		path := filepath.ToSlash(filepath.Join(tagsDir, tag))
 
 		node := model.NewNode()
@@ -78,7 +87,7 @@ func (t *tags) PostWrite() error {
 
 // createListPage initializes a new list page for a given key.
 func (t *tags) createListPage(key string) {
-	t.m[key] = &model.ListPage{
+	t.tags[key] = &model.ListPage{
 		Pages: make([]*model.Page, 0),
 		Page: model.Page{
 			Route: tagsDir + "/" + key,

@@ -2,12 +2,15 @@
 package related
 
 import (
+	"sync"
+
 	"github.com/verless/verless/model"
 	"github.com/verless/verless/tree"
 )
 
 type related struct {
-	pages map[string]*model.Page
+	pages      map[string]*model.Page
+	pagesMutex sync.RWMutex
 }
 
 // New initializes and returns a related plugin instance.
@@ -20,7 +23,9 @@ func New() *related {
 // ProcessPage adds a given pointer to a Page instance to the plugin's page
 // map. This prevents that each page has to be resolved from the tre later.
 func (r *related) ProcessPage(page *model.Page) error {
+	r.pagesMutex.Lock()
 	r.pages[page.Href] = page
+	r.pagesMutex.Unlock()
 	return nil
 }
 

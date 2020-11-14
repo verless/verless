@@ -4,6 +4,7 @@ package atom
 import (
 	"fmt"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -42,6 +43,7 @@ func New(meta *model.Meta, fs afero.Fs, outputDir string) *atom {
 type atom struct {
 	meta      *model.Meta
 	feed      *feeds.Feed
+	feedMutex sync.RWMutex
 	fs        afero.Fs
 	outputDir string
 }
@@ -63,7 +65,9 @@ func (a *atom) ProcessPage(page *model.Page) error {
 		Created:     page.Date,
 	}
 
+	a.feedMutex.Lock()
 	a.feed.Add(item)
+	a.feedMutex.Unlock()
 	return nil
 }
 
