@@ -21,6 +21,9 @@
             {{end}}
 
             {{.Page.Content}}
+            {{range $tag := .Page.Tags}}
+                <a href={{$tag.Href}}>{{$tag}}</a>
+            {{end}}
         </main>
         <aside>
             <h4>Related</h4>

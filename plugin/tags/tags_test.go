@@ -10,10 +10,21 @@ import (
 var (
 	// testPages is a set of pages used for testing.
 	testPages = []model.Page{
-		{ID: "page-0", Route: "/route-0", Tags: []string{"t-1", "t-2"}},
-		{ID: "page-1", Route: "/route-1", Tags: []string{"t-1", "t-3"}},
-		{ID: "page-2", Route: "/route-2", Tags: []string{"t-2", "t-3"}},
-		{ID: "page-3", Route: "/route-3", Tags: []string{"t-2"}},
+		{ID: "page-0", Route: "/route-0", Tags: []model.Tag{
+			{Name: "t-1", Href: "/tags/t-1"},
+			{Name: "t-2", Href: "/tags/t-2"},
+		}},
+		{ID: "page-1", Route: "/route-1", Tags: []model.Tag{
+			{Name: "t-1", Href: "/tags/t-1"},
+			{Name: "t-3", Href: "/tags/t-3"},
+		}},
+		{ID: "page-2", Route: "/route-2", Tags: []model.Tag{
+			{Name: "t-2", Href: "/tags/t-2"},
+			{Name: "t-3", Href: "/tags/t-3"},
+		}},
+		{ID: "page-3", Route: "/route-3", Tags: []model.Tag{
+			{Name: "t-2", Href: "/tags/t-2"},
+		}},
 	}
 )
 
@@ -42,11 +53,11 @@ func TestTags_ProcessPage(t *testing.T) {
 			}
 
 			for _, tag := range page.Tags {
-				taggerTag, exists := tagger.tags[tag]
+				taggerTag, exists := tagger.tags[tag.Name]
 
 				test.Assert(t, exists, "tag should exist")
 				test.NotEquals(t, nil, taggerTag)
-				test.Assert(t, len(tagger.tags[tag].Pages) > 0, "tag should exist")
+				test.Assert(t, len(tagger.tags[tag.Name].Pages) > 0, "tag should exist")
 			}
 		}
 	}

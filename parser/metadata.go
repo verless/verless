@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"strings"
 	"time"
 
 	"github.com/verless/verless/model"
@@ -50,7 +51,11 @@ func readMetadata(metadata metadata, page *model.Page) {
 	})
 
 	readList(metadata["Tags"], func(val interface{}) {
-		page.Tags = append(page.Tags, val.(string))
+		name := val.(string)
+		page.Tags = append(page.Tags, model.Tag{
+			Name: name,
+			Href: "/tags/" + strings.ToLower(name),
+		})
 	})
 
 	readPrimitive(metadata["Img"], func(val interface{}) {

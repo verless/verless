@@ -35,21 +35,21 @@ type tags struct {
 // ProcessPage creates a new map entry for each tag in the processed
 // page and adds the page to the entry's list page.
 func (t *tags) ProcessPage(page *model.Page) error {
-	for _, tagName := range page.Tags {
-		//sanitizing the tags like "Making Coffee" to "making-coffee"
-		tagName = strings.Replace(tagName, " ", "-", -1)
-		tagName = strings.ToLower(tagName)
+	for _, tag := range page.Tags {
+		// Sanitizing the tags like "Making Coffee" to "making-coffee".
+		tag.Name = strings.Replace(tag.Name, " ", "-", -1)
+		tag.Name = strings.ToLower(tag.Name)
 
 		t.tagsMutex.RLock()
-		_, tagExists := t.tags[tagName]
+		_, tagExists := t.tags[tag.Name]
 		t.tagsMutex.RUnlock()
 
 		if !tagExists {
-			t.createListPage(tagName)
+			t.createListPage(tag.Name)
 		}
 
 		t.tagsMutex.Lock()
-		t.tags[tagName].Pages = append(t.tags[tagName].Pages, page)
+		t.tags[tag.Name].Pages = append(t.tags[tag.Name].Pages, page)
 		t.tagsMutex.Unlock()
 	}
 

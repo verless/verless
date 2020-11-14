@@ -15,6 +15,12 @@
                     <p>{{$page.Description}}</p>
                     <p><a href="{{$page.Href}}">read post</a></p>
                 </div>
+                <p>
+                    Tags:
+                    {{range $tag := $page.Tags}}
+                        <a href={{$tag.Href}}>{{$tag}}</a>
+                    {{end}}
+                </p>
             {{end}}
         </main>
     </body>
