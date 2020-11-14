@@ -172,15 +172,9 @@ func (b *Build) Run() error {
 		}
 	}()
 
-	for _, p := range b.Plugins {
-		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
-		if !ok {
-			continue
-		}
-
-		if err := prePostPlugin.PreProcessPages(); err != nil {
-			return err
-		}
+	err := b.preProcessing()
+	if err != nil {
+		return err
 	}
 
 	wg := sync.WaitGroup{}
@@ -218,15 +212,9 @@ func (b *Build) Run() error {
 		return fmt.Errorf("errors while processing files: %v", collectedErrors)
 	}
 
-	for _, p := range b.Plugins {
-		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
-		if !ok {
-			continue
-		}
-
-		if err := prePostPlugin.PostProcessPages(); err != nil {
-			return err
-		}
+	err = b.postProcessing()
+	if err != nil {
+		return err
 	}
 
 	site, err := b.Builder.Dispatch()
@@ -250,6 +238,35 @@ func (b *Build) Run() error {
 		}
 	}
 
+	return nil
+}
+
+func (b *Build) preProcessing() error {
+	for _, p := range b.Plugins {
+		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
+		if !ok {
+			continue
+		}
+
+		if err := prePostPlugin.PreProcessPages(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (b *Build) postProcessing() error {
+	for _, p := range b.Plugins {
+		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
+		if !ok {
+			continue
+		}
+
+		if err := prePostPlugin.PostProcessPages(); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -278,8 +295,8 @@ func (b *Build) processFile(contentDir, file string) error {
 		return err
 	}
 
-	for _, plugin := range b.Plugins {
-		if err := plugin.ProcessPage(&page); err != nil {
+	for _, p := range b.Plugins {
+		if err := p.ProcessPage(&page); err != nil {
 			return err
 		}
 	}
