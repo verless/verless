@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	// parallelism specifies the number of parallel workers.
+	// parallelism specifies the number of parallel workers
 	parallelism int = 4
 )
 
@@ -172,8 +172,7 @@ func (b *Build) Run() error {
 		}
 	}()
 
-	err := b.preProcessing()
-	if err != nil {
+	if err := b.preProcessing(); err != nil {
 		return err
 	}
 
@@ -212,13 +211,11 @@ func (b *Build) Run() error {
 		return fmt.Errorf("errors while processing files: %v", collectedErrors)
 	}
 
-	err = b.postProcessing()
-	if err != nil {
+	if err := b.postProcessing(); err != nil {
 		return err
 	}
 
-	err = b.render()
-	if err != nil {
+	if err := b.render(); err != nil {
 		return err
 	}
 
