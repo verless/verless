@@ -29,7 +29,7 @@ func New() *tags {
 // tags from all processed pages.
 type tags struct {
 	tags      map[string]*model.ListPage
-	tagsMutex sync.RWMutex
+	tagsMutex sync.Mutex
 }
 
 // ProcessPage creates a new map entry for each tag in the processed
@@ -40,15 +40,13 @@ func (t *tags) ProcessPage(page *model.Page) error {
 		tag.Name = strings.Replace(tag.Name, " ", "-", -1)
 		tag.Name = strings.ToLower(tag.Name)
 
-		t.tagsMutex.RLock()
+		t.tagsMutex.Lock()
 		_, tagExists := t.tags[tag.Name]
-		t.tagsMutex.RUnlock()
 
 		if !tagExists {
 			t.createListPage(tag.Name)
 		}
 
-		t.tagsMutex.Lock()
 		t.tags[tag.Name].Pages = append(t.tags[tag.Name].Pages, page)
 		t.tagsMutex.Unlock()
 	}
