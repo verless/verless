@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	// parallelism specifies the number of parallel workers.
+	// parallelism specifies the number of parallel workers
 	parallelism int = 4
 )
 
@@ -172,6 +172,10 @@ func (b *Build) Run() error {
 		}
 	}()
 
+	if err := b.preProcessing(); err != nil {
+		return err
+	}
+
 	wg := sync.WaitGroup{}
 	wg.Add(parallelism)
 
@@ -207,6 +211,18 @@ func (b *Build) Run() error {
 		return fmt.Errorf("errors while processing files: %v", collectedErrors)
 	}
 
+	if err := b.postProcessing(); err != nil {
+		return err
+	}
+
+	if err := b.render(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (b *Build) render() error {
 	site, err := b.Builder.Dispatch()
 	if err != nil {
 		return err
@@ -228,6 +244,35 @@ func (b *Build) Run() error {
 		}
 	}
 
+	return nil
+}
+
+func (b *Build) preProcessing() error {
+	for _, p := range b.Plugins {
+		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
+		if !ok {
+			continue
+		}
+
+		if err := prePostPlugin.PreProcessPages(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (b *Build) postProcessing() error {
+	for _, p := range b.Plugins {
+		prePostPlugin, ok := p.(plugin.PrePostProcessPlugin)
+		if !ok {
+			continue
+		}
+
+		if err := prePostPlugin.PostProcessPages(); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -256,8 +301,8 @@ func (b *Build) processFile(contentDir, file string) error {
 		return err
 	}
 
-	for _, plugin := range b.Plugins {
-		if err := plugin.ProcessPage(&page); err != nil {
+	for _, p := range b.Plugins {
+		if err := p.ProcessPage(&page); err != nil {
 			return err
 		}
 	}

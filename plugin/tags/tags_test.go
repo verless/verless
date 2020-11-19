@@ -53,11 +53,11 @@ func TestTags_ProcessPage(t *testing.T) {
 			}
 
 			for _, tag := range page.Tags {
-				taggerTag, exists := tagger.m[tag.Name]
+				taggerTag, exists := tagger.tags[tag.Name]
 
 				test.Assert(t, exists, "tag should exist")
 				test.NotEquals(t, nil, taggerTag)
-				test.Assert(t, len(tagger.m[tag.Name].Pages) > 0, "tag should exist")
+				test.Assert(t, len(tagger.tags[tag.Name].Pages) > 0, "tag should exist")
 			}
 		}
 	}
@@ -83,7 +83,7 @@ func TestTags_PreWrite(t *testing.T) {
 		t.Log(name)
 
 		tagger := New()
-		tagger.m = testCase.tagsListPages
+		tagger.tags = testCase.tagsListPages
 		s := model.NewSite()
 		err := tagger.PreWrite(&s)
 		if test.ExpectedError(t, testCase.expectedError, err) != test.IsCorrectNil {
@@ -94,7 +94,7 @@ func TestTags_PreWrite(t *testing.T) {
 		test.Equals(t, true, ok)
 		test.NotEquals(t, nil, tags)
 
-		for tag := range tagger.m {
+		for tag := range tagger.tags {
 			child, ok := tags.Children()[tag]
 			test.Equals(t, true, ok)
 			test.NotEquals(t, nil, child)

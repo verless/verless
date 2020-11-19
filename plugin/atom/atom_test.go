@@ -38,6 +38,13 @@ func TestAtom_ProcessPage(t *testing.T) {
 			Base: "https://example.com",
 		}, afero.NewOsFs(), "")
 
+		// Note that hte ProcessPage functionality is heavily coupled with the Pre/Post methods.
+		// That's why we have to call it here also.
+		err := a.PreProcessPages()
+		if test.ExpectedError(t, nil, err) != test.IsCorrectNil {
+			return
+		}
+
 		for i, page := range testCase.pages {
 			t.Logf("process page number %v, route '%v'", i, page.Route)
 			err := a.ProcessPage(&page)
@@ -50,6 +57,11 @@ func TestAtom_ProcessPage(t *testing.T) {
 
 			canonicalLink := fmt.Sprintf("%s%s/%s", a.meta.Base, page.Route, page.ID)
 			test.Equals(t, canonicalLink, item.Link.Href)
+		}
+
+		err = a.PostProcessPages()
+		if test.ExpectedError(t, nil, err) != test.IsCorrectNil {
+			return
 		}
 
 		test.Equals(t, len(testCase.pages), len(a.feed.Items))
