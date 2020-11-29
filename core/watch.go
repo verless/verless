@@ -26,7 +26,7 @@ type watchContext struct {
 // watchContext.IgnorePath can be used to ignore a path inside the given watchContext.Path.
 func watch(ctx watchContext) error {
 	w := watcher.New()
-	w.FilterOps(watcher.Write)
+	w.FilterOps(watcher.Write, watcher.Create, watcher.Move, watcher.Remove, watcher.Rename)
 
 	go func() {
 	watcherLoop:
