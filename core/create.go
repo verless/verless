@@ -15,6 +15,8 @@ import (
 	"github.com/verless/verless/theme"
 )
 
+const gitDirectory string = ".git"
+
 var (
 	// ErrProjectExists states that the specified project already exists.
 	ErrProjectExists = errors.New("project already exists, use --overwrite to remove it")
@@ -57,6 +59,9 @@ func CreateProject(path string, options CreateProjectOptions) error {
 			// os.PathError saying "no such file or directory" for next recursion of
 			// WalkFunc.
 			if os.IsNotExist(err) {
+				return nil
+			}
+			if path == gitDirectory {
 				return nil
 			}
 			if path != "." {
