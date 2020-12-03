@@ -7,6 +7,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.5.3] - 2020-12-03
+
+### Changed
+- Introduce `Tags` type with `Href` field.
+- Make `verless serve --watch` listen for more filesystem events.
+
+### Fixed
+- Fix possible race condition in the `tags` plugin.
+- Make plugins safer for concurrent usage.
+
+## [0.5.2] - 2020-11-10
+
+### Fixed
+- Fix deadlock when serving the project.
+
 ## [0.5.1] - 2020-10-25
 
 ### Changed
