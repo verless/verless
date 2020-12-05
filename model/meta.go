@@ -7,4 +7,5 @@ type Meta struct {
 	Description string
 	Author      string
 	Base        string
+	Robots      string
 }

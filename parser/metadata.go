@@ -81,6 +81,10 @@ func readMetadata(metadata metadata, page *model.Page) {
 	readPrimitive(metadata["Hidden"], func(val interface{}) {
 		page.Hidden = val.(bool)
 	})
+
+	readPrimitive(metadata["Robots"], func(val interface{}) {
+		page.Robots = val.(string)
+	})
 }
 
 // readPrimitive converts a field to a primitive value and
