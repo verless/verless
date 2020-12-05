@@ -209,6 +209,12 @@ In our `list-page.html`, we want to provide a simple list of page titles with hy
 </html>
 ```
 
+Finally, adapt your `verless.yml` to use your new theme:
+```yaml
+# ...
+theme: light
+```
+
 ## Serving or building the website
 
 If you're inside the project directory, serve the website using the following command and check if everything works as
