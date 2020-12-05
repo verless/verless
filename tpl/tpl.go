@@ -5,6 +5,9 @@ package tpl
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"text/template"
 )
 
@@ -20,7 +23,7 @@ var (
 // Register parses a template file and registers the instance under
 // the given key. If a template with the key has already registered,
 // Register will return an error unless the registration is forced.
-func Register(key string, path string, force bool) (*template.Template, error) {
+func Register(key string, path string, basePath string, force bool) (*template.Template, error) {
 	if templates == nil {
 		templates = make(map[string]*template.Template)
 	}
@@ -31,11 +34,31 @@ func Register(key string, path string, force bool) (*template.Template, error) {
 		}
 	}
 
-	tpl, err := template.ParseFiles(path)
+	if _, err := os.Stat(basePath); os.IsNotExist(err) {
+		tpl, err := template.ParseFiles(path)
+		if err != nil {
+			return nil, err
+		}
+
+		templates[key] = tpl
+		return templates[key], nil
+	}
+
+	return registerWithBaseTemplates(key, path, basePath)
+}
+
+func registerWithBaseTemplates(key string, path string, basePath string) (*template.Template, error) {
+	baseFiles, err := ioutil.ReadDir(basePath)
 	if err != nil {
 		return nil, err
 	}
+	fileNames := make([]string, len(baseFiles)+1)
+	fileNames[0] = path
+	for i, f := range baseFiles {
+		fileNames[i+1] = filepath.Join(basePath, f.Name())
+	}
 
+	tpl, err := template.ParseFiles(fileNames...)
 	templates[key] = tpl
 
 	return templates[key], nil
