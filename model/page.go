@@ -35,7 +35,7 @@ type Page struct {
 	Related     []*Page
 	Type        *Type
 	Hidden      bool
-	Robots      string
+	Meta        map[string]string
 
 	providedRelated []string
 	providedType    string

@@ -40,6 +40,7 @@ func (m *markdown) ParsePage(src []byte) (model.Page, error) {
 	}
 
 	page.Content = buf.String()
+	page.Meta = make(map[string]string)
 	metadata := meta.Get(ctx)
 
 	readMetadata(metadata, &page)

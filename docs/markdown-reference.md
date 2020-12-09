@@ -59,7 +59,7 @@ This reference shows all available YAML keys for providing metadata. **All keys 
     - **`<verless path>`** _(String)_: The path to a related page.
 * **`Type`** _(String)_: The page type. Has to be declared in the [`types` section](configuration-reference.md#configuration-key-reference) of your configuration.
 * **`Hidden`** _(Bool)_: Don't include the page in lists like [`{{.Pages}}`](template-reference.md#pages).
-* **`Robots`** _(String)_: Specifies the indexing and crawling behavior of [search engines](https://developers.google.com/search/reference/robots_meta_tag).
+* **`Meta`** _(String/String pairs)_: A list of [meta tags](https://www.w3schools.com/tags/tag_meta.asp).
 
 <p align="center">
 <br>
