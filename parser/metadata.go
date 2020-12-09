@@ -28,8 +28,6 @@ type (
 	//		setID(1)
 	//	}
 	//
-	//	setter(setID)
-	//
 	// Type-asserting val to int in a closure avoids that the
 	// setter function has to be re-written for each data type.
 	assignFn func(val interface{})
@@ -87,8 +85,8 @@ func readMetadata(metadata metadata, page *model.Page) {
 	})
 }
 
-// readPrimitive converts a field to a primitive value and
-// invokes the assignFn with that value.
+// readPrimitive converts a field to a primitive value and invokes
+// the assignFn with that value.
 func readPrimitive(field interface{}, assign assignFn) {
 	if field == nil {
 		return
@@ -97,8 +95,8 @@ func readPrimitive(field interface{}, assign assignFn) {
 	assign(field)
 }
 
-// readPrimitive converts a field to a date and invokes the
-// assignFn with that date.
+// readPrimitive converts a field to a date and invokes the assignFn
+// with that date.
 func readDate(field interface{}, assign assignFn) {
 	if field == nil {
 		return
@@ -112,8 +110,8 @@ func readDate(field interface{}, assign assignFn) {
 	assign(date)
 }
 
-// readList converts a field to a list and invokes the
-// assignFn for each item in that list.
+// readList converts a field to a list and invokes the assignFn for
+// each item in that list.
 func readList(field interface{}, assign assignFn) {
 	if field == nil {
 		return
@@ -123,5 +121,19 @@ func readList(field interface{}, assign assignFn) {
 
 	for i := 0; i < len(list); i++ {
 		assign(list[i])
+	}
+}
+
+// readMap converts a field to a map of strings mapped against interface{}
+// and invokes the assign function for each key-value pair in that map.
+func readMap(field interface{}, assign func(key, val interface{})) {
+	if field == nil {
+		return
+	}
+
+	mapp, _ := field.(map[interface{}]interface{})
+
+	for k, v := range mapp {
+		assign(k, v)
 	}
 }
