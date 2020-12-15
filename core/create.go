@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/afero"
@@ -61,7 +62,7 @@ func CreateProject(path string, options CreateProjectOptions) error {
 			if os.IsNotExist(err) {
 				return nil
 			}
-			if path == gitDirectory {
+			if strings.Contains(path, gitDirectory) {
 				return nil
 			}
 			if path != "." {
