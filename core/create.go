@@ -50,18 +50,18 @@ func CreateProject(path string, options CreateProjectOptions) error {
 		return ErrProjectExists
 	}
 
-	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-		if os.IsExist(err) {
-			return nil
-		}
-		if strings.Contains(path, gitDirectory) {
-			return nil
-		}
-		return os.RemoveAll(path)
-	})
-
+	dir, err := ioutil.ReadDir(path)
 	if err != nil {
-		return errors.New("Cannot remove existing files from current directory")
+		return err
+	}
+
+	for _, file := range dir {
+		if strings.Contains(file.Name(), gitDirectory) {
+			continue
+		}
+		if err := os.RemoveAll(filepath.Join(path, file.Name())); err != nil {
+			return err
+		}
 	}
 
 	dirs := []string{
