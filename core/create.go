@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/afero"
@@ -14,6 +15,8 @@ import (
 	"github.com/verless/verless/fs"
 	"github.com/verless/verless/theme"
 )
+
+const gitDirectory string = ".git"
 
 var (
 	// ErrProjectExists states that the specified project already exists.
@@ -47,31 +50,17 @@ func CreateProject(path string, options CreateProjectOptions) error {
 		return ErrProjectExists
 	}
 
-	if path != "." {
-		if err := os.RemoveAll(path); err != nil {
-			return err
+	dir, err := ioutil.ReadDir(path)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range dir {
+		if strings.Contains(file.Name(), gitDirectory) {
+			continue
 		}
-	} else {
-		err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-			// RemoveAll removes nested directory in first iteration which causes
-			// os.PathError saying "no such file or directory" for next recursion of
-			// WalkFunc.
-			if os.IsNotExist(err) {
-				return nil
-			}
-			if path != "." {
-				if info.IsDir() {
-					// Remove nested non-empty directories as os.Remove() only removes
-					// files and empty directories
-					return os.RemoveAll(path)
-				} else {
-					return os.Remove(path)
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return errors.New("Cannot remove existing files from current directory")
+		if err := os.RemoveAll(filepath.Join(path, file.Name())); err != nil {
+			return err
 		}
 	}
 
