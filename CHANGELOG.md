@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.5.4] - 2021-01-08
+
+### Changed
+- Don't remove an existing `.git` directory on `verless create project --overwrite`.
+
+### Fixed
+- Fix double slashed in generated RSS feed URLs.
+
 ## [0.5.3] - 2020-12-03
 
 ### Changed
