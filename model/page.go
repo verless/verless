@@ -35,6 +35,7 @@ type Page struct {
 	Related     []*Page
 	Type        *Type
 	Hidden      bool
+	Meta        map[string]string
 
 	providedRelated []string
 	providedType    string
