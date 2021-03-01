@@ -96,32 +96,30 @@ func Serve(path string, options ServeOptions) error {
 // watchAndRebuild watches the project for changes and rebuilds the project
 // once a change is detected. Any errors will be printed directly.
 func watchAndRebuild(factory func() (*Build, error), rebuildCh <-chan string, doneCh <-chan bool) {
-	go func() {
-		for {
-			select {
-			case _, ok := <-rebuildCh:
-				if !ok {
-					return
-				}
-				out.T(style.Sparkles, "rebuilding project ...")
-
-				build, err := factory()
-				if err != nil {
-					out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
-					continue
-				}
-
-				if err := build.Run(); err != nil {
-					out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
-					continue
-				}
-
-				out.T(style.HeavyCheckMark, "project built successfully")
-			case _, _ = <-doneCh:
+	for {
+		select {
+		case _, ok := <-rebuildCh:
+			if !ok {
 				return
 			}
+			out.T(style.Sparkles, "rebuilding project ...")
+
+			build, err := factory()
+			if err != nil {
+				out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
+				continue
+			}
+
+			if err := build.Run(); err != nil {
+				out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
+				continue
+			}
+
+			out.T(style.HeavyCheckMark, "project built successfully")
+		case _, _ = <-doneCh:
+			return
 		}
-	}()
+	}
 }
 
 // listenAndServe starts a file server serving the built project.
