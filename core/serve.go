@@ -2,15 +2,16 @@ package core
 
 import (
 	"fmt"
-	"net"
-	"net/http"
-	"path/filepath"
-
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
 	"github.com/verless/verless/out"
 	"github.com/verless/verless/out/style"
 	"github.com/verless/verless/theme"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
+	"path/filepath"
 )
 
 // ServeOptions represents options for running a verless listenAndServe command.
@@ -134,7 +135,21 @@ func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
 
 	httpFs := afero.NewHttpFs(fs)
 	server := http.FileServer(httpFs.Dir(path))
+
 	http.Handle("/", server)
 
-	return http.ListenAndServe(addr, server)
+	shutdown := make(chan os.Signal)
+	signal.Notify(shutdown, os.Interrupt)
+
+	var err error
+
+	go func() {
+		err = http.ListenAndServe(addr, server)
+	}()
+
+	<-shutdown
+
+	// ToDo: Perform a graceful shutdown.
+
+	return err
 }
