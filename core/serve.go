@@ -76,32 +76,10 @@ func Serve(path string, options ServeOptions) error {
 
 	// If --watch is enabled, launch a goroutine that handles rebuilds.
 	if options.Watch {
-		go func() {
-			for {
-				select {
-				case _, ok := <-rebuildCh:
-					if !ok {
-						return
-					}
-					out.T(style.Sparkles, "rebuilding project ...")
-
-					build, err := NewBuild(memMapFs, path, options.BuildOptions)
-					if err != nil {
-						out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
-						continue
-					}
-
-					if err := build.Run(); err != nil {
-						out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
-						continue
-					}
-
-					out.T(style.HeavyCheckMark, "project built successfully")
-				case _, _ = <-done:
-					return
-				}
-			}
-		}()
+		factory := func() (*Build, error) {
+			return NewBuild(memMapFs, path, options.BuildOptions)
+		}
+		go watchAndRebuild(factory, rebuildCh, done)
 	}
 
 	// If the target folder doesn't exist, return an error.
@@ -113,6 +91,37 @@ func Serve(path string, options ServeOptions) error {
 	close(done)
 
 	return err
+}
+
+// watchAndRebuild watches the project for changes and rebuilds the project
+// once a change is detected. Any errors will be printed directly.
+func watchAndRebuild(factory func() (*Build, error), rebuildCh <-chan string, doneCh <-chan bool) {
+	go func() {
+		for {
+			select {
+			case _, ok := <-rebuildCh:
+				if !ok {
+					return
+				}
+				out.T(style.Sparkles, "rebuilding project ...")
+
+				build, err := factory()
+				if err != nil {
+					out.Err(style.Exclamation, "failed to initialize new build: %s", err.Error())
+					continue
+				}
+
+				if err := build.Run(); err != nil {
+					out.Err(style.Exclamation, "failed to build the project: %s", err.Error())
+					continue
+				}
+
+				out.T(style.HeavyCheckMark, "project built successfully")
+			case _, _ = <-doneCh:
+				return
+			}
+		}
+	}()
 }
 
 // listenAndServe starts a file server serving the built project.
