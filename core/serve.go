@@ -2,16 +2,17 @@ package core
 
 import (
 	"fmt"
-	"github.com/spf13/afero"
-	"github.com/verless/verless/config"
-	"github.com/verless/verless/out"
-	"github.com/verless/verless/out/style"
-	"github.com/verless/verless/theme"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
+
+	"github.com/spf13/afero"
+	"github.com/verless/verless/config"
+	"github.com/verless/verless/out"
+	"github.com/verless/verless/out/style"
+	"github.com/verless/verless/theme"
 )
 
 // ServeOptions represents options for running a verless listenAndServe command.
