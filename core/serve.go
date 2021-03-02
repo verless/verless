@@ -1,12 +1,14 @@
 package core
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/afero"
 	"github.com/verless/verless/config"
@@ -132,25 +134,35 @@ func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
 		addr = fmt.Sprintf("[%v]:%v", ip, port)
 	}
 
-	out.T(style.Bulb, "serving website on %s", addr)
-
 	httpFs := afero.NewHttpFs(fs)
-	server := http.FileServer(httpFs.Dir(path))
 
-	http.Handle("/", server)
+	server := http.Server{
+		Addr:    addr,
+		Handler: http.FileServer(httpFs.Dir(path)),
+	}
 
 	shutdown := make(chan os.Signal)
 	signal.Notify(shutdown, os.Interrupt)
 
-	var err error
+	out.T(style.Bulb, "serving website on %s", addr)
 
 	go func() {
-		err = http.ListenAndServe(addr, server)
+		if err := server.ListenAndServe(); err != nil {
+			// In case the HTTP server cannot serve, just exit.
+			out.Err(style.X, err.Error())
+			os.Exit(1)
+		}
 	}()
 
 	<-shutdown
 
-	// ToDo: Perform a graceful shutdown.
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancel()
 
-	return err
+	// Perform a graceful shutdown once the interrupt signal is received.
+	if err := server.Shutdown(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }
