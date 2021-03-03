@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -147,7 +148,7 @@ func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
 	out.T(style.Bulb, "serving website on %s", addr)
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
+		if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			// In case the HTTP server cannot serve, just exit.
 			out.Err(style.X, err.Error())
 			os.Exit(1)
