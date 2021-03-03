@@ -157,6 +157,8 @@ func listenAndServe(fs afero.Fs, path string, ip net.IP, port uint16) error {
 
 	<-shutdown
 
+	out.T(style.HeavyCheckMark, "performing graceful shutdown")
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer cancel()
 
