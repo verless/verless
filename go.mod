@@ -15,7 +15,7 @@ require (
 	github.com/spf13/cobra v1.1.3
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1
-	github.com/yuin/goldmark v1.3.4
+	github.com/yuin/goldmark v1.3.5
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691
 	github.com/yuin/goldmark-meta v0.0.0-20191126180153-f0638e958b60
 	golang.org/x/sys v0.0.0-20200803210538-64077c9b5642 // indirect
