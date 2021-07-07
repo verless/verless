@@ -26,6 +26,7 @@ const (
 	Default          string = "default"
 	PageTemplate     string = "page.html"
 	ListPageTemplate string = "list-page.html"
+	TemplateBase     string = "base"
 	configFilename   string = "theme"
 )
 
