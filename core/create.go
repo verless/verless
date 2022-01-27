@@ -151,7 +151,7 @@ Date: %s
 `
 
 	content := fmt.Sprintf(defaultContentTemplate, time.Now().Format("2006-01-02"))
-	if err := ioutil.WriteFile(contentPath, []byte(content), 0755); err != nil {
+	if err := ioutil.WriteFile(contentPath, []byte(content), 0644); err != nil {
 		return err
 	}
 
@@ -161,7 +161,7 @@ Date: %s
 
 func createFiles(files map[string][]byte) error {
 	for path, content := range files {
-		if err := ioutil.WriteFile(path, content, 0755); err != nil {
+		if err := ioutil.WriteFile(path, content, 0644); err != nil {
 			return err
 		}
 	}
