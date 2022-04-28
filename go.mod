@@ -3,7 +3,7 @@ module github.com/verless/verless
 go 1.14
 
 require (
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.5.8
 	github.com/gorilla/feeds v1.1.1
 	github.com/pkg/errors v0.9.1
 	github.com/radovskyb/watcher v1.0.7
