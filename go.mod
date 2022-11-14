@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/feeds v1.1.1
 	github.com/pkg/errors v0.9.1
 	github.com/radovskyb/watcher v1.0.7
-	github.com/spf13/afero v1.9.2
+	github.com/spf13/afero v1.9.3
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 	github.com/yuin/goldmark v1.5.2
