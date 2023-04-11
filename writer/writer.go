@@ -151,9 +151,11 @@ func (w *writer) loadTemplate(t *model.Type, defaultTpl string) (*template.Templ
 		return tpl.Get(pageTpl)
 	}
 
-	tplPath := filepath.Join(theme.TemplatePath(w.ctx.Path, w.ctx.Theme), pageTpl)
+	templatesRoot := filepath.Join(theme.TemplatePath(w.ctx.Path, w.ctx.Theme))
+	tplPath := filepath.Join(templatesRoot, pageTpl)
+	basePath := filepath.Join(templatesRoot, theme.TemplateBase)
 
-	return tpl.Register(pageTpl, tplPath, w.ctx.RecompileTemplates)
+	return tpl.Register(pageTpl, tplPath, basePath, w.ctx.RecompileTemplates)
 }
 
 func (w *writer) copyDirs() error {

@@ -48,8 +48,9 @@ func TestRegister(t *testing.T) {
 	for _, testCase := range tests {
 		t.Logf("Testing '%s'", testCase.testName)
 		pageTplPath := filepath.Join(theme.TemplatePath(projectPath, theme.Default), theme.PageTemplate)
+		tplBasePath := filepath.Join(theme.TemplatePath(projectPath, theme.Default), theme.TemplateBase)
 
-		_, err := Register(testCase.key, pageTplPath, testCase.force)
+		_, err := Register(testCase.key, pageTplPath, tplBasePath, testCase.force)
 		test.ExpectedError(t, testCase.expectedError, err)
 	}
 }
